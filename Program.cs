@@ -32,8 +32,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.MapControllerRoute(
-    name: "admin-stat",
-    pattern: "admin/{controller=StatisticsAdmin}/{action=Index}/{id?}");
 
 app.Run();

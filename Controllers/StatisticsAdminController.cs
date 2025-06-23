@@ -2,7 +2,7 @@
 
 namespace GoEASy.Controllers
 {
-    [Route("Admin/[controller]")]
+    [Route("admin/statistics")]
     public class StatisticsAdminController : Controller
     {
         [HttpGet("")]
