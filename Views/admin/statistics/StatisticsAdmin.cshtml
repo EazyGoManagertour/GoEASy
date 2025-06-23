@@ -1,0 +1,312 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<link rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.4.2/css/all.css" />
+<link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i%7COpen+Sans:300,300i,400,400i,600,600i,700,700i"
+      rel="stylesheet" />
+
+<link href="https://cdn.jsdelivr.net/npm/jvectormap@2.0.5/jquery-jvectormap.css"
+      rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+<link rel="stylesheet" href="~/css/style.css" />
+
+<body>
+    <!-- Header -->
+    @Html.Partial("~/Views/admin/share/header.cshtml")
+
+    <!-- Overlay for mobile -->
+    <div class="overlay" onclick="toggleSidebar()"></div>
+
+    <div class="container">
+        <!-- Sidebar -->
+        @Html.Partial("~/Views/admin/share/menu.cshtml")
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">23,454</div>
+                    <div class="stat-label">Page Views</div>
+                    <div class="stat-change positive">↑ 4.3%</div>
+                    <div class="mini-chart">
+                        <div class="chart-bars">
+                            <div class="bar" style="height: 20%"></div>
+                            <div class="bar" style="height: 40%"></div>
+                            <div class="bar" style="height: 60%"></div>
+                            <div class="bar" style="height: 30%"></div>
+                            <div class="bar" style="height: 80%"></div>
+                            <div class="bar" style="height: 50%"></div>
+                            <div class="bar" style="height: 90%"></div>
+                            <div class="bar" style="height: 70%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-number">6,630</div>
+                    <div class="stat-label">Unique Visitors</div>
+                    <div class="stat-change negative">↓ 2.5%</div>
+                    <div class="mini-chart">
+                        <div class="chart-bars red">
+                            <div class="bar" style="height: 30%"></div>
+                            <div class="bar" style="height: 60%"></div>
+                            <div class="bar" style="height: 40%"></div>
+                            <div class="bar" style="height: 80%"></div>
+                            <div class="bar" style="height: 20%"></div>
+                            <div class="bar" style="height: 70%"></div>
+                            <div class="bar" style="height: 50%"></div>
+                            <div class="bar" style="height: 90%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-number">86,578</div>
+                    <div class="stat-label">Total Visits</div>
+                    <div class="stat-change positive">↑ 12.5%</div>
+                    <div class="mini-chart">
+                        <div class="chart-bars orange">
+                            <div class="bar" style="height: 50%"></div>
+                            <div class="bar" style="height: 70%"></div>
+                            <div class="bar" style="height: 40%"></div>
+                            <div class="bar" style="height: 90%"></div>
+                            <div class="bar" style="height: 60%"></div>
+                            <div class="bar" style="height: 30%"></div>
+                            <div class="bar" style="height: 80%"></div>
+                            <div class="bar" style="height: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Chart Area -->
+            <div class="chart-container">
+                <canvas id="mainChart"></canvas>
+            </div>
+
+            <!-- Middle Stats Row -->
+            <div class="middle-stats">
+                <div class="stat-item">
+                    <div class="stat-icon user-icon"><i class="fas fa-user"></i></div>
+                    <div class="stat-info">
+                        <div class="stat-percent">78%</div>
+                        <div class="stat-desc">New Sessions</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 78%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-item">
+                    <div class="stat-icon visits-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-percent">423</div>
+                        <div class="stat-desc">Total Visits</div>
+                        <div class="progress-bar red">
+                            <div class="progress-fill" style="width: 60%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-item">
+                    <div class="stat-icon bounce-icon">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-percent">64.89%</div>
+                        <div class="stat-desc">Bounce Rate</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 65%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-item">
+                    <div class="stat-icon duration-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-percent">02:12</div>
+                        <div class="stat-desc">Session Duration</div>
+                        <div class="progress-bar orange">
+                            <div class="progress-fill" style="width: 45%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Section -->
+            <div class="bottom-section">
+                <!-- Session Duration Chart -->
+                <div class="chart-widget">
+                    <div class="widget-header">
+                        <h3>AVG. SESSION DURATION & PAGES/SESSION</h3>
+                    </div>
+                    <div class="area-chart">
+                        <canvas id="sessionChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Goals Completion -->
+                <div class="goals-widget">
+                    <div class="widget-header">
+                        <h3>GOALS COMPLETION</h3>
+                    </div>
+                    <div class="goals-list">
+                        <div class="goal-item">
+                            <div class="goal-info">
+                                <span class="goal-name">Account</span>
+                                <span class="goal-value">$0.18</span>
+                            </div>
+                            <div class="goal-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 85%"></div>
+                                </div>
+                                <span class="goal-percent">85%</span>
+                            </div>
+                        </div>
+                        <div class="goal-item">
+                            <div class="goal-info">
+                                <span class="goal-name">Subscribe</span>
+                                <span class="goal-value">$9.12</span>
+                            </div>
+                            <div class="goal-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 75%"></div>
+                                </div>
+                                <span class="goal-percent">75%</span>
+                            </div>
+                        </div>
+                        <div class="goal-item">
+                            <div class="goal-info">
+                                <span class="goal-name">Mobile</span>
+                                <span class="goal-value">$2.20</span>
+                            </div>
+                            <div class="goal-progress">
+                                <div class="progress-bar orange">
+                                    <div class="progress-fill" style="width: 60%"></div>
+                                </div>
+                                <span class="goal-percent">60%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- World Map and Browser Stats -->
+            <!-- <div class="map-section">
+              <div class="world-map-widget">
+                <div class="map-container">
+                  <div id="world-map-markers" style="height: 450px"></div>
+                </div>
+              </div>
+
+              <div class="browser-stats">
+                <div class="widget-header">
+                  <h3>VISITORS SESSIONS</h3>
+                  <p>Sessions by Browser</p>
+                </div>
+                <div class="browser-chart">
+                  <div class="donut-chart">
+                    <canvas id="browserChart"></canvas>
+                  </div>
+                  <div class="browser-legend">
+                    <div class="legend-item">
+                      <span class="legend-color chrome"></span>
+                      <span>Chrome 3,500</span>
+                    </div>
+                    <div class="browser-trends">
+                      <div class="trend-item">
+                        <span>Today's</span>
+                        <span class="trend-positive">↑ 5.86%</span>
+                      </div>
+                      <div class="trend-item">
+                        <span>Yesterday's</span>
+                        <span class="trend-negative">↓ 4.18%</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+            <!-- Country Stats Table -->
+            <div class="country-table">
+                <div class="widget-header">
+                    <h3>AUDIENCE BY COUNTRY</h3>
+                </div>
+                <table class="analytics-table">
+                    <thead>
+                        <tr>
+                            <th>Country</th>
+                            <th>Page views</th>
+                            <th>Device</th>
+                            <th>% Bounce rate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                United State
+                            </td>
+                            <td>18</td>
+                            <td>Desktop</td>
+                            <td>
+                                <div class="bounce-bar">
+                                    <div class="bounce-fill" style="width: 80%"></div>
+                                    <span>80%</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Australia
+                            </td>
+                            <td>12</td>
+                            <td>Mobile</td>
+                            <td>
+                                <div class="bounce-bar">
+                                    <div class="bounce-fill" style="width: 75%"></div>
+                                    <span>75%</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+
+                                Brazil
+                            </td>
+                            <td>25</td>
+                            <td>Tablet</td>
+                            <td>
+                                <div class="bounce-bar">
+                                    <div class="bounce-fill" style="width: 68%"></div>
+                                    <span>68%</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+
+                                Great Britain (UK)
+                            </td>
+                            <td>8</td>
+                            <td>Mobile</td>
+                            <td>
+                                <div class="bounce-bar orange">
+                                    <div class="bounce-fill" style="width: 55%"></div>
+                                    <span>55%</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    @Html.Partial("~/Views/admin/share/script.cshtml")
+</body>
+</html>
