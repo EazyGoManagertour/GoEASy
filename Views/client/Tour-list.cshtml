@@ -1,6 +1,30 @@
-﻿<!DOCTYPE html>
+﻿@using System.Linq
+@model IEnumerable<GoEASy.Models.Tour>
+<!DOCTYPE html>
 <html lang="zxx">
- @Html.Partial("~/Views/client/share/head.cshtml")
+@Html.Partial("~/Views/client/share/head.cshtml")
+<link rel="shortcut icon" href="assets/images/logos/favicon.png" type="image/x-icon">
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+
+<!-- Flaticon -->
+<link rel="stylesheet" href="assets/css/flaticon.min.css">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="assets/css/fontawesome-5.14.0.min.css">
+<!-- Bootstrap -->
+<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+<!-- Magnific Popup -->
+<link rel="stylesheet" href="assets/css/magnific-popup.min.css">
+<!-- Nice Select -->
+<link rel="stylesheet" href="assets/css/nice-select.min.css">
+<!-- jQuery UI -->
+<link rel="stylesheet" href="assets/css/jquery-ui.min.css">
+<!-- Animate -->
+<link rel="stylesheet" href="assets/css/aos.css">
+<!-- Slick -->
+<link rel="stylesheet" href="assets/css/slick.min.css">
+<!-- Main Style -->
+<link rel="stylesheet" href="assets/css/style.css">
 <body>
     <div class="page-wrapper">
 
@@ -8,7 +32,7 @@
         <div class="preloader"><div class="custom-loader"></div></div>
 
         <!-- main header -->
-         @Html.Partial("~/Views/client/share/header.cshtml")
+        @Html.Partial("~/Views/client/share/header.cshtml")
 
         <!--Form Back Drop-->
         <div class="form-back-drop"></div>
@@ -284,37 +308,30 @@
 
                             <div class="widget widget-tour" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
                                 <h6 class="widget-title">Popular Tours</h6>
-                                <div class="destination-item tour-grid style-three bgc-lighter">
-                                    <div class="image">
-                                        <span class="badge">10% Off</span>
-                                        <img src="assets/images/widgets/tour1.jpg" alt="Tour">
-                                    </div>
-                                    <div class="content">
-                                        <div class="destination-header">
-                                            <span class="location"><i class="fal fa-map-marker-alt"></i> Bali, Indonesia</span>
-                                            <div class="ratting">
-                                                <i class="fas fa-star"></i>
-                                                <span>(4.8)</span>
+                                @if (Model != null && Model.Any())
+                                {
+                                    var popularTours = Model.Take(2);
+                                    foreach (var tour in popularTours)
+                                    {
+                                        var coverImage = tour.TourImages?.FirstOrDefault(ti => ti.IsCover == true)?.ImageUrl ?? "assets/images/destinations/tour-list1.jpg";
+                                        <div class="destination-item tour-grid style-three bgc-lighter">
+                                            <div class="image">
+                                                <span class="badge">10% Off</span>
+                                                <img src="@coverImage" alt="@tour.TourName">
+                                            </div>
+                                            <div class="content">
+                                                <div class="destination-header">
+                                                    <span class="location"><i class="fal fa-map-marker-alt"></i> @(tour.Destination?.DestinationName ?? "Unknown Location")</span>
+                                                    <div class="ratting">
+                                                        <i class="fas fa-star"></i>
+                                                        <span>(4.8)</span>
+                                                    </div>
+                                                </div>
+                                                <h6><a href="tour-details.html">@tour.TourName</a></h6>
                                             </div>
                                         </div>
-                                        <h6><a href="tour-details.html">Relinking Beach, Bali, Indonesia</a></h6>
-                                    </div>
-                                </div>
-                                <div class="destination-item tour-grid style-three bgc-lighter">
-                                    <div class="image">
-                                        <img src="assets/images/widgets/tour1.jpg" alt="Tour">
-                                    </div>
-                                    <div class="content">
-                                        <div class="destination-header">
-                                            <span class="location"><i class="fal fa-map-marker-alt"></i> Bali, Indonesia</span>
-                                            <div class="ratting">
-                                                <i class="fas fa-star"></i>
-                                                <span>(4.8)</span>
-                                            </div>
-                                        </div>
-                                        <h6><a href="tour-details.html">Relinking Beach, Bali, Indonesia</a></h6>
-                                    </div>
-                                </div>
+                                    }
+                                }
                             </div>
                         </div>
 
@@ -341,7 +358,7 @@
                                 <li><a href="#"><i class="far fa-list"></i></a></li>
                             </ul>
                             <div class="sort-text mb-15 me-4 me-xl-auto">
-                                34 Tours found
+                                @(Model?.Count() ?? 0) Tours found
                             </div>
                             <div class="sort-text mb-15 me-4">
                                 Sort By
@@ -354,227 +371,67 @@
                                 <option value="low-to-high">Low To High</option>
                             </select>
                         </div>
-                        <div class="destination-item style-three bgc-lighter" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                            <div class="image">
-                                <span class="badge bgc-pink">Featured</span>
-                                <a href="#" class="heart"><i class="fas fa-heart"></i></a>
-                                <img src="assets/images/destinations/tour-list1.jpg" alt="Tour List">
-                            </div>
-                            <div class="content">
-                                <div class="destination-header">
-                                    <span class="location"><i class="fal fa-map-marker-alt"></i> Bali, Indonesia</span>
-                                    <div class="ratting">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
+
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var tour in Model)
+                            {
+                                var coverImage = tour.TourImages?.FirstOrDefault(ti => ti.IsCover == true)?.ImageUrl ?? "assets/images/destinations/tour-list1.jpg";
+                                var isFeatured = tour.TourId % 3 == 0; // Logic để xác định tour featured
+                                var hasDiscount = tour.TourId % 4 == 0; // Logic để xác định tour có discount
+
+                                <div class="destination-item style-three bgc-lighter" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                                    <div class="image">
+                                        @if (isFeatured)
+                                        {
+                                            <span class="badge bgc-pink">Featured</span>
+                                        }
+                                        else if (hasDiscount)
+                                        {
+                                            <span class="badge">10% Off</span>
+                                        }
+                                        <a href="#" class="heart"><i class="fas fa-heart"></i></a>
+                                        <img src="@coverImage" alt="@tour.TourName">
+                                    </div>
+                                    <div class="content">
+                                        <div class="destination-header">
+                                            <span class="location"><i class="fal fa-map-marker-alt"></i> @(tour.Destination?.DestinationName ?? "Unknown Location")</span>
+                                            <div class="ratting">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                        </div>
+                                        <h5><a href="tour-details.html">@tour.TourName</a></h5>
+                                        <p>@(tour.Description?.Length > 100 ? tour.Description.Substring(0, 100) + "..." : tour.Description ?? "No description available")</p>
+                                        <ul class="blog-meta">
+                                            <li><i class="far fa-clock"></i> @(tour.StartDate?.ToString("MMM dd") ?? "TBD") - @(tour.EndDate?.ToString("MMM dd") ?? "TBD")</li>
+                                            <li><i class="far fa-user"></i> @(tour.MaxSeats ?? 0) max guests</li>
+                                        </ul>
+                                        <div class="destination-footer">
+                                            <span class="price">
+                                                <span>$@tour.AdultPrice.ToString("0.00")</span>/adult,
+                                                <span>$@tour.ChildPrice.ToString("0.00")</span>/child
+                                            </span>
+                                            <a href="tour-details.html" class="theme-btn style-two style-three">
+                                                <span data-hover="Book Now">Book Now</span>
+                                                <i class="fal fa-arrow-right"></i>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
-                                <h5><a href="tour-details.html">Bay Cruise by Boat in Bali, Indonesia</a></h5>
-                                <p>Bali, Indonesia, is tropical paradise renowned breathtaking beaches, vibrant culture, and lush landscapes</p>
-                                <ul class="blog-meta">
-                                    <li><i class="far fa-clock"></i> 3 days 2 nights</li>
-                                    <li><i class="far fa-user"></i> 5-8 guest</li>
-                                </ul>
-                                <div class="destination-footer">
-                                    <span class="price"><span>$58.00</span>/person</span>
-                                    <a href="tour-details.html" class="theme-btn style-two style-three">
-                                        <span data-hover="Book Now">Book Now</span>
-                                        <i class="fal fa-arrow-right"></i>
-                                    </a>
-                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="text-center py-5">
+                                <h4>No tours available at the moment.</h4>
+                                <p>Please check back later for new tour offerings.</p>
                             </div>
-                        </div>
-                        <div class="destination-item style-three bgc-lighter" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                            <div class="image">
-                                <span class="badge">10% Off</span>
-                                <a href="#" class="heart"><i class="fas fa-heart"></i></a>
-                                <img src="assets/images/destinations/tour-list2.jpg" alt="Tour List">
-                            </div>
-                            <div class="content">
-                                <div class="destination-header">
-                                    <span class="location"><i class="fal fa-map-marker-alt"></i> Rome, Italy</span>
-                                    <div class="ratting">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                    </div>
-                                </div>
-                                <h5><a href="tour-details.html">Buenos Aires, Calafate & Ushuaia</a></h5>
-                                <p>Bali, Indonesia, is tropical paradise renowned breathtaking beaches, vibrant culture, and lush landscapes</p>
-                                <ul class="blog-meta">
-                                    <li><i class="far fa-clock"></i> 3 days 2 nights</li>
-                                    <li><i class="far fa-user"></i> 5-8 guest</li>
-                                </ul>
-                                <div class="destination-footer">
-                                    <span class="price"><span>$105.00</span>/person</span>
-                                    <a href="tour-details.html" class="theme-btn style-two style-three">
-                                        <span data-hover="Book Now">Book Now</span>
-                                        <i class="fal fa-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="destination-item style-three bgc-lighter" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                            <div class="image">
-                                <a href="#" class="heart"><i class="fas fa-heart"></i></a>
-                                <img src="assets/images/destinations/tour-list3.jpg" alt="Tour List">
-                            </div>
-                            <div class="content">
-                                <div class="destination-header">
-                                    <span class="location"><i class="fal fa-map-marker-alt"></i> Tamnougalt, Morocco</span>
-                                    <div class="ratting">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                    </div>
-                                </div>
-                                <h5><a href="tour-details.html">Camels on desert Morocco, Sahara.</a></h5>
-                                <p>Bali, Indonesia, is tropical paradise renowned breathtaking beaches, vibrant culture, and lush landscapes</p>
-                                <ul class="blog-meta">
-                                    <li><i class="far fa-clock"></i> 3 days 2 nights</li>
-                                    <li><i class="far fa-user"></i> 5-8 guest</li>
-                                </ul>
-                                <div class="destination-footer">
-                                    <span class="price"><span>$386.00</span>/person</span>
-                                    <a href="tour-details.html" class="theme-btn style-two style-three">
-                                        <span data-hover="Book Now">Book Now</span>
-                                        <i class="fal fa-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="destination-item style-three bgc-lighter" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                            <div class="image">
-                                <span class="badge bgc-primary">Popular</span>
-                                <a href="#" class="heart"><i class="fas fa-heart"></i></a>
-                                <img src="assets/images/destinations/tour-list4.jpg" alt="Tour List">
-                            </div>
-                            <div class="content">
-                                <div class="destination-header">
-                                    <span class="location"><i class="fal fa-map-marker-alt"></i> Switzerland</span>
-                                    <div class="ratting">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                    </div>
-                                </div>
-                                <h5><a href="tour-details.html">Hakone, Lake Asha Cruise Day Bus Trip</a></h5>
-                                <p>Bali, Indonesia, is tropical paradise renowned breathtaking beaches, vibrant culture, and lush landscapes</p>
-                                <ul class="blog-meta">
-                                    <li><i class="far fa-clock"></i> 3 days 2 nights</li>
-                                    <li><i class="far fa-user"></i> 5-8 guest</li>
-                                </ul>
-                                <div class="destination-footer">
-                                    <span class="price"><span>$293.00</span>/person</span>
-                                    <a href="tour-details.html" class="theme-btn style-two style-three">
-                                        <span data-hover="Book Now">Book Now</span>
-                                        <i class="fal fa-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="destination-item style-three bgc-lighter" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                            <div class="image">
-                                <a href="#" class="heart"><i class="fas fa-heart"></i></a>
-                                <img src="assets/images/destinations/tour-list5.jpg" alt="Tour List">
-                            </div>
-                            <div class="content">
-                                <div class="destination-header">
-                                    <span class="location"><i class="fal fa-map-marker-alt"></i> Tours, France</span>
-                                    <div class="ratting">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                    </div>
-                                </div>
-                                <h5><a href="tour-details.html">Concrete Building Basilica St Martin</a></h5>
-                                <p>Bali, Indonesia, is tropical paradise renowned breathtaking beaches, vibrant culture, and lush landscapes</p>
-                                <ul class="blog-meta">
-                                    <li><i class="far fa-clock"></i> 3 days 2 nights</li>
-                                    <li><i class="far fa-user"></i> 5-8 guest</li>
-                                </ul>
-                                <div class="destination-footer">
-                                    <span class="price"><span>$58.00</span>/person</span>
-                                    <a href="tour-details.html" class="theme-btn style-two style-three">
-                                        <span data-hover="Book Now">Book Now</span>
-                                        <i class="fal fa-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="destination-item style-three bgc-lighter" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                            <div class="image">
-                                <span class="badge bgc-pink">Featured</span>
-                                <a href="#" class="heart"><i class="fas fa-heart"></i></a>
-                                <img src="assets/images/destinations/tour-list6.jpg" alt="Tour List">
-                            </div>
-                            <div class="content">
-                                <div class="destination-header">
-                                    <span class="location"><i class="fal fa-map-marker-alt"></i> Wildest, Italy</span>
-                                    <div class="ratting">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                    </div>
-                                </div>
-                                <h5><a href="tour-details.html">Blue lake water view taken Sea Beach</a></h5>
-                                <p>Bali, Indonesia, is tropical paradise renowned breathtaking beaches, vibrant culture, and lush landscapes</p>
-                                <ul class="blog-meta">
-                                    <li><i class="far fa-clock"></i> 3 days 2 nights</li>
-                                    <li><i class="far fa-user"></i> 5-8 guest</li>
-                                </ul>
-                                <div class="destination-footer">
-                                    <span class="price"><span>$58.00</span>/person</span>
-                                    <a href="tour-details.html" class="theme-btn style-two style-three">
-                                        <span data-hover="Book Now">Book Now</span>
-                                        <i class="fal fa-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="destination-item style-three bgc-lighter" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                            <div class="image">
-                                <a href="#" class="heart"><i class="fas fa-heart"></i></a>
-                                <img src="assets/images/destinations/tour-list7.jpg" alt="Tour List">
-                            </div>
-                            <div class="content">
-                                <div class="destination-header">
-                                    <span class="location"><i class="fal fa-map-marker-alt"></i> Bali, Indonesia</span>
-                                    <div class="ratting">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                    </div>
-                                </div>
-                                <h5><a href="tour-details.html">Bay Cruise by Boat in Bali, Indonesia</a></h5>
-                                <p>Bali, Indonesia, is tropical paradise renowned breathtaking beaches, vibrant culture, and lush landscapes</p>
-                                <ul class="blog-meta">
-                                    <li><i class="far fa-clock"></i> 3 days 2 nights</li>
-                                    <li><i class="far fa-user"></i> 5-8 guest</li>
-                                </ul>
-                                <div class="destination-footer">
-                                    <span class="price"><span>$58.00</span>/person</span>
-                                    <a href="tour-details.html" class="theme-btn style-two style-three">
-                                        <span data-hover="Book Now">Book Now</span>
-                                        <i class="fal fa-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+                        }
+
                         <ul class="pagination pt-15 flex-wrap" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
                             <li class="page-item disabled">
                                 <span class="page-link"><i class="far fa-chevron-left"></i></span>
@@ -605,7 +462,7 @@
                         <div class="newsletter-content-part text-white rmb-55" data-aos="zoom-in-right" data-aos-duration="1500" data-aos-offset="50">
                             <div class="section-title counter-text-wrap mb-45">
                                 <h2>Subscribe Our Newsletter to Get more offer & Tips</h2>
-                                <p>One site <span class="count-text plus" data-speed="3000" data-stop="34500">0</span> most popular experience you’ll remember</p>
+                                <p>One site <span class="count-text plus" data-speed="3000" data-stop="34500">0</span> most popular experience you'll remember</p>
                             </div>
                             <form class="newsletter-form mb-15" action="#">
                                 <input id="news-email" type="email" placeholder="Email Address" required>
@@ -633,7 +490,28 @@
     </div>
     <!--End pagewrapper-->
     @Html.Partial("~/Views/client/share/script.cshtml")
-   
+    <script src="assets/js/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="assets/js/bootstrap.min.js"></script>
+    <!-- Appear Js -->
+    <script src="assets/js/appear.min.js"></script>
+    <!-- Slick -->
+    <script src="assets/js/slick.min.js"></script>
+    <!-- Magnific Popup -->
+    <script src="assets/js/jquery.magnific-popup.min.js"></script>
+    <!-- Nice Select -->
+    <script src="assets/js/jquery.nice-select.min.js"></script>
+    <!-- Image Loader -->
+    <script src="assets/js/imagesloaded.pkgd.min.js"></script>
+    <!-- Jquery UI -->
+    <script src="assets/js/jquery-ui.min.js"></script>
+    <!-- Isotope -->
+    <script src="assets/js/isotope.pkgd.min.js"></script>
+    <!--  AOS Animation -->
+    <script src="assets/js/aos.js"></script>
+    <!-- Custom script -->
+    <script src="assets/js/script.js"></script>
+
 
 </body>
 
