@@ -1,12 +1,22 @@
+<<<<<<< HEAD
 ﻿using GoEASy.Models;
+=======
+﻿using GoEASy.DBConnection;
+>>>>>>> 33b4a60fd6af242bb2c1562a2cbee06a7b57d2bb
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 public class TestDbController : Controller
 {
+<<<<<<< HEAD
     private readonly GoEasyContext _context;
 
     public TestDbController(GoEasyContext context)
+=======
+    private readonly AppDbContext _context;
+
+    public TestDbController(AppDbContext context)
+>>>>>>> 33b4a60fd6af242bb2c1562a2cbee06a7b57d2bb
     {
         _context = context;
     }
@@ -15,6 +25,7 @@ public class TestDbController : Controller
     {
         try
         {
+<<<<<<< HEAD
             // Test connection cơ bản
             bool ok = _context.Database.CanConnect();
             
@@ -43,4 +54,17 @@ public class TestDbController : Controller
             return Content($"❌ Lỗi DB: {ex.Message}");
         }
     }
+=======
+            bool ok = _context.Database.CanConnect();
+            return Content(ok ? "✅ Database connected!" : "❌ Cannot connect to database.");
+        }
+        catch (Exception ex)
+        {
+            return Content("❌ Lỗi DB: " + ex.Message);
+        }
+    }
+
+
+
+>>>>>>> 33b4a60fd6af242bb2c1562a2cbee06a7b57d2bb
 }
