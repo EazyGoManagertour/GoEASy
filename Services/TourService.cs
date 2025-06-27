@@ -19,7 +19,10 @@ public class TourService
             .Include(t => t.TourImages)
             .Include(t => t.Destination)
             .Include(t => t.Category)
+<<<<<<< HEAD
             .Include(t => t.Reviews)
+=======
+>>>>>>> 33b4a60fd6af242bb2c1562a2cbee06a7b57d2bb
             .ToListAsync();
     }
 
@@ -27,6 +30,11 @@ public class TourService
     {
         return await _context.Tours
             .Include(t => t.TourImages)
+<<<<<<< HEAD
+=======
+            .Include(t => t.Destination)
+            .Include(t => t.Category)
+>>>>>>> 33b4a60fd6af242bb2c1562a2cbee06a7b57d2bb
             .FirstOrDefaultAsync(t => t.TourId == id);
     }
 

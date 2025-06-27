@@ -17,8 +17,11 @@ public partial class User
 
     public string? Phone { get; set; }
 
+<<<<<<< HEAD
     public string? Address { get; set; }
 
+=======
+>>>>>>> 33b4a60fd6af242bb2c1562a2cbee06a7b57d2bb
     public bool? IsVip { get; set; }
 
     public int? Vippoints { get; set; }
