@@ -1,27 +1,17 @@
 using GoEASy.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-<<<<<<< HEAD
-=======
 using Microsoft.EntityFrameworkCore;
->>>>>>> 33b4a60fd6af242bb2c1562a2cbee06a7b57d2bb
 
 public class TourController : Controller
 {
     private readonly TourService _tourService;
-<<<<<<< HEAD
-
-    public TourController(TourService tourService)
-    {
-        _tourService = tourService;
-=======
     private readonly GoEasyContext _context;
 
     public TourController(TourService tourService, GoEasyContext context)
     {
         _tourService = tourService;
         _context = context;
->>>>>>> 33b4a60fd6af242bb2c1562a2cbee06a7b57d2bb
     }
 
     // GET: /Tour
@@ -31,8 +21,6 @@ public class TourController : Controller
         return View("~/Views/client/tour-list.cshtml", tours);
     }
 
-<<<<<<< HEAD
-=======
     // GET: /Tour/SeedData - Action để tạo dữ liệu mẫu
     public async Task<IActionResult> SeedData()
     {
@@ -139,7 +127,6 @@ public class TourController : Controller
         return RedirectToAction(nameof(Index));
     }
 
->>>>>>> 33b4a60fd6af242bb2c1562a2cbee06a7b57d2bb
     // GET: /Tour/Details/5
     public async Task<IActionResult> Details(int id)
     {

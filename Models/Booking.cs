@@ -11,11 +11,8 @@ public partial class Booking
 
     public int? TourId { get; set; }
 
-<<<<<<< HEAD
     public int? DiscountId { get; set; }
 
-=======
->>>>>>> 33b4a60fd6af242bb2c1562a2cbee06a7b57d2bb
     public DateTime? BookingDate { get; set; }
 
     public int AdultGuests { get; set; }
@@ -36,11 +33,8 @@ public partial class Booking
 
     public DateTime? UpdatedAt { get; set; }
 
-<<<<<<< HEAD
     public virtual Discount? Discount { get; set; }
 
-=======
->>>>>>> 33b4a60fd6af242bb2c1562a2cbee06a7b57d2bb
     public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
 
     public virtual Tour? Tour { get; set; }
