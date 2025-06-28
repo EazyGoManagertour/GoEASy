@@ -19,6 +19,7 @@ public class TourService
             .Include(t => t.TourImages)
             .Include(t => t.Destination)
             .Include(t => t.Category)
+            .Include(t => t.Reviews)
             .ToListAsync();
     }
 
@@ -28,6 +29,7 @@ public class TourService
             .Include(t => t.TourImages)
             .Include(t => t.Destination)
             .Include(t => t.Category)
+            .Include(t => t.Reviews)
             .FirstOrDefaultAsync(t => t.TourId == id);
     }
 

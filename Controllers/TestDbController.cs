@@ -1,29 +1,22 @@
-﻿using GoEASy.DBConnection;
+﻿using GoEASy.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-public class TestDbController : Controller
+namespace GoEASy.Controllers
 {
-    private readonly AppDbContext _context;
-
-    public TestDbController(AppDbContext context)
+    public class TestDbController : Controller
     {
-        _context = context;
-    }
+        private readonly GoEasyContext _context;
 
-    public IActionResult Index()
-    {
-        try
+        public TestDbController(GoEasyContext context)
         {
-            bool ok = _context.Database.CanConnect();
-            return Content(ok ? "✅ Database connected!" : "❌ Cannot connect to database.");
+            _context = context;
         }
-        catch (Exception ex)
+
+        public async Task<IActionResult> TestRoleTable()
         {
-            return Content("❌ Lỗi DB: " + ex.Message);
+            var roles = await _context.Roles.ToListAsync();
+            return Content($"Số lượng roles: {roles.Count}");
         }
     }
-
-
-
 }
