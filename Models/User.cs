@@ -17,6 +17,8 @@ public partial class User
 
     public string? Phone { get; set; }
 
+    public string? Address { get; set; }
+
     public bool? IsVip { get; set; }
 
     public int? Vippoints { get; set; }
