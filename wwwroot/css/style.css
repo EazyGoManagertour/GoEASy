@@ -119,9 +119,9 @@ body {
     position: relative;
 }
 
-    .sidebar.expanded {
-        width: 260px;
-    }
+.sidebar.expanded {
+    width: 260px;
+}
 
 .sidebar-toggle {
     position: absolute;
