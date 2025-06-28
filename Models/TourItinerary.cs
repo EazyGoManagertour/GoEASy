@@ -15,5 +15,11 @@ public partial class TourItinerary
 
     public string? Description { get; set; }
 
+    public string? Meals { get; set; }
+
+    public string? Accommodation { get; set; }
+
+    public DateTime? CreatedAt { get; set; }
+
     public virtual Tour? Tour { get; set; }
 }

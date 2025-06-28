@@ -1,21 +1,23 @@
 using System;
 using Microsoft.EntityFrameworkCore;
-using GoEASy.DBConnection;
 using GoEASy.Models;
 using GoEASy.Repositories;
-
+using GoEASy.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-
+// Đăng ký GoEasyContext
 builder.Services.AddDbContext<GoEasyContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Đăng ký repository generic
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-builder.Services.AddScoped<TourService>();
+
+// Đăng ký UserService
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
