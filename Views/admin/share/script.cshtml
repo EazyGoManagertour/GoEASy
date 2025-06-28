@@ -16,3 +16,74 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script src="~/js/script.js"></script>
+
+<script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.querySelector(".overlay");
+
+        sidebar.classList.toggle("active");
+        overlay.classList.toggle("active");
+    }
+
+    function toggleSidebarExpand() {
+        const sidebar = document.getElementById("sidebar");
+        const toggleIcon = document.getElementById("toggleIcon");
+
+        sidebar.classList.toggle("expanded");
+
+        if (sidebar.classList.contains("expanded")) {
+            toggleIcon.classList.remove("fa-light fa-gear-complex");
+            toggleIcon.classList.add("fa-light fa-gear-complex");
+        } else {
+            toggleIcon.classList.remove("fa-light fa-gear-complex");
+            toggleIcon.classList.add("fa-light fa-gear-complex");
+        }
+    }
+
+    // Close sidebar when clicking on menu items on mobile
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll(".menu-item").forEach((item) => {
+            item.addEventListener("click", () => {
+                if (window.innerWidth <= 768) {
+                    toggleSidebar();
+                }
+            });
+        });
+
+        // Handle tab switching
+        document.querySelectorAll(".tab").forEach((tab) => {
+            tab.addEventListener("click", function () {
+                document
+                    .querySelectorAll(".tab")
+                    .forEach((t) => t.classList.remove("active"));
+                this.classList.add("active");
+            });
+        });
+
+        // Handle menu item switching - only for items with href="#"
+        document.querySelectorAll(".menu-item").forEach((item) => {
+            item.addEventListener("click", function (e) {
+                // Only prevent default and handle active state for placeholder links
+                if (this.getAttribute('href') === '#' || this.getAttribute('href') === null) {
+                    e.preventDefault();
+                    document
+                        .querySelectorAll(".menu-item")
+                        .forEach((i) => i.classList.remove("active"));
+                    this.classList.add("active");
+                }
+            });
+        });
+
+        // Add smooth animations for buttons
+        document.querySelectorAll(".btn, .action-btn").forEach((btn) => {
+            btn.addEventListener("mouseenter", function () {
+                this.style.transform = "translateY(-2px)";
+            });
+
+            btn.addEventListener("mouseleave", function () {
+                this.style.transform = "translateY(0)";
+            });
+        });
+    });
+</script>
