@@ -103,7 +103,9 @@
                                 <td>@admin.Address</td>
                                 <td>@admin.Role</td>
                                 <td>
-                                    <button class="status admit" style="border: none; outline: none; background-color:@(admin.Status == true ? "" : "#dc3545")">
+                                    <button class="status admit"
+                                            style="border: none; outline: none; background-color:@(admin.Status == true ? "" : "#dc3545")"
+                                            onclick="toggleStatus(this, '@admin.AdminId', @(admin.Status.ToString().ToLower()))">
                                         @(admin.Status == true ? "Active" : "Disable")
                                     </button>
                                 </td>
@@ -278,8 +280,43 @@
             </div>
         </div>
     </div>
+    <script>
+        function toggleStatus(button, adminId, currentStatus) {
+            fetch(`/admin/account-admin/toggle-status?id=${adminId}`, {
+                method: 'POST'
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Cập nhật UI
+                    const newStatus = !(currentStatus === true || currentStatus === "true");
+                    button.textContent = newStatus ? "Active" : "Disable";
+                    button.style.backgroundColor = newStatus ? "" : "#dc3545";
+                    button.setAttribute("onclick", `toggleStatus(this, '${adminId}', ${newStatus})`);
 
-    <script src="~/js/account-admin.js"></script>
+                    // Show success toast
+                    const msg = "Status updated successfully!";
+                    document.getElementById("toast-success-msg").value = msg;
+                    document.querySelector("#successToast .toast-body").innerText = msg;
+                    new bootstrap.Toast(document.getElementById("successToast"), { delay: 5000 }).show();
+                } else {
+                    // Show error toast
+                    const msg = "Failed to update status.";
+                    document.getElementById("toast-error-msg").value = msg;
+                    document.querySelector("#errorToast .toast-body").innerText = msg;
+                    new bootstrap.Toast(document.getElementById("errorToast"), { delay: 5000 }).show();
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                const msg = "An unexpected error occurred!";
+                document.getElementById("toast-error-msg").value = msg;
+                document.querySelector("#errorToast .toast-body").innerText = msg;
+                new bootstrap.Toast(document.getElementById("errorToast"), { delay: 5000 }).show();
+            });
+        }
+    </script> 
+    <script src="~/js/account-admin.js"></script> 
     @Html.Partial("~/Views/admin/share/script.cshtml")
+
 </body>
 </html>
