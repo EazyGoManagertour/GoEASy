@@ -103,8 +103,11 @@ namespace GoEASy.Controllers
                 return RedirectToAction("Index");
             }
 
-            await _adminService.DeleteAdminAsync(id);
-            TempData["Success"] = "Admin deleted successfully!";
+            admin.Status = false;
+            admin.UpdatedAt = DateTime.Now;
+
+            await _adminService.UpdateAdminAsync(admin);
+            TempData["Success"] = "Admin disabled (soft deleted) successfully!";
             return RedirectToAction("Index");
         }
 
