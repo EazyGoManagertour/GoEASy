@@ -182,5 +182,35 @@ namespace GoEASy.Services
             
             return string.Join(" ", formattedWords);
         }
+
+
+        public static (bool IsValid, List<string> Errors) ValidateAdmin(Admin admin, bool isUpdate = false)
+        {
+            var errors = new List<string>();
+
+            if (!IsValidUsername(admin.Username))
+                errors.Add("Username phải có 3-20 ký tự, chỉ chứa chữ cái, số và dấu gạch dưới");
+
+            if (!isUpdate || !string.IsNullOrEmpty(admin.Password))
+            {
+                if (!IsStrongPassword(admin.Password))
+                    errors.Add("Password phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường và số");
+            }
+
+            if (!IsValidName(admin.FullName))
+                errors.Add("Họ tên phải viết hoa đầu mỗi từ");
+
+            if (!string.IsNullOrEmpty(admin.Email) && !IsValidEmail(admin.Email))
+                errors.Add("Email không hợp lệ");
+
+            if (!string.IsNullOrEmpty(admin.Phone) && !IsValidPhone(admin.Phone))
+                errors.Add("Số điện thoại không hợp lệ (định dạng Việt Nam)");
+
+            if (string.IsNullOrWhiteSpace(admin.Role) || !(admin.Role == "Admin" || admin.Role == "Employee"))
+                errors.Add("Role phải là Admin hoặc Employee");
+
+            return (errors.Count == 0, errors);
+        }
+
     }
 } 

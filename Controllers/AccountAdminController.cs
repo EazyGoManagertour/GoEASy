@@ -1,7 +1,9 @@
 ﻿using GoEASy.Models;
 using GoEASy.Services;
 using Microsoft.AspNetCore.Mvc;
+using BCrypt.Net;
 using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace GoEASy.Controllers
@@ -28,43 +30,34 @@ namespace GoEASy.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> Create(Admin admin)
         {
-            try
+            var (isValid, errors) = ValidationService.ValidateAdmin(admin);
+
+            if (!isValid)
             {
-                if (!ModelState.IsValid)
-                {
-                    TempData["Error"] = "Please fill in all required fields.";
-                    return RedirectToAction("Index");
-                }
-
-                admin.CreatedAt = DateTime.Now;
-                await _adminService.CreateAdminAsync(admin);
-
-                TempData["Success"] = "Admin added successfully!";
+                TempData["Error"] = string.Join("<br/>", errors); // Hiện toast đỏ
+                return RedirectToAction("Index");
             }
-            catch (Exception ex)
-            {
-                TempData["Error"] = "Failed to create admin: " + ex.Message;
-            }
+            admin.Password = BCrypt.Net.BCrypt.HashPassword(admin.Password);
+            admin.CreatedAt = DateTime.Now;
+            admin.Status = admin.Status ?? true;
 
+            await _adminService.CreateAdminAsync(admin);
+            TempData["Success"] = "Admin created successfully!";
             return RedirectToAction("Index");
         }
 
 
-
+        // POST: admin/account-admin/update
         [HttpPost("update")]
         public async Task<IActionResult> Update(Admin admin)
         {
             try
             {
-                // ⚠️ Xóa lỗi validation với Password nếu người dùng không nhập
-                if (string.IsNullOrWhiteSpace(admin.Password))
-                {
-                    ModelState.Remove(nameof(admin.Password));
-                }
+                var (isValid, errors) = ValidationService.ValidateAdmin(admin, isUpdate: true);
 
-                if (!ModelState.IsValid || admin.AdminId == 0)
+                if (!isValid || admin.AdminId == 0)
                 {
-                    TempData["Error"] = "Invalid update data!";
+                    TempData["Error"] = string.Join("<br/>", errors); // Chỉ toast lỗi
                     return RedirectToAction("Index");
                 }
 
@@ -75,11 +68,14 @@ namespace GoEASy.Controllers
                     return RedirectToAction("Index");
                 }
 
+                // Cập nhật thông tin
                 existingAdmin.Username = admin.Username;
                 existingAdmin.FullName = admin.FullName;
                 existingAdmin.Email = admin.Email;
-                if (!string.IsNullOrEmpty(admin.Password))
-                    existingAdmin.Password = admin.Password;
+
+                if (!string.IsNullOrWhiteSpace(admin.Password))
+                    existingAdmin.Password = BCrypt.Net.BCrypt.HashPassword(admin.Password);
+
                 existingAdmin.Phone = admin.Phone;
                 existingAdmin.Address = admin.Address;
                 existingAdmin.Role = admin.Role;
@@ -87,7 +83,6 @@ namespace GoEASy.Controllers
                 existingAdmin.UpdatedAt = DateTime.Now;
 
                 await _adminService.UpdateAdminAsync(existingAdmin);
-
                 TempData["Success"] = "Admin updated successfully!";
             }
             catch (Exception ex)
@@ -97,7 +92,6 @@ namespace GoEASy.Controllers
 
             return RedirectToAction("Index");
         }
-
 
         [HttpPost("delete-confirm")]
         public async Task<IActionResult> DeleteConfirm(int id)
@@ -114,5 +108,11 @@ namespace GoEASy.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost("toggle-status")]
+        public async Task<IActionResult> ToggleStatus(int id)
+        {
+            await _adminService.ToggleStatusAsync(id);
+            return Ok();
+        }
     }
 }
