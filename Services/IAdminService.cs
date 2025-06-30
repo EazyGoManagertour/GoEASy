@@ -11,5 +11,7 @@ namespace GoEASy.Services
         Task CreateAdminAsync(Admin admin);
         Task UpdateAdminAsync(Admin admin);
         Task DeleteAdminAsync(int id);
+
+        Task ToggleStatusAsync(int id);
     }
 }
