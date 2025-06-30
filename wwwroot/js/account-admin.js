@@ -1,4 +1,6 @@
 ﻿
+        
+
         function setDeleteAdminId(id) {
         document.getElementById("deleteAdminId").value = id;
         }
@@ -16,4 +18,7 @@
         document.getElementById("editRole").value = role;
         document.getElementById("editStatus").value = status;
         }
+
+
+
     

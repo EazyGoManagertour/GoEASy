@@ -45,5 +45,16 @@ namespace GoEASy.Services
                 await _adminRepo.SaveAsync();
             }
         }
+
+        public async Task ToggleStatusAsync(int id)
+        {
+            var admin = await _adminRepo.GetByIdAsync(id);
+            if (admin != null)
+            {
+                admin.Status = !(admin.Status ?? true); // toggle true/false
+                _adminRepo.Update(admin);
+                await _adminRepo.SaveAsync();
+            }
+        }
     }
 }
