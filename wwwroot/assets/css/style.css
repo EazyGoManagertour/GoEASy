@@ -73,6 +73,7 @@ body {
   --primary-rgb: 99, 171, 69;
   --secondary-rgb: 247, 146, 30; }
 
+
 a {
   color: var(--base-color);
   cursor: pointer;
