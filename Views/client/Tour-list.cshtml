@@ -1,30 +1,100 @@
-﻿@using System.Linq
-@model IEnumerable<GoEASy.Models.Tour>
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zxx">
-@Html.Partial("~/Views/client/share/head.cshtml")
-<link rel="shortcut icon" href="assets/images/logos/favicon.png" type="image/x-icon">
-<!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
 
-<!-- Flaticon -->
-<link rel="stylesheet" href="assets/css/flaticon.min.css">
-<!-- Font Awesome -->
-<link rel="stylesheet" href="assets/css/fontawesome-5.14.0.min.css">
-<!-- Bootstrap -->
-<link rel="stylesheet" href="assets/css/bootstrap.min.css">
-<!-- Magnific Popup -->
-<link rel="stylesheet" href="assets/css/magnific-popup.min.css">
-<!-- Nice Select -->
-<link rel="stylesheet" href="assets/css/nice-select.min.css">
-<!-- jQuery UI -->
-<link rel="stylesheet" href="assets/css/jquery-ui.min.css">
-<!-- Animate -->
-<link rel="stylesheet" href="assets/css/aos.css">
-<!-- Slick -->
-<link rel="stylesheet" href="assets/css/slick.min.css">
-<!-- Main Style -->
-<link rel="stylesheet" href="assets/css/style.css">
+<head>
+    @await Html.PartialAsync("~/Views/client/share/head.cshtml")
+    <!-- Chỉ giữ lại file riêng cho Tour-list nếu cần -->
+    <link rel="stylesheet" href="/assets/css/jquery-ui.min.css">
+
+    <!-- Additional CSS for Tour List (not in shared) -->
+    <link rel="stylesheet" href="/assets/css/flaticon.min.css">
+    <link rel="stylesheet" href="/assets/css/fontawesome-5.14.0.min.css">
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/magnific-popup.min.css">
+    <link rel="stylesheet" href="/assets/css/nice-select.min.css">
+    <link rel="stylesheet" href="/assets/css/aos.css">
+    <link rel="stylesheet" href="/assets/css/slick.min.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
+
+    <style>
+        .filter-item {
+            margin-bottom: 15px;
+        }
+
+        .search-filter-inner {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .clear-filters {
+            font-size: 12px;
+            padding: 8px 15px;
+        }
+
+        .tour-img-fixed {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 12px;
+            background: #eee;
+            display: block;
+            aspect-ratio: 4/3;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .destination-item .image {
+            width: 100%;
+            min-height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 12px;
+            background: #eee;
+        }
+
+        .filter-item select,
+        .filter-item .filter-input {
+            width: 100%;
+            height: 44px;
+            padding: 8px 12px;
+            font-size: 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            background: #fafafa;
+            box-sizing: border-box;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .filter-item .filter-input::-webkit-input-placeholder {
+            text-align: center;
+        }
+        .filter-item .filter-input::placeholder {
+            text-align: center;
+        }
+
+        /* Ghi đè logo header nếu có class .main-header .logo img hoặc .header-logo img */
+        .main-header .logo img,
+        .header-logo img {
+            content: none !important;
+            src: url('/assets/images/logos/logo.png') !important;
+        }
+        /* Ghi đè icon scroll up nếu có class .scroll-up hoặc .scroll-up img */
+        .scroll-up {
+            background-image: url('/assets/images/icons/scroll-up.png') !important;
+        }
+        .scroll-up img {
+            content: none !important;
+            src: url('/assets/images/icons/scroll-up.png') !important;
+        }
+
+        /* Đảm bảo chỉ có 1 .main-header trên trang, tránh xung đột */
+        body .main-header:not(#tourlist-header) { display: none !important; }
+    </style>
+</head>
+
 <body>
     <div class="page-wrapper">
 
@@ -32,7 +102,9 @@
         <div class="preloader"><div class="custom-loader"></div></div>
 
         <!-- main header -->
-        @Html.Partial("~/Views/client/share/header.cshtml")
+        <header class="main-header header-one white-menu menu-absolute" id="tourlist-header">
+            @await Html.PartialAsync("~/Views/client/share/header.cshtml")
+        </header>
 
         <!--Form Back Drop-->
         <div class="form-back-drop"></div>
@@ -77,7 +149,7 @@
         </section>
         <!--End Hidden Sidebar -->
         <!-- Page Banner Start -->
-        <section class="page-banner-area pt-50 pb-35 rel z-1 bgs-cover" style="background-image: url(assets/images/banner/banner.jpg);">
+        <section class="page-banner-area pt-50 pb-35 rel z-1 bgs-cover" style="background-image: url(/assets/images/banner/banner.jpg);">
             <div class="container">
                 <div class="banner-inner text-white mb-50">
                     <h2 class="page-title mb-10" data-aos="fade-left" data-aos-duration="1500" data-aos-offset="50">Tour List View</h2>
@@ -95,41 +167,40 @@
                 <div class="filter-item clearfix">
                     <div class="icon"><i class="fal fa-map-marker-alt"></i></div>
                     <span class="title">Destinations</span>
-                    <select name="city" id="city">
-                        <option value="value1">City or Region</option>
-                        <option value="value2">City</option>
-                        <option value="value2">Region</option>
+                    <select name="destinationId" id="destinationId" class="nice-select">
+                        <option value="">Tất cả điểm đến</option>
+                        @if (ViewBag.Destinations != null)
+                        {
+                            foreach (dynamic destination in ViewBag.Destinations)
+                            {
+                                var selected = ViewBag.SelectedDestinationId != null && ViewBag.SelectedDestinationId.ToString() == destination.DestinationId.ToString() ? "selected" : "";
+                                <option value="@destination.DestinationId" @selected>@destination.DestinationName</option>
+                            }
+                        }
                     </select>
                 </div>
                 <div class="filter-item clearfix">
                     <div class="icon"><i class="fal fa-flag"></i></div>
-                    <span class="title">All Activity</span>
-                    <select name="activity" id="activity">
-                        <option value="value1">Choose Activity</option>
-                        <option value="value2">Daily</option>
-                        <option value="value2">Monthly</option>
+                    <span class="title">Categories</span>
+                    <select name="categoryId" id="categoryId" class="nice-select">
+                        <option value="">Tất cả danh mục</option>
+                        @if (ViewBag.Categories != null)
+                        {
+                            foreach (dynamic category in ViewBag.Categories)
+                            {
+                                var selected = ViewBag.SelectedCategoryId != null && ViewBag.SelectedCategoryId.ToString() == category.CategoryId.ToString() ? "selected" : "";
+                                <option value="@category.CategoryId" @selected>@category.CategoryName</option>
+                            }
+                        }
                     </select>
                 </div>
                 <div class="filter-item clearfix">
                     <div class="icon"><i class="fal fa-calendar-alt"></i></div>
                     <span class="title">Departure Date</span>
-                    <select name="date" id="date">
-                        <option value="value1">Date from</option>
-                        <option value="value2">10</option>
-                        <option value="value2">20</option>
-                    </select>
-                </div>
-                <div class="filter-item clearfix">
-                    <div class="icon"><i class="fal fa-users"></i></div>
-                    <span class="title">Guests</span>
-                    <select name="cuests" id="cuests">
-                        <option value="value1">0</option>
-                        <option value="value2">1</option>
-                        <option value="value2">2</option>
-                    </select>
+                    <input type="date" name="startDate" id="startDate" class="form-control filter-input" value="@(ViewBag.StartDate?.ToString("yyyy-MM-dd"))">
                 </div>
                 <div class="search-button">
-                    <button class="theme-btn">
+                    <button class="theme-btn" onclick="performSearch()">
                         <span data-hover="Search">Search</span>
                         <i class="far fa-search"></i>
                     </button>
@@ -143,195 +214,24 @@
                 <div class="row">
                     <div class="col-lg-3 col-md-6 col-sm-10 rmb-75">
                         <div class="shop-sidebar mb-30">
-                            <div class="widget widget-filter" data-aos="fade-up" data-aos-delay="50" data-aos-duration="1500" data-aos-offset="50">
-                                <h6 class="widget-title">Filter by Price</h6>
-                                <div class="price-filter-wrap">
-                                    <div class="price-slider-range"></div>
-                                    <div class="price">
-                                        <span>Price </span>
-                                        <input type="text" id="price" readonly>
-                                    </div>
-                                </div>
-                            </div>
-
                             <div class="widget widget-activity" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                                <h6 class="widget-title">By Activities</h6>
+                                <h6 class="widget-title">By Categories</h6>
                                 <ul class="radio-filter">
                                     <li>
-                                        <input class="form-check-input" type="radio" checked name="ByActivities" id="activity1">
-                                        <label for="activity1">Sea Beach <span>18</span></label>
+                                        <input class="form-check-input" type="radio" checked name="ByCategories" id="category-all" value="">
+                                        <label for="category-all">Tất cả danh mục</label>
                                     </li>
-                                    <li>
-                                        <input class="form-check-input" type="radio" name="ByActivities" id="activity2">
-                                        <label for="activity2">Car Parking <span>29</span></label>
-                                    </li>
-                                    <li>
-                                        <input class="form-check-input" type="radio" name="ByActivities" id="activity3">
-                                        <label for="activity3">Laundry Service <span>23</span></label>
-                                    </li>
-                                    <li>
-                                        <input class="form-check-input" type="radio" name="ByActivities" id="activity4">
-                                        <label for="activity4">Outdoor Seating <span>25</span></label>
-                                    </li>
-                                    <li>
-                                        <input class="form-check-input" type="radio" name="ByActivities" id="activity5">
-                                        <label for="activity5">Reservations <span>26</span></label>
-                                    </li>
-                                    <li>
-                                        <input class="form-check-input" type="radio" name="ByActivities" id="activity6">
-                                        <label for="activity6">Smoking Allowed <span>28</span></label>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div class="widget widget-reviews" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                                <h6 class="widget-title">By Reviews</h6>
-                                <ul class="radio-filter">
-                                    <li>
-                                        <input class="form-check-input" type="radio" checked name="ByReviews" id="review1">
-                                        <label for="review1">
-                                            <span class="ratting">
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                            </span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <input class="form-check-input" type="radio" name="ByReviews" id="review2">
-                                        <label for="review2">
-                                            <span class="ratting">
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star-half-alt white"></i>
-                                            </span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <input class="form-check-input" type="radio" name="ByReviews" id="review3">
-                                        <label for="review3">
-                                            <span class="ratting">
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star white"></i>
-                                                <i class="fas fa-star-half-alt white"></i>
-                                            </span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <input class="form-check-input" type="radio" name="ByReviews" id="review4">
-                                        <label for="review4">
-                                            <span class="ratting">
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star white"></i>
-                                                <i class="fas fa-star white"></i>
-                                                <i class="fas fa-star-half-alt white"></i>
-                                            </span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <input class="form-check-input" type="radio" name="ByReviews" id="review5">
-                                        <label for="review5">
-                                            <span class="ratting">
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star white"></i>
-                                                <i class="fas fa-star white"></i>
-                                                <i class="fas fa-star white"></i>
-                                                <i class="fas fa-star-half-alt white"></i>
-                                            </span>
-                                        </label>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div class="widget widget-languages" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                                <h6 class="widget-title">By Languages</h6>
-                                <ul class="radio-filter">
-                                    <li>
-                                        <input class="form-check-input" type="radio" checked name="ByLanguages" id="language1">
-                                        <label for="language1">American</label>
-                                    </li>
-                                    <li>
-                                        <input class="form-check-input" type="radio" name="ByLanguages" id="language2">
-                                        <label for="language2">English</label>
-                                    </li>
-                                    <li>
-                                        <input class="form-check-input" type="radio" name="ByLanguages" id="language3">
-                                        <label for="language3">German</label>
-                                    </li>
-                                    <li>
-                                        <input class="form-check-input" type="radio" name="ByLanguages" id="language4">
-                                        <label for="language4">Japanese</label>
-                                    </li>
-                                    <li>
-                                        <input class="form-check-input" type="radio" name="ByLanguages" id="language5">
-                                        <label for="language5">Vietnamese</label>
-                                    </li>
-                                    <li>
-                                        <input class="form-check-input" type="radio" name="ByLanguages" id="language6">
-                                        <label for="language6">French</label>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div class="widget widget-duration" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                                <h6 class="widget-title">Duration</h6>
-                                <ul class="radio-filter">
-                                    <li>
-                                        <input class="form-check-input" type="radio" checked name="Duration" id="duration1">
-                                        <label for="duration1">0 - 2 hours</label>
-                                    </li>
-                                    <li>
-                                        <input class="form-check-input" type="radio" name="Duration" id="duration2">
-                                        <label for="duration2">2 - 4 hours</label>
-                                    </li>
-                                    <li>
-                                        <input class="form-check-input" type="radio" name="Duration" id="duration3">
-                                        <label for="duration3">4 - 8 hours</label>
-                                    </li>
-                                    <li>
-                                        <input class="form-check-input" type="radio" name="Duration" id="duration4">
-                                        <label for="duration4">Fulda (+8 hours)</label>
-                                    </li>
-                                    <li>
-                                        <input class="form-check-input" type="radio" name="Duration" id="duration5">
-                                        <label for="duration5">Multi days</label>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div class="widget widget-tour" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                                <h6 class="widget-title">Popular Tours</h6>
-                                @if (Model != null && Model.Any())
-                                {
-                                    var popularTours = Model.Take(2);
-                                    foreach (var tour in popularTours)
+                                    @if (ViewBag.Categories != null)
                                     {
-                                        var coverImage = tour.TourImages?.FirstOrDefault(ti => ti.IsCover == true)?.ImageUrl ?? "assets/images/destinations/tour-list1.jpg";
-                                        <div class="destination-item tour-grid style-three bgc-lighter">
-                                            <div class="image">
-                                                <span class="badge">10% Off</span>
-                                                <img src="@coverImage" alt="@tour.TourName">
-                                            </div>
-                                            <div class="content">
-                                                <div class="destination-header">
-                                                    <span class="location"><i class="fal fa-map-marker-alt"></i> @(tour.Destination?.DestinationName ?? "Unknown Location")</span>
-                                                    <div class="ratting">
-                                                        <i class="fas fa-star"></i>
-                                                        <span>(4.8)</span>
-                                                    </div>
-                                                </div>
-                                                <h6><a href="tour-details.html">@tour.TourName</a></h6>
-                                            </div>
-                                        </div>
+                                        foreach (dynamic category in ViewBag.Categories)
+                                        {
+                                            <li>
+                                                <input class="form-check-input" type="radio" name="ByCategories" id="category-@category.CategoryId" value="@category.CategoryId">
+                                                <label for="category-@category.CategoryId">@category.CategoryName</label>
+                                            </li>
+                                        }
                                     }
-                                }
+                                </ul>
                             </div>
                         </div>
 
@@ -345,9 +245,9 @@
                                 </a>
                             </div>
                             <div class="image">
-                                <img src="assets/images/widgets/cta-widget.png" alt="CTA">
+                                <img src="/assets/images/widgets/cta-widget.png" alt="CTA">
                             </div>
-                            <div class="cta-shape"><img src="assets/images/widgets/cta-shape2.png" alt="Shape"></div>
+                            <div class="cta-shape"><img src="/assets/images/widgets/cta-shape2.png" alt="Shape"></div>
                         </div>
 
                     </div>
@@ -358,29 +258,44 @@
                                 <li><a href="#"><i class="far fa-list"></i></a></li>
                             </ul>
                             <div class="sort-text mb-15 me-4 me-xl-auto">
-                                @(Model?.Count() ?? 0) Tours found
+                                @(ViewBag.TotalTours) Tours found
                             </div>
                             <div class="sort-text mb-15 me-4">
                                 Sort By
                             </div>
-                            <select>
-                                <option value="default" selected="">Short By</option>
-                                <option value="new">Newness</option>
-                                <option value="old">Oldest</option>
-                                <option value="hight-to-low">High To Low</option>
-                                <option value="low-to-high">Low To High</option>
+                            <select class="nice-select sort-select">
+                                <option value="default" @(ViewBag.SortBy == null ? "selected" : "")>Sort By</option>
+                                <option value="name" @(ViewBag.SortBy?.ToString() == "name" ? "selected" : "")>Tên tour</option>
+                                <option value="price" @(ViewBag.SortBy?.ToString() == "price" ? "selected" : "")>Giá</option>
+                                <option value="startdate" @(ViewBag.SortBy?.ToString() == "startdate" ? "selected" : "")>Ngày khởi hành</option>
                             </select>
+                            <button class="theme-btn style-two clear-filters ms-3">
+                                <span data-hover="Clear">Clear</span>
+                                <i class="fal fa-times"></i>
+                            </button>
                         </div>
 
-                        @if (Model != null && Model.Any())
+                        @if (Model != null && Model.Count > 0)
                         {
                             foreach (var tour in Model)
                             {
-                                var coverImage = tour.TourImages?.FirstOrDefault(ti => ti.IsCover == true)?.ImageUrl ?? "assets/images/destinations/tour-list1.jpg";
+                                var coverImage = "/assets/images/destinations/tour-list1.jpg";
+                                if (tour.TourImages != null)
+                                {
+                                    foreach (var tourImage in tour.TourImages)
+                                    {
+                                        if (tourImage.IsCover == true)
+                                        {
+                                            coverImage = tourImage.ImageUrl ?? coverImage;
+                                            break;
+                                        }
+                                    }
+                                }
                                 var isFeatured = tour.TourId % 3 == 0; // Logic để xác định tour featured
                                 var hasDiscount = tour.TourId % 4 == 0; // Logic để xác định tour có discount
+                                var isPopular = tour.TourId % 5 == 0; // Logic để xác định tour popular
 
-                                <div class="destination-item style-three bgc-lighter" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                                <div class="destination-item style-three bgc-lighter" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50" data-tour-id="@tour.TourId">
                                     <div class="image">
                                         @if (isFeatured)
                                         {
@@ -390,12 +305,16 @@
                                         {
                                             <span class="badge">10% Off</span>
                                         }
+                                        else if (isPopular)
+                                        {
+                                            <span class="badge bgc-primary">Popular</span>
+                                        }
                                         <a href="#" class="heart"><i class="fas fa-heart"></i></a>
-                                        <img src="@coverImage" alt="@tour.TourName">
+                                        <img src="@coverImage" alt="@tour.TourName" class="tour-img-fixed">
                                     </div>
                                     <div class="content">
                                         <div class="destination-header">
-                                            <span class="location"><i class="fal fa-map-marker-alt"></i> @(tour.Destination?.DestinationName ?? "Unknown Location")</span>
+                                            <span class="location"><i class="fal fa-map-marker-alt"></i> @(tour.Destination != null ? tour.Destination.DestinationName : "Unknown Location")</span>
                                             <div class="ratting">
                                                 <i class="fas fa-star"></i>
                                                 <i class="fas fa-star"></i>
@@ -405,15 +324,35 @@
                                             </div>
                                         </div>
                                         <h5><a href="tour-details.html">@tour.TourName</a></h5>
-                                        <p>@(tour.Description?.Length > 100 ? tour.Description.Substring(0, 100) + "..." : tour.Description ?? "No description available")</p>
+                                        <p>
+                                            @{
+                                                var description = tour.Description ?? "Khám phá điểm đến tuyệt vời với tour du lịch chất lượng cao";
+                                                if (description.Length > 100)
+                                                {
+                                                    description = description.Substring(0, 100) + "...";
+                                                }
+                                                @description
+                                            }
+                                        </p>
                                         <ul class="blog-meta">
-                                            <li><i class="far fa-clock"></i> @(tour.StartDate?.ToString("MMM dd") ?? "TBD") - @(tour.EndDate?.ToString("MMM dd") ?? "TBD")</li>
-                                            <li><i class="far fa-user"></i> @(tour.MaxSeats ?? 0) max guests</li>
+                                            <li><i class="far fa-clock"></i> @(tour.StartDate?.ToString("dd/MM/yyyy") ?? "TBD") - @(tour.EndDate?.ToString("dd/MM/yyyy") ?? "TBD")</li>
+                                            @if (tour.Category != null)
+                                            {
+                                                <li><i class="far fa-tag"></i> @tour.Category.CategoryName</li>
+                                            }
                                         </ul>
                                         <div class="destination-footer">
                                             <span class="price">
-                                                <span>$@tour.AdultPrice.ToString("0.00")</span>/adult,
-                                                <span>$@tour.ChildPrice.ToString("0.00")</span>/child
+                                                @{
+                                                    if (tour.AdultPrice > 0)
+                                                    {
+                                                        <span>Từ @(tour.AdultPrice.ToString("N0")) VND</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>Liên hệ</span>
+                                                    }
+                                                }
                                             </span>
                                             <a href="tour-details.html" class="theme-btn style-two style-three">
                                                 <span data-hover="Book Now">Book Now</span>
@@ -426,29 +365,57 @@
                         }
                         else
                         {
-                            <div class="text-center py-5">
-                                <h4>No tours available at the moment.</h4>
-                                <p>Please check back later for new tour offerings.</p>
+                            <div class="text-center py-50">
+                                <h4>Không có tour nào được tìm thấy</h4>
+                                <p>Vui lòng thử lại với bộ lọc khác</p>
                             </div>
                         }
 
-                        <ul class="pagination pt-15 flex-wrap" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                            <li class="page-item disabled">
-                                <span class="page-link"><i class="far fa-chevron-left"></i></span>
-                            </li>
-                            <li class="page-item active">
-                                <span class="page-link">
-                                    1
-                                    <span class="sr-only">(current)</span>
-                                </span>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item"><a class="page-link" href="#">...</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#"><i class="far fa-chevron-right"></i></a>
-                            </li>
-                        </ul>
+                        <!-- Pagination -->
+                        @if (Model != null && Model.Count > 0 && ViewBag.TotalPages > 1)
+                        {
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination pt-15 flex-wrap" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                                    <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                                        <a class="page-link" href="/tour-list?page=@(ViewBag.CurrentPage - 1)@(ViewBag.PageSize != null ? "&pageSize=" + ViewBag.PageSize : "")@(ViewBag.SelectedDestinationId != null ? "&destinationId=" + ViewBag.SelectedDestinationId : "")@(ViewBag.SelectedCategoryId != null ? "&categoryId=" + ViewBag.SelectedCategoryId : "")@(ViewBag.StartDate != null ? "&startDate=" + ViewBag.StartDate : "")@(ViewBag.SortBy != null ? "&sortBy=" + ViewBag.SortBy : "")" tabindex="-1"><i class="far fa-chevron-left"></i></a>
+                                    </li>
+                                    @{
+                                        int startPage = Math.Max(1, ViewBag.CurrentPage - 1);
+                                        int endPage = Math.Min((int)ViewBag.TotalPages, ViewBag.CurrentPage + 1);
+                                        if (startPage > 1)
+                                        {
+                                            <li class="page-item"><a class="page-link" href="/tour-list?page=1@(ViewBag.PageSize != null ? "&pageSize=" + ViewBag.PageSize : "")@(ViewBag.SelectedDestinationId != null ? "&destinationId=" + ViewBag.SelectedDestinationId : "")@(ViewBag.SelectedCategoryId != null ? "&categoryId=" + ViewBag.SelectedCategoryId : "")@(ViewBag.StartDate != null ? "&startDate=" + ViewBag.StartDate : "")@(ViewBag.SortBy != null ? "&sortBy=" + ViewBag.SortBy : "")">1</a></li>
+                                            if (startPage > 2)
+                                            {
+                                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                                            }
+                                        }
+                                        for (int i = startPage; i <= endPage; i++)
+                                        {
+                                            if (i == ViewBag.CurrentPage)
+                                            {
+                                                <li class="page-item active"><span class="page-link">@i</span></li>
+                                            }
+                                            else
+                                            {
+                                                <li class="page-item"><a class="page-link" href="/tour-list?page=@i@(ViewBag.PageSize != null ? "&pageSize=" + ViewBag.PageSize : "")@(ViewBag.SelectedDestinationId != null ? "&destinationId=" + ViewBag.SelectedDestinationId : "")@(ViewBag.SelectedCategoryId != null ? "&categoryId=" + ViewBag.SelectedCategoryId : "")@(ViewBag.StartDate != null ? "&startDate=" + ViewBag.StartDate : "")@(ViewBag.SortBy != null ? "&sortBy=" + ViewBag.SortBy : "")">@i</a></li>
+                                            }
+                                        }
+                                        if (endPage < (int)ViewBag.TotalPages)
+                                        {
+                                            if (endPage < (int)ViewBag.TotalPages - 1)
+                                            {
+                                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                                            }
+                                            <li class="page-item"><a class="page-link" href="/tour-list?page=@ViewBag.TotalPages@(ViewBag.PageSize != null ? "&pageSize=" + ViewBag.PageSize : "")@(ViewBag.SelectedDestinationId != null ? "&destinationId=" + ViewBag.SelectedDestinationId : "")@(ViewBag.SelectedCategoryId != null ? "&categoryId=" + ViewBag.SelectedCategoryId : "")@(ViewBag.StartDate != null ? "&startDate=" + ViewBag.StartDate : "")@(ViewBag.SortBy != null ? "&sortBy=" + ViewBag.SortBy : "")">@ViewBag.TotalPages</a></li>
+                                        }
+                                    }
+                                    <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                                        <a class="page-link" href="/tour-list?page=@(ViewBag.CurrentPage + 1)@(ViewBag.PageSize != null ? "&pageSize=" + ViewBag.PageSize : "")@(ViewBag.SelectedDestinationId != null ? "&destinationId=" + ViewBag.SelectedDestinationId : "")@(ViewBag.SelectedCategoryId != null ? "&categoryId=" + ViewBag.SelectedCategoryId : "")@(ViewBag.StartDate != null ? "&startDate=" + ViewBag.StartDate : "")@(ViewBag.SortBy != null ? "&sortBy=" + ViewBag.SortBy : "")"><i class="far fa-chevron-right"></i></a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        }
                     </div>
                 </div>
             </div>
@@ -474,46 +441,133 @@
                             <p>No credit card requirement. No commitments</p>
                         </div>
                         <div class="newsletter-bg-image" data-aos="zoom-in-up" data-aos-delay="100" data-aos-duration="1500" data-aos-offset="50">
-                            <img src="assets/images/newsletter/newsletter-bg-image.png" alt="Newsletter">
+                            <img src="/assets/images/newsletter/newsletter-bg-image.png" alt="Newsletter">
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <div class="newsletter-image-part bgs-cover" style="background-image: url(assets/images/newsletter/newsletter-two-right.jpg);" data-aos="fade-left" data-aos-duration="1500" data-aos-offset="50"></div>
+                        <div class="newsletter-image-part bgs-cover" style="background-image: url(/assets/images/newsletter/newsletter-two-right.jpg);" data-aos="fade-left" data-aos-duration="1500" data-aos-offset="50"></div>
                     </div>
                 </div>
             </div>
         </section>
         <!-- Newsletter Area end -->
         <!-- footer area start -->
-        @Html.Partial("~/Views/client/share/footer.cshtml")
+        @await Html.PartialAsync("~/Views/client/share/footer.cshtml")
         <!-- footer area end -->
+
     </div>
     <!--End pagewrapper-->
-    @Html.Partial("~/Views/client/share/script.cshtml")
-    <script src="assets/js/jquery-3.6.0.min.js"></script>
-    <!-- Bootstrap -->
-    <script src="assets/js/bootstrap.min.js"></script>
-    <!-- Appear Js -->
-    <script src="assets/js/appear.min.js"></script>
-    <!-- Slick -->
-    <script src="assets/js/slick.min.js"></script>
-    <!-- Magnific Popup -->
-    <script src="assets/js/jquery.magnific-popup.min.js"></script>
-    <!-- Nice Select -->
-    <script src="assets/js/jquery.nice-select.min.js"></script>
-    <!-- Image Loader -->
-    <script src="assets/js/imagesloaded.pkgd.min.js"></script>
-    <!-- Jquery UI -->
-    <script src="assets/js/jquery-ui.min.js"></script>
-    <!-- Isotope -->
-    <script src="assets/js/isotope.pkgd.min.js"></script>
-    <!--  AOS Animation -->
-    <script src="assets/js/aos.js"></script>
-    <!-- Custom script -->
-    <script src="assets/js/script.js"></script>
+    <!-- Shared Scripts -->
+    @await Html.PartialAsync("~/Views/client/share/script.cshtml")
+    <!-- Chỉ giữ lại file riêng cho Tour-list nếu cần -->
+    <script src="/assets/js/jquery-ui.min.js"></script>
 
+    <!-- Initialize Nice Select and other functionalities -->
+    <script>
+        $(document).ready(function() {
+            // Initialize nice-select for all select elements
+            $('select.nice-select').niceSelect();
+
+            // Set selected values from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('destinationId')) {
+                $('#destinationId').val(urlParams.get('destinationId'));
+            }
+            if (urlParams.get('categoryId')) {
+                $('#categoryId').val(urlParams.get('categoryId'));
+            }
+            if (urlParams.get('startDate')) {
+                $('#startDate').val(urlParams.get('startDate'));
+            }
+            if (urlParams.get('sortBy')) {
+                $('.sort-select').val(urlParams.get('sortBy'));
+            }
+
+            // Re-initialize nice-select after setting values
+            $('select.nice-select').niceSelect('destroy');
+            $('select.nice-select').niceSelect();
+
+            // Handle search button click
+            $('.search-button button').on('click', function() {
+                performSearch();
+            });
+
+            // Function to perform search
+            function performSearch() {
+                var destinationId = $('#destinationId').val();
+                var categoryId = $('#categoryId').val();
+                var startDate = $('#startDate').val();
+                var sortBy = $('.sort-select').val();
+
+                console.log('Search params:', { destinationId, categoryId, startDate, sortBy });
+
+                // Build search parameters
+                var searchParams = new URLSearchParams();
+                if (destinationId) searchParams.append('destinationId', destinationId);
+                if (categoryId) searchParams.append('categoryId', categoryId);
+                if (startDate) searchParams.append('startDate', startDate);
+                if (sortBy && sortBy !== 'default') searchParams.append('sortBy', sortBy);
+
+                // Reload page with search parameters
+                var newUrl = window.location.pathname + '?' + searchParams.toString();
+                console.log('Redirecting to:', newUrl);
+                window.location.href = newUrl;
+            }
+
+            // Handle radio button changes in sidebar
+            $(document).on('change', '.radio-filter input[type="radio"]', function() {
+                var filterType = $(this).attr('name');
+                var filterValue = $(this).val();
+
+                if (filterType === 'ByCategories') {
+                    // Update category dropdown in search bar
+                    if (filterValue) {
+                        $('#categoryId').val(filterValue);
+                    } else {
+                        $('#categoryId').val('');
+                    }
+                    // Re-initialize nice-select
+                    $('#categoryId').niceSelect('destroy');
+                    $('#categoryId').niceSelect();
+
+                    // Perform search immediately
+                    performSearch();
+                }
+            });
+
+            // Handle sort dropdown
+            $('.sort-select').on('change', function() {
+                performSearch();
+            });
+
+            // Handle heart button (favorite)
+            $('.heart').on('click', function(e) {
+                $(this).toggleClass('active');
+                var tourId = $(this).closest('.destination-item').data('tour-id');
+                console.log('Toggle favorite for tour:', tourId);
+            });
+
+            // Clear all filters
+            $('.clear-filters').on('click', function() {
+                $('#destinationId').val('');
+                $('#categoryId').val('');
+                $('#startDate').val('');
+                $('.sort-select').val('default');
+
+                // Re-initialize nice-select
+                $('select.nice-select').niceSelect('destroy');
+                $('select.nice-select').niceSelect();
+
+                // Clear radio buttons
+                $('.radio-filter input[type="radio"]').prop('checked', false);
+                $('#category-all').prop('checked', true);
+
+                // Reload page without parameters
+                window.location.href = window.location.pathname;
+            });
+        });
+    </script>
 
 </body>
 
-<!-- Mirrored from webtendtheme.net/html/2024/ravelo/tour-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 07 Oct 2024 09:28:05 GMT -->
-</html>
+</html> 
