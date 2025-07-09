@@ -25,43 +25,29 @@ namespace GoEASy.Services
             return await _context.Users.Include(u => u.Role).OrderByDescending(u => u.CreatedAt).ToListAsync();
         }
 
-        public async Task<User> GetUserByIdAsync(int id)
+        public Task<User> GetUserByIdAsync(int id)
         {
-            return await _context.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.UserId == id);
+            return _context.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.UserId == id);
         }
 
-        public async Task<User> GetUserByUsernameAsync(string username)
+        public async Task CreateUserAsync(User user)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
-        }
+            // Set default values (CreatedAt đã được set trong Controller)
+            if (user.UpdatedAt == null)
+                user.UpdatedAt = System.DateTime.Now;
+            if (user.Status == null)
+                user.Status = true;
+            if (user.Vippoints == null)
+                user.Vippoints = 0;
+            if (user.IsVip == null)
+                user.IsVip = false;
 
-        public async Task<User> GetUserByEmailAsync(string email)
-        {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
-        }
-
-        public async Task<bool> UsernameExistsAsync(string username, int? excludeId = null)
-        {
-            return await _context.Users.AnyAsync(u => u.Username == username && (!excludeId.HasValue || u.UserId != excludeId));
-        }
-
-        public async Task<bool> EmailExistsAsync(string email, int? excludeId = null)
-        {
-            return await _context.Users.AnyAsync(u => u.Email == email && (!excludeId.HasValue || u.UserId != excludeId));
-        }
-
-        public async Task AddUserAsync(User user)
-        {
-            user.CreatedAt = System.DateTime.Now;
-            user.UpdatedAt = System.DateTime.Now;
-            user.Status = true;
             await _userRepo.AddAsync(user);
             await _userRepo.SaveAsync();
         }
 
         public async Task UpdateUserAsync(User user)
         {
-            user.UpdatedAt = System.DateTime.Now;
             _userRepo.Update(user);
             await _userRepo.SaveAsync();
         }
@@ -76,6 +62,31 @@ namespace GoEASy.Services
             }
         }
 
+        public Task<IEnumerable<Role>> GetAllRolesAsync()
+        {
+            return _roleRepo.GetAllAsync();
+        }
+
+        public Task<bool> UsernameExistsAsync(string username, int? excludeId = null)
+        {
+            return _context.Users.AnyAsync(u => u.Username == username && (!excludeId.HasValue || u.UserId != excludeId));
+        }
+
+        public Task<bool> EmailExistsAsync(string email, int? excludeId = null)
+        {
+            return _context.Users.AnyAsync(u => u.Email == email && (!excludeId.HasValue || u.UserId != excludeId));
+        }
+
+        public Task<User> GetUserByUsernameAsync(string username)
+        {
+            return _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+        }
+
+        public Task<User> GetUserByEmailAsync(string email)
+        {
+            return _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        }
+
         public async Task ToggleStatusAsync(int id)
         {
             var user = await _userRepo.GetByIdAsync(id);
@@ -86,11 +97,6 @@ namespace GoEASy.Services
                 _userRepo.Update(user);
                 await _userRepo.SaveAsync();
             }
-        }
-
-        public async Task<IEnumerable<Role>> GetAllRolesAsync()
-        {
-            return await _roleRepo.GetAllAsync();
         }
     }
 } 
