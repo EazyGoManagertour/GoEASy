@@ -25,6 +25,7 @@ builder.Services.AddScoped<IFavoriteService, FavoriteService>();
 
 builder.Services.AddScoped<TourService>();
 
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 var app = builder.Build();
 
