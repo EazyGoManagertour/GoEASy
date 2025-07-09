@@ -1,0 +1,573 @@
+﻿<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    @await Html.PartialAsync("~/Views/client/share/head.cshtml")
+    <!-- Chỉ giữ lại file riêng cho Tour-list nếu cần -->
+    <link rel="stylesheet" href="/assets/css/jquery-ui.min.css">
+
+    <!-- Additional CSS for Tour List (not in shared) -->
+    <link rel="stylesheet" href="/assets/css/flaticon.min.css">
+    <link rel="stylesheet" href="/assets/css/fontawesome-5.14.0.min.css">
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/magnific-popup.min.css">
+    <link rel="stylesheet" href="/assets/css/nice-select.min.css">
+    <link rel="stylesheet" href="/assets/css/aos.css">
+    <link rel="stylesheet" href="/assets/css/slick.min.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
+
+    <style>
+        .filter-item {
+            margin-bottom: 15px;
+        }
+
+        .search-filter-inner {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .clear-filters {
+            font-size: 12px;
+            padding: 8px 15px;
+        }
+
+        .tour-img-fixed {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 12px;
+            background: #eee;
+            display: block;
+            aspect-ratio: 4/3;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .destination-item .image {
+            width: 100%;
+            min-height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 12px;
+            background: #eee;
+        }
+
+        .filter-item select,
+        .filter-item .filter-input {
+            width: 100%;
+            height: 44px;
+            padding: 8px 12px;
+            font-size: 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            background: #fafafa;
+            box-sizing: border-box;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .filter-item .filter-input::-webkit-input-placeholder {
+            text-align: center;
+        }
+        .filter-item .filter-input::placeholder {
+            text-align: center;
+        }
+
+        /* Ghi đè logo header nếu có class .main-header .logo img hoặc .header-logo img */
+        .main-header .logo img,
+        .header-logo img {
+            content: none !important;
+            src: url('/assets/images/logos/logo.png') !important;
+        }
+        /* Ghi đè icon scroll up nếu có class .scroll-up hoặc .scroll-up img */
+        .scroll-up {
+            background-image: url('/assets/images/icons/scroll-up.png') !important;
+        }
+        .scroll-up img {
+            content: none !important;
+            src: url('/assets/images/icons/scroll-up.png') !important;
+        }
+
+        /* Đảm bảo chỉ có 1 .main-header trên trang, tránh xung đột */
+        body .main-header:not(#tourlist-header) { display: none !important; }
+    </style>
+</head>
+
+<body>
+    <div class="page-wrapper">
+
+        <!-- Preloader -->
+        <div class="preloader"><div class="custom-loader"></div></div>
+
+        <!-- main header -->
+        <header class="main-header header-one white-menu menu-absolute" id="tourlist-header">
+            @await Html.PartialAsync("~/Views/client/share/header.cshtml")
+        </header>
+
+        <!--Form Back Drop-->
+        <div class="form-back-drop"></div>
+
+        <!-- Hidden Sidebar -->
+        <section class="hidden-bar">
+            <div class="inner-box text-center">
+                <div class="cross-icon"><span class="fa fa-times"></span></div>
+                <div class="title">
+                    <h4>Get Appointment</h4>
+                </div>
+
+                <!--Appointment Form-->
+                <div class="appointment-form">
+                    <form method="post" action="https://webtendtheme.net/html/2024/ravelo/contact.html">
+                        <div class="form-group">
+                            <input type="text" name="text" value="" placeholder="Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="email" value="" placeholder="Email Address" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea placeholder="Message" rows="5"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="theme-btn style-two">
+                                <span data-hover="Submit now">Submit now</span>
+                                <i class="fal fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!--Social Icons-->
+                <div class="social-style-one">
+                    <a href="contact.html"><i class="fab fa-twitter"></i></a>
+                    <a href="contact.html"><i class="fab fa-facebook-f"></i></a>
+                    <a href="contact.html"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                </div>
+            </div>
+        </section>
+        <!--End Hidden Sidebar -->
+        <!-- Page Banner Start -->
+        <section class="page-banner-area pt-50 pb-35 rel z-1 bgs-cover" style="background-image: url(/assets/images/banner/banner.jpg);">
+            <div class="container">
+                <div class="banner-inner text-white mb-50">
+                    <h2 class="page-title mb-10" data-aos="fade-left" data-aos-duration="1500" data-aos-offset="50">Tour List View</h2>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center mb-20" data-aos="fade-right" data-aos-delay="200" data-aos-duration="1500" data-aos-offset="50">
+                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item active">Tour List</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </section>
+        <div class="container container-1400">
+            <div class="search-filter-inner" data-aos="zoom-out-down" data-aos-duration="1500" data-aos-offset="50">
+                <div class="filter-item clearfix">
+                    <div class="icon"><i class="fal fa-map-marker-alt"></i></div>
+                    <span class="title">Destinations</span>
+                    <select name="destinationId" id="destinationId" class="nice-select">
+                        <option value="">Tất cả điểm đến</option>
+                        @if (ViewBag.Destinations != null)
+                        {
+                            foreach (dynamic destination in ViewBag.Destinations)
+                            {
+                                var selected = ViewBag.SelectedDestinationId != null && ViewBag.SelectedDestinationId.ToString() == destination.DestinationId.ToString() ? "selected" : "";
+                                <option value="@destination.DestinationId" @selected>@destination.DestinationName</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="filter-item clearfix">
+                    <div class="icon"><i class="fal fa-flag"></i></div>
+                    <span class="title">Categories</span>
+                    <select name="categoryId" id="categoryId" class="nice-select">
+                        <option value="">Tất cả danh mục</option>
+                        @if (ViewBag.Categories != null)
+                        {
+                            foreach (dynamic category in ViewBag.Categories)
+                            {
+                                var selected = ViewBag.SelectedCategoryId != null && ViewBag.SelectedCategoryId.ToString() == category.CategoryId.ToString() ? "selected" : "";
+                                <option value="@category.CategoryId" @selected>@category.CategoryName</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="filter-item clearfix">
+                    <div class="icon"><i class="fal fa-calendar-alt"></i></div>
+                    <span class="title">Departure Date</span>
+                    <input type="date" name="startDate" id="startDate" class="form-control filter-input" value="@(ViewBag.StartDate?.ToString("yyyy-MM-dd"))">
+                </div>
+                <div class="search-button">
+                    <button class="theme-btn" onclick="performSearch()">
+                        <span data-hover="Search">Search</span>
+                        <i class="far fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Page Banner End -->
+        <!-- Tour List Area start -->
+        <section class="tour-list-page py-100 rel z-1">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 col-sm-10 rmb-75">
+                        <div class="shop-sidebar mb-30">
+                            <div class="widget widget-activity" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                                <h6 class="widget-title">By Categories</h6>
+                                <ul class="radio-filter">
+                                    <li>
+                                        <input class="form-check-input" type="radio" checked name="ByCategories" id="category-all" value="">
+                                        <label for="category-all">Tất cả danh mục</label>
+                                    </li>
+                                    @if (ViewBag.Categories != null)
+                                    {
+                                        foreach (dynamic category in ViewBag.Categories)
+                                        {
+                                            <li>
+                                                <input class="form-check-input" type="radio" name="ByCategories" id="category-@category.CategoryId" value="@category.CategoryId">
+                                                <label for="category-@category.CategoryId">@category.CategoryName</label>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="widget widget-cta" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                            <div class="content text-white">
+                                <span class="h6">Explore The World</span>
+                                <h3>Best Tourist Place</h3>
+                                <a href="tour-grid.html" class="theme-btn style-two bgc-secondary">
+                                    <span data-hover="Explore Now">Explore Now</span>
+                                    <i class="fal fa-arrow-right"></i>
+                                </a>
+                            </div>
+                            <div class="image">
+                                <img src="/assets/images/widgets/cta-widget.png" alt="CTA">
+                            </div>
+                            <div class="cta-shape"><img src="/assets/images/widgets/cta-shape2.png" alt="Shape"></div>
+                        </div>
+
+                    </div>
+                    <div class="col-lg-9">
+                        <div class="shop-shorter rel z-3 mb-20">
+                            <ul class="grid-list mb-15 me-2">
+                                <li><a href="#"><i class="fal fa-border-all"></i></a></li>
+                                <li><a href="#"><i class="far fa-list"></i></a></li>
+                            </ul>
+                            <div class="sort-text mb-15 me-4 me-xl-auto">
+                                @(ViewBag.TotalTours) Tours found
+                            </div>
+                            <div class="sort-text mb-15 me-4">
+                                Sort By
+                            </div>
+                            <select class="nice-select sort-select">
+                                <option value="default" @(ViewBag.SortBy == null ? "selected" : "")>Sort By</option>
+                                <option value="name" @(ViewBag.SortBy?.ToString() == "name" ? "selected" : "")>Tên tour</option>
+                                <option value="price" @(ViewBag.SortBy?.ToString() == "price" ? "selected" : "")>Giá</option>
+                                <option value="startdate" @(ViewBag.SortBy?.ToString() == "startdate" ? "selected" : "")>Ngày khởi hành</option>
+                            </select>
+                            <button class="theme-btn style-two clear-filters ms-3">
+                                <span data-hover="Clear">Clear</span>
+                                <i class="fal fa-times"></i>
+                            </button>
+                        </div>
+
+                        @if (Model != null && Model.Count > 0)
+                        {
+                            foreach (var tour in Model)
+                            {
+                                var coverImage = "/assets/images/destinations/tour-list1.jpg";
+                                if (tour.TourImages != null)
+                                {
+                                    foreach (var tourImage in tour.TourImages)
+                                    {
+                                        if (tourImage.IsCover == true)
+                                        {
+                                            coverImage = tourImage.ImageUrl ?? coverImage;
+                                            break;
+                                        }
+                                    }
+                                }
+                                var isFeatured = tour.TourId % 3 == 0; // Logic để xác định tour featured
+                                var hasDiscount = tour.TourId % 4 == 0; // Logic để xác định tour có discount
+                                var isPopular = tour.TourId % 5 == 0; // Logic để xác định tour popular
+
+                                <div class="destination-item style-three bgc-lighter" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50" data-tour-id="@tour.TourId">
+                                    <div class="image">
+                                        @if (isFeatured)
+                                        {
+                                            <span class="badge bgc-pink">Featured</span>
+                                        }
+                                        else if (hasDiscount)
+                                        {
+                                            <span class="badge">10% Off</span>
+                                        }
+                                        else if (isPopular)
+                                        {
+                                            <span class="badge bgc-primary">Popular</span>
+                                        }
+                                        <a href="#" class="heart"><i class="fas fa-heart"></i></a>
+                                        <img src="@coverImage" alt="@tour.TourName" class="tour-img-fixed">
+                                    </div>
+                                    <div class="content">
+                                        <div class="destination-header">
+                                            <span class="location"><i class="fal fa-map-marker-alt"></i> @(tour.Destination != null ? tour.Destination.DestinationName : "Unknown Location")</span>
+                                            <div class="ratting">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                        </div>
+                                        <h5><a href="tour-details.html">@tour.TourName</a></h5>
+                                        <p>
+                                            @{
+                                                var description = tour.Description ?? "Khám phá điểm đến tuyệt vời với tour du lịch chất lượng cao";
+                                                if (description.Length > 100)
+                                                {
+                                                    description = description.Substring(0, 100) + "...";
+                                                }
+                                                @description
+                                            }
+                                        </p>
+                                        <ul class="blog-meta">
+                                            <li><i class="far fa-clock"></i> @(tour.StartDate?.ToString("dd/MM/yyyy") ?? "TBD") - @(tour.EndDate?.ToString("dd/MM/yyyy") ?? "TBD")</li>
+                                            @if (tour.Category != null)
+                                            {
+                                                <li><i class="far fa-tag"></i> @tour.Category.CategoryName</li>
+                                            }
+                                        </ul>
+                                        <div class="destination-footer">
+                                            <span class="price">
+                                                @{
+                                                    if (tour.AdultPrice > 0)
+                                                    {
+                                                        <span>Từ @(tour.AdultPrice.ToString("N0")) VND</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>Liên hệ</span>
+                                                    }
+                                                }
+                                            </span>
+                                            <a href="tour-details.html" class="theme-btn style-two style-three">
+                                                <span data-hover="Book Now">Book Now</span>
+                                                <i class="fal fa-arrow-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="text-center py-50">
+                                <h4>Không có tour nào được tìm thấy</h4>
+                                <p>Vui lòng thử lại với bộ lọc khác</p>
+                            </div>
+                        }
+
+                        <!-- Pagination -->
+                        @if (Model != null && Model.Count > 0 && ViewBag.TotalPages > 1)
+                        {
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination pt-15 flex-wrap" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                                    <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                                        <a class="page-link" href="/tour-list?page=@(ViewBag.CurrentPage - 1)@(ViewBag.PageSize != null ? "&pageSize=" + ViewBag.PageSize : "")@(ViewBag.SelectedDestinationId != null ? "&destinationId=" + ViewBag.SelectedDestinationId : "")@(ViewBag.SelectedCategoryId != null ? "&categoryId=" + ViewBag.SelectedCategoryId : "")@(ViewBag.StartDate != null ? "&startDate=" + ViewBag.StartDate : "")@(ViewBag.SortBy != null ? "&sortBy=" + ViewBag.SortBy : "")" tabindex="-1"><i class="far fa-chevron-left"></i></a>
+                                    </li>
+                                    @{
+                                        int startPage = Math.Max(1, ViewBag.CurrentPage - 1);
+                                        int endPage = Math.Min((int)ViewBag.TotalPages, ViewBag.CurrentPage + 1);
+                                        if (startPage > 1)
+                                        {
+                                            <li class="page-item"><a class="page-link" href="/tour-list?page=1@(ViewBag.PageSize != null ? "&pageSize=" + ViewBag.PageSize : "")@(ViewBag.SelectedDestinationId != null ? "&destinationId=" + ViewBag.SelectedDestinationId : "")@(ViewBag.SelectedCategoryId != null ? "&categoryId=" + ViewBag.SelectedCategoryId : "")@(ViewBag.StartDate != null ? "&startDate=" + ViewBag.StartDate : "")@(ViewBag.SortBy != null ? "&sortBy=" + ViewBag.SortBy : "")">1</a></li>
+                                            if (startPage > 2)
+                                            {
+                                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                                            }
+                                        }
+                                        for (int i = startPage; i <= endPage; i++)
+                                        {
+                                            if (i == ViewBag.CurrentPage)
+                                            {
+                                                <li class="page-item active"><span class="page-link">@i</span></li>
+                                            }
+                                            else
+                                            {
+                                                <li class="page-item"><a class="page-link" href="/tour-list?page=@i@(ViewBag.PageSize != null ? "&pageSize=" + ViewBag.PageSize : "")@(ViewBag.SelectedDestinationId != null ? "&destinationId=" + ViewBag.SelectedDestinationId : "")@(ViewBag.SelectedCategoryId != null ? "&categoryId=" + ViewBag.SelectedCategoryId : "")@(ViewBag.StartDate != null ? "&startDate=" + ViewBag.StartDate : "")@(ViewBag.SortBy != null ? "&sortBy=" + ViewBag.SortBy : "")">@i</a></li>
+                                            }
+                                        }
+                                        if (endPage < (int)ViewBag.TotalPages)
+                                        {
+                                            if (endPage < (int)ViewBag.TotalPages - 1)
+                                            {
+                                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                                            }
+                                            <li class="page-item"><a class="page-link" href="/tour-list?page=@ViewBag.TotalPages@(ViewBag.PageSize != null ? "&pageSize=" + ViewBag.PageSize : "")@(ViewBag.SelectedDestinationId != null ? "&destinationId=" + ViewBag.SelectedDestinationId : "")@(ViewBag.SelectedCategoryId != null ? "&categoryId=" + ViewBag.SelectedCategoryId : "")@(ViewBag.StartDate != null ? "&startDate=" + ViewBag.StartDate : "")@(ViewBag.SortBy != null ? "&sortBy=" + ViewBag.SortBy : "")">@ViewBag.TotalPages</a></li>
+                                        }
+                                    }
+                                    <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                                        <a class="page-link" href="/tour-list?page=@(ViewBag.CurrentPage + 1)@(ViewBag.PageSize != null ? "&pageSize=" + ViewBag.PageSize : "")@(ViewBag.SelectedDestinationId != null ? "&destinationId=" + ViewBag.SelectedDestinationId : "")@(ViewBag.SelectedCategoryId != null ? "&categoryId=" + ViewBag.SelectedCategoryId : "")@(ViewBag.StartDate != null ? "&startDate=" + ViewBag.StartDate : "")@(ViewBag.SortBy != null ? "&sortBy=" + ViewBag.SortBy : "")"><i class="far fa-chevron-right"></i></a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        }
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Tour List Area end -->
+        <!-- Newsletter Area start -->
+        <section class="newsletter-three bgc-primary py-100 rel z-1" style="background-image: url(assets/images/newsletter/newsletter-bg-lines.png);">
+            <div class="container container-1500">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="newsletter-content-part text-white rmb-55" data-aos="zoom-in-right" data-aos-duration="1500" data-aos-offset="50">
+                            <div class="section-title counter-text-wrap mb-45">
+                                <h2>Subscribe Our Newsletter to Get more offer & Tips</h2>
+                                <p>One site <span class="count-text plus" data-speed="3000" data-stop="34500">0</span> most popular experience you'll remember</p>
+                            </div>
+                            <form class="newsletter-form mb-15" action="#">
+                                <input id="news-email" type="email" placeholder="Email Address" required>
+                                <button type="submit" class="theme-btn bgc-secondary style-two">
+                                    <span data-hover="Subscribe">Subscribe</span>
+                                    <i class="fal fa-arrow-right"></i>
+                                </button>
+                            </form>
+                            <p>No credit card requirement. No commitments</p>
+                        </div>
+                        <div class="newsletter-bg-image" data-aos="zoom-in-up" data-aos-delay="100" data-aos-duration="1500" data-aos-offset="50">
+                            <img src="/assets/images/newsletter/newsletter-bg-image.png" alt="Newsletter">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="newsletter-image-part bgs-cover" style="background-image: url(/assets/images/newsletter/newsletter-two-right.jpg);" data-aos="fade-left" data-aos-duration="1500" data-aos-offset="50"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Newsletter Area end -->
+        <!-- footer area start -->
+        @await Html.PartialAsync("~/Views/client/share/footer.cshtml")
+        <!-- footer area end -->
+
+    </div>
+    <!--End pagewrapper-->
+    <!-- Shared Scripts -->
+    @await Html.PartialAsync("~/Views/client/share/script.cshtml")
+    <!-- Chỉ giữ lại file riêng cho Tour-list nếu cần -->
+    <script src="/assets/js/jquery-ui.min.js"></script>
+
+    <!-- Initialize Nice Select and other functionalities -->
+    <script>
+        $(document).ready(function() {
+            // Initialize nice-select for all select elements
+            $('select.nice-select').niceSelect();
+
+            // Set selected values from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('destinationId')) {
+                $('#destinationId').val(urlParams.get('destinationId'));
+            }
+            if (urlParams.get('categoryId')) {
+                $('#categoryId').val(urlParams.get('categoryId'));
+            }
+            if (urlParams.get('startDate')) {
+                $('#startDate').val(urlParams.get('startDate'));
+            }
+            if (urlParams.get('sortBy')) {
+                $('.sort-select').val(urlParams.get('sortBy'));
+            }
+
+            // Re-initialize nice-select after setting values
+            $('select.nice-select').niceSelect('destroy');
+            $('select.nice-select').niceSelect();
+
+            // Handle search button click
+            $('.search-button button').on('click', function() {
+                performSearch();
+            });
+
+            // Function to perform search
+            function performSearch() {
+                var destinationId = $('#destinationId').val();
+                var categoryId = $('#categoryId').val();
+                var startDate = $('#startDate').val();
+                var sortBy = $('.sort-select').val();
+
+                console.log('Search params:', { destinationId, categoryId, startDate, sortBy });
+
+                // Build search parameters
+                var searchParams = new URLSearchParams();
+                if (destinationId) searchParams.append('destinationId', destinationId);
+                if (categoryId) searchParams.append('categoryId', categoryId);
+                if (startDate) searchParams.append('startDate', startDate);
+                if (sortBy && sortBy !== 'default') searchParams.append('sortBy', sortBy);
+
+                // Reload page with search parameters
+                var newUrl = window.location.pathname + '?' + searchParams.toString();
+                console.log('Redirecting to:', newUrl);
+                window.location.href = newUrl;
+            }
+
+            // Handle radio button changes in sidebar
+            $(document).on('change', '.radio-filter input[type="radio"]', function() {
+                var filterType = $(this).attr('name');
+                var filterValue = $(this).val();
+
+                if (filterType === 'ByCategories') {
+                    // Update category dropdown in search bar
+                    if (filterValue) {
+                        $('#categoryId').val(filterValue);
+                    } else {
+                        $('#categoryId').val('');
+                    }
+                    // Re-initialize nice-select
+                    $('#categoryId').niceSelect('destroy');
+                    $('#categoryId').niceSelect();
+
+                    // Perform search immediately
+                    performSearch();
+                }
+            });
+
+            // Handle sort dropdown
+            $('.sort-select').on('change', function() {
+                performSearch();
+            });
+
+            // Handle heart button (favorite)
+            $('.heart').on('click', function(e) {
+                $(this).toggleClass('active');
+                var tourId = $(this).closest('.destination-item').data('tour-id');
+                console.log('Toggle favorite for tour:', tourId);
+            });
+
+            // Clear all filters
+            $('.clear-filters').on('click', function() {
+                $('#destinationId').val('');
+                $('#categoryId').val('');
+                $('#startDate').val('');
+                $('.sort-select').val('default');
+
+                // Re-initialize nice-select
+                $('select.nice-select').niceSelect('destroy');
+                $('select.nice-select').niceSelect();
+
+                // Clear radio buttons
+                $('.radio-filter input[type="radio"]').prop('checked', false);
+                $('#category-all').prop('checked', true);
+
+                // Reload page without parameters
+                window.location.href = window.location.pathname;
+            });
+        });
+    </script>
+
+</body>
+
+</html> 
