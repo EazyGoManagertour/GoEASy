@@ -212,5 +212,90 @@ namespace GoEASy.Services
             return (errors.Count == 0, errors);
         }
 
+        // Validate Tour object
+        public static (bool IsValid, List<string> Errors) ValidateTour(Tour tour, bool isUpdate = false)
+        {
+            var errors = new List<string>();
+
+            // TourName validation
+            if (string.IsNullOrWhiteSpace(tour.TourName))
+            {
+                errors.Add("Tên tour không được để trống");
+            }
+            else if (tour.TourName.Length < 3)
+            {
+                errors.Add("Tên tour phải có ít nhất 3 ký tự");
+            }
+            else if (tour.TourName.Length > 100)
+            {
+                errors.Add("Tên tour không được quá 100 ký tự");
+            }
+
+            // Description validation
+            if (!string.IsNullOrWhiteSpace(tour.Description) && tour.Description.Length > 1000)
+            {
+                errors.Add("Mô tả tour không được quá 1000 ký tự");
+            }
+
+            // Price validation
+            if (tour.AdultPrice <= 0)
+            {
+                errors.Add("Giá người lớn phải lớn hơn 0");
+            }
+
+            if (tour.ChildPrice <= 0)
+            {
+                errors.Add("Giá trẻ em phải lớn hơn 0");
+            }
+
+            if (tour.ChildPrice > tour.AdultPrice)
+            {
+                errors.Add("Giá trẻ em không được cao hơn giá người lớn");
+            }
+
+            // Date validation
+            if (tour.StartDate.HasValue && tour.EndDate.HasValue)
+            {
+                if (tour.StartDate >= tour.EndDate)
+                {
+                    errors.Add("Ngày bắt đầu phải trước ngày kết thúc");
+                }
+            }
+
+            if (tour.StartDate.HasValue && tour.StartDate < DateTime.Today)
+            {
+                errors.Add("Ngày bắt đầu không được trong quá khứ");
+            }
+
+            // Seats validation
+            if (tour.MaxSeats.HasValue && tour.MaxSeats <= 0)
+            {
+                errors.Add("Số chỗ ngồi tối đa phải lớn hơn 0");
+            }
+
+            if (tour.AvailableSeats.HasValue && tour.AvailableSeats < 0)
+            {
+                errors.Add("Số chỗ ngồi có sẵn không được âm");
+            }
+
+            if (tour.MaxSeats.HasValue && tour.AvailableSeats.HasValue && tour.AvailableSeats > tour.MaxSeats)
+            {
+                errors.Add("Số chỗ ngồi có sẵn không được vượt quá số chỗ ngồi tối đa");
+            }
+
+            // Destination and Category validation
+            if (tour.DestinationId.HasValue && tour.DestinationId <= 0)
+            {
+                errors.Add("ID điểm đến không hợp lệ");
+            }
+
+            if (tour.CategoryId.HasValue && tour.CategoryId <= 0)
+            {
+                errors.Add("ID danh mục không hợp lệ");
+            }
+
+            return (errors.Count == 0, errors);
+        }
+
     }
 } 

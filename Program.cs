@@ -15,7 +15,7 @@ builder.Services.AddDbContext<GoEasyContext>(options =>
 
 // Đăng ký repository generic
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-
+builder.Services.AddScoped<TourService>();
 // Đăng ký UserService
 builder.Services.AddScoped<IUserService, UserService>();
 
