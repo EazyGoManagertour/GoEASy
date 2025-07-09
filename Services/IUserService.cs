@@ -12,7 +12,7 @@ namespace GoEASy.Services
         Task<User> GetUserByEmailAsync(string email);
         Task<bool> UsernameExistsAsync(string username, int? excludeId = null);
         Task<bool> EmailExistsAsync(string email, int? excludeId = null);
-        Task AddUserAsync(User user);
+        Task CreateUserAsync(User user);
         Task UpdateUserAsync(User user);
         Task DeleteUserAsync(int id);
         Task ToggleStatusAsync(int id);
