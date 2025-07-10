@@ -33,6 +33,8 @@ public partial class User
 
     public virtual ICollection<AccessLog> AccessLogs { get; set; } = new List<AccessLog>();
 
+    public virtual ICollection<BlogComment> BlogComments { get; set; } = new List<BlogComment>();
+
     public virtual ICollection<Blog> Blogs { get; set; } = new List<Blog>();
 
     public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();

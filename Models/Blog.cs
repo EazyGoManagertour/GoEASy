@@ -9,11 +9,15 @@ public partial class Blog
 
     public string Title { get; set; } = null!;
 
-    public string Content { get; set; } = null!;
+    public string? ShortDescription { get; set; }
 
-    public int? AuthorId { get; set; }
+    public string? Category { get; set; }
 
-    public bool? IsPublished { get; set; }
+    public int? AuthorUserId { get; set; }
+
+    public int? AuthorAdminId { get; set; }
+
+    public bool? IsApproved { get; set; }
 
     public bool? Status { get; set; }
 
@@ -21,5 +25,15 @@ public partial class Blog
 
     public DateTime? UpdatedAt { get; set; }
 
-    public virtual User? Author { get; set; }
+    public virtual Admin? AuthorAdmin { get; set; }
+
+    public virtual User? AuthorUser { get; set; }
+
+    public virtual ICollection<BlogComment> BlogComments { get; set; } = new List<BlogComment>();
+
+    public virtual BlogDetail? BlogDetail { get; set; }
+
+    public virtual ICollection<BlogImage> BlogImages { get; set; } = new List<BlogImage>();
+
+    public virtual ICollection<BlogTag> Tags { get; set; } = new List<BlogTag>();
 }

@@ -21,6 +21,14 @@ public partial class GoEasyContext : DbContext
 
     public virtual DbSet<Blog> Blogs { get; set; }
 
+    public virtual DbSet<BlogComment> BlogComments { get; set; }
+
+    public virtual DbSet<BlogDetail> BlogDetails { get; set; }
+
+    public virtual DbSet<BlogImage> BlogImages { get; set; }
+
+    public virtual DbSet<BlogTag> BlogTags { get; set; }
+
     public virtual DbSet<Booking> Bookings { get; set; }
 
     public virtual DbSet<Companion> Companions { get; set; }
@@ -103,19 +111,111 @@ public partial class GoEasyContext : DbContext
 
         modelBuilder.Entity<Blog>(entity =>
         {
-            entity.HasKey(e => e.BlogId).HasName("PK__Blogs__54379E50829A4F62");
+            entity.HasKey(e => e.BlogId).HasName("PK__Blogs__54379E502ADFF003");
 
             entity.Property(e => e.BlogId).HasColumnName("BlogID");
-            entity.Property(e => e.AuthorId).HasColumnName("AuthorID");
+            entity.Property(e => e.AuthorAdminId).HasColumnName("AuthorAdminID");
+            entity.Property(e => e.AuthorUserId).HasColumnName("AuthorUserID");
+            entity.Property(e => e.Category).HasMaxLength(50);
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetime())");
-            entity.Property(e => e.IsPublished).HasDefaultValue(false);
+            entity.Property(e => e.IsApproved).HasDefaultValue(false);
+            entity.Property(e => e.ShortDescription).HasMaxLength(255);
             entity.Property(e => e.Status).HasDefaultValue(true);
             entity.Property(e => e.Title).HasMaxLength(200);
             entity.Property(e => e.UpdatedAt).HasDefaultValueSql("(sysdatetime())");
 
-            entity.HasOne(d => d.Author).WithMany(p => p.Blogs)
-                .HasForeignKey(d => d.AuthorId)
-                .HasConstraintName("FK__Blogs__AuthorID__17036CC0");
+            entity.HasOne(d => d.AuthorAdmin).WithMany(p => p.Blogs)
+                .HasForeignKey(d => d.AuthorAdminId)
+                .HasConstraintName("FK__Blogs__AuthorAdm__55F4C372");
+
+            entity.HasOne(d => d.AuthorUser).WithMany(p => p.Blogs)
+                .HasForeignKey(d => d.AuthorUserId)
+                .HasConstraintName("FK__Blogs__AuthorUse__55009F39");
+
+            entity.HasMany(d => d.Tags).WithMany(p => p.Blogs)
+                .UsingEntity<Dictionary<string, object>>(
+                    "BlogTagMapping",
+                    r => r.HasOne<BlogTag>().WithMany()
+                        .HasForeignKey("TagId")
+                        .HasConstraintName("FK__BlogTagMa__TagID__6AEFE058"),
+                    l => l.HasOne<Blog>().WithMany()
+                        .HasForeignKey("BlogId")
+                        .HasConstraintName("FK__BlogTagMa__BlogI__69FBBC1F"),
+                    j =>
+                    {
+                        j.HasKey("BlogId", "TagId").HasName("PK__BlogTagM__826051F46BC7CBC7");
+                        j.ToTable("BlogTagMapping");
+                        j.IndexerProperty<int>("BlogId").HasColumnName("BlogID");
+                        j.IndexerProperty<int>("TagId").HasColumnName("TagID");
+                    });
+        });
+
+        modelBuilder.Entity<BlogComment>(entity =>
+        {
+            entity.HasKey(e => e.CommentId).HasName("PK__BlogComm__C3B4DFAA2757BEDA");
+
+            entity.Property(e => e.CommentId).HasColumnName("CommentID");
+            entity.Property(e => e.BlogId).HasColumnName("BlogID");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetime())");
+            entity.Property(e => e.Email).HasMaxLength(100);
+            entity.Property(e => e.Name).HasMaxLength(100);
+            entity.Property(e => e.UserId).HasColumnName("UserID");
+
+            entity.HasOne(d => d.Blog).WithMany(p => p.BlogComments)
+                .HasForeignKey(d => d.BlogId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__BlogComme__BlogI__5E8A0973");
+
+            entity.HasOne(d => d.User).WithMany(p => p.BlogComments)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK__BlogComme__UserI__5F7E2DAC");
+        });
+
+        modelBuilder.Entity<BlogDetail>(entity =>
+        {
+            entity.HasKey(e => e.BlogDetailId).HasName("PK__BlogDeta__2383E81E5C55CC6D");
+
+            entity.HasIndex(e => e.BlogId, "UQ__BlogDeta__54379E51AFC04DFF").IsUnique();
+
+            entity.Property(e => e.BlogDetailId).HasColumnName("BlogDetailID");
+            entity.Property(e => e.BlogId).HasColumnName("BlogID");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetime())");
+            entity.Property(e => e.MainImage).HasMaxLength(255);
+            entity.Property(e => e.QuoteAuthor).HasMaxLength(100);
+            entity.Property(e => e.Section1Title).HasMaxLength(255);
+            entity.Property(e => e.Section2Title).HasMaxLength(255);
+
+            entity.HasOne(d => d.Blog).WithOne(p => p.BlogDetail)
+                .HasForeignKey<BlogDetail>(d => d.BlogId)
+                .HasConstraintName("FK__BlogDetai__BlogI__5AB9788F");
+        });
+
+        modelBuilder.Entity<BlogImage>(entity =>
+        {
+            entity.HasKey(e => e.ImageId).HasName("PK__BlogImag__7516F4EC613B291D");
+
+            entity.Property(e => e.ImageId).HasColumnName("ImageID");
+            entity.Property(e => e.BlogId).HasColumnName("BlogID");
+            entity.Property(e => e.Caption).HasMaxLength(255);
+            entity.Property(e => e.ImageUrl)
+                .HasMaxLength(255)
+                .HasColumnName("ImageURL");
+            entity.Property(e => e.IsMain).HasDefaultValue(false);
+            entity.Property(e => e.UploadedAt).HasDefaultValueSql("(sysdatetime())");
+
+            entity.HasOne(d => d.Blog).WithMany(p => p.BlogImages)
+                .HasForeignKey(d => d.BlogId)
+                .HasConstraintName("FK__BlogImage__BlogI__6442E2C9");
+        });
+
+        modelBuilder.Entity<BlogTag>(entity =>
+        {
+            entity.HasKey(e => e.TagId).HasName("PK__BlogTags__657CFA4C943A6324");
+
+            entity.HasIndex(e => e.Name, "UQ__BlogTags__737584F680A87096").IsUnique();
+
+            entity.Property(e => e.TagId).HasColumnName("TagID");
+            entity.Property(e => e.Name).HasMaxLength(50);
         });
 
         modelBuilder.Entity<Booking>(entity =>
@@ -379,6 +479,9 @@ public partial class GoEasyContext : DbContext
             entity.HasKey(e => e.ItineraryId).HasName("PK__TourItin__361216A6CB7C9AAC");
 
             entity.Property(e => e.ItineraryId).HasColumnName("ItineraryID");
+            entity.Property(e => e.Accommodation).HasMaxLength(255);
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetime())");
+            entity.Property(e => e.Meals).HasMaxLength(255);
             entity.Property(e => e.Title).HasMaxLength(255);
             entity.Property(e => e.TourId).HasColumnName("TourID");
 
