@@ -1,0 +1,236 @@
+﻿<!DOCTYPE html>
+<html lang="zxx">
+@Html.Partial("~/Views/client/share/head.cshtml")
+<!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<body>
+    <div class="page-wrapper">
+        <!-- Preloader -->
+        <div class="preloader"><div class="custom-loader"></div></div>
+
+        <!-- main header -->
+        <header class="main-header header-one white-menu menu-absolute">
+            @Html.Partial("~/Views/client/share/header.cshtml")
+        </header>
+        <!--End Header Upper-->
+
+        <div class="main-content">
+        <!--Form Back Drop-->
+        <div class="form-back-drop"></div>
+        <!-- Hidden Sidebar -->
+        <section class="hidden-bar">
+            <div class="inner-box text-center">
+                <div class="cross-icon"><span class="fa fa-times"></span></div>
+                <div class="title">
+                    <h4>Get Appointment</h4>
+                </div>
+                <!--Appointment Form-->
+                <div class="appointment-form">
+                    <form method="post" action="https://webtendtheme.net/html/2024/ravelo/contact.html">
+                        <div class="form-group">
+                            <input type="text" name="text" value="" placeholder="Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="email" value="" placeholder="Email Address" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea placeholder="Message" rows="5"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="theme-btn style-two">
+                                <span data-hover="Submit now">Submit now</span>
+                                <i class="fal fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <!--Social Icons-->
+                <div class="social-style-one">
+                    <a href="contact.html"><i class="fab fa-twitter"></i></a>
+                    <a href="contact.html"><i class="fab fa-facebook-f"></i></a>
+                    <a href="contact.html"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                </div>
+            </div>
+        </section>
+        <!--End Hidden Sidebar -->
+
+        <!-- Page Banner Start -->
+        <section class="page-banner-area pt-50 pb-35 rel z-1 bgs-cover" style="background-image: url(assets/images/banner/banner.jpg);">
+            <div class="container">
+                <div class="banner-inner text-white mb-50">
+                    <h2 class="page-title mb-10" data-aos="fade-left" data-aos-duration="1500" data-aos-offset="50">Destination 02</h2>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center mb-20" data-aos="fade-right" data-aos-delay="200" data-aos-duration="1500" data-aos-offset="50">
+                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item active">Destination 02</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </section>
+        <div class="container pb-5">
+            <div class="search-filter-inner" data-aos="zoom-out-down" data-aos-duration="1500" data-aos-offset="50">
+                <div class="filter-item clearfix">
+                    <div class="icon"><i class="fal fa-map-marker-alt"></i></div>
+                    <span class="title">Destinations</span>
+                    <select name="city" id="city">
+                        <option value="value1">City or Region</option>
+                        <option value="value2">City</option>
+                        <option value="value2">Region</option>
+                    </select>
+                </div>
+                <div class="filter-item clearfix">
+                    <div class="icon"><i class="fal fa-flag"></i></div>
+                    <span class="title">All Activity</span>
+                    <select name="activity" id="activity">
+                        <option value="value1">Choose Activity</option>
+                        <option value="value2">Daily</option>
+                        <option value="value2">Monthly</option>
+                    </select>
+                </div>
+                <div class="filter-item clearfix">
+                    <div class="icon"><i class="fal fa-calendar-alt"></i></div>
+                    <span class="title">Departure Date</span>
+                    <select name="date" id="date">
+                        <option value="value1">Date from</option>
+                        <option value="value2">10</option>
+                        <option value="value2">20</option>
+                    </select>
+                </div>
+                <div class="filter-item clearfix">
+                    <div class="icon"><i class="fal fa-users"></i></div>
+                    <span class="title">Guests</span>
+                    <select name="cuests" id="cuests">
+                        <option value="value1">0</option>
+                        <option value="value2">1</option>
+                        <option value="value2">2</option>
+                    </select>
+                </div>
+                <div class="search-button">
+                    <button class="theme-btn">
+                        <span data-hover="Search">Search</span>
+                        <i class="far fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Page Banner End -->
+
+        <!-- Popular Destinations Area start -->
+        <section class="popular-destinations-area pt-100 pb-90 rel z-1">
+            <div class="container pb-5">
+                <div class="swiper destinations-swiper">
+                    <div class="swiper-wrapper">
+                        @if (Model != null)
+                        {
+                            foreach (var dest in Model)
+                            {
+                                <div class="swiper-slide">
+                                    <div class="destination-item style-two" data-aos="flip-up" data-aos-duration="1500" data-aos-offset="50">
+                                        <div class="image">
+                                            <a href="#" class="heart"><i class="fas fa-heart"></i></a>
+                                            <img src="@dest.ImageUrl" alt="@dest.DestinationName">
+                                        </div>
+                                        <div class="content">
+                                            <h6><a href="/destination/details/@dest.DestinationId">@dest.DestinationName</a></h6>
+                                            <a href="/destination/details/@dest.DestinationId" class="more"><i class="fas fa-chevron-right"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+                <!-- Đưa các controls ra ngoài grid -->
+                <div class="swiper-controls-wrapper mt-4">
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-next"></div>
+                </div>
+            </div>
+        </section>
+        <!-- Popular Destinations Area end -->
+        @Html.Partial("~/Views/client/share/footer.cshtml")
+        </div>
+
+    </div>
+    <!--End pagewrapper-->
+
+    @Html.Partial("~/Views/client/share/script.cshtml")
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var swiper = new Swiper('.destinations-swiper', {
+                slidesPerView: 4,
+                spaceBetween: 30,
+                loop: true,
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                breakpoints: {
+                    1200: { slidesPerView: 4 },
+                    992: { slidesPerView: 3 },
+                    768: { slidesPerView: 2 },
+                    0: { slidesPerView: 1 }
+                }
+            });
+        });
+    </script>
+    <style>
+    .destination-item .image img {
+      height: 220px;
+      width: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    /* Swiper controls custom style */
+    .swiper-controls-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 20px;
+      position: relative;
+      z-index: 2;
+    }
+    .swiper-controls-wrapper .swiper-button-next,
+    .swiper-controls-wrapper .swiper-button-prev {
+      position: static;
+      margin: 0 10px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      color: #63AB45;
+      transition: background 0.2s;
+    }
+    .swiper-controls-wrapper .swiper-button-next:hover,
+    .swiper-controls-wrapper .swiper-button-prev:hover {
+      background: #63AB45;
+      color: #fff;
+    }
+    .swiper-controls-wrapper .swiper-pagination {
+      flex: 1;
+      text-align: center;
+      position: static;
+    }
+    .swiper-pagination-bullet {
+      background: #63AB45;
+      opacity: 0.5;
+      margin: 0 4px !important;
+    }
+    .swiper-pagination-bullet-active {
+      opacity: 1;
+      background: #F7921E;
+    }
+    </style>
+</body>
+</html> 

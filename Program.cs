@@ -24,6 +24,7 @@ builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IFavoriteService, FavoriteService>();
 
 builder.Services.AddScoped<TourService>();
+builder.Services.AddScoped<DestinationService>();
 
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 
