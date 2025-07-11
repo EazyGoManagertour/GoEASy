@@ -1,0 +1,343 @@
+@model GoEASy.Models.Destination
+@{
+    /* Đã partial head, header, footer, script. 
+       Các thẻ <link> và <script> đã có trong shared sẽ không lặp lại ở đây. 
+       Nếu có file css/js đặc biệt chưa có trong shared, hãy thêm thủ công vào shared hoặc giữ lại ở đây. */
+}
+
+<!DOCTYPE html>
+<html lang="zxx">
+@Html.Partial("~/Views/client/share/head.cshtml")
+<link rel="stylesheet" href="/assets/css/flaticon.min.css">
+<link rel="stylesheet" href="/assets/css/fontawesome-5.14.0.min.css">
+<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+<link rel="stylesheet" href="/assets/css/magnific-popup.min.css">
+<link rel="stylesheet" href="/assets/css/nice-select.min.css">
+<link rel="stylesheet" href="/assets/css/aos.css">
+<link rel="stylesheet" href="/assets/css/slick.min.css">
+<link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<body>
+    <div class="page-wrapper">
+        <!-- Preloader -->
+        <div class="preloader"><div class="custom-loader"></div></div>
+        <!-- main header -->
+        <header class="main-header header-one white-menu menu-absolute">
+            @Html.Partial("~/Views/client/share/header.cshtml")
+        </header>
+        <!--End Header Upper-->
+
+        @* Giữ nguyên toàn bộ phần còn lại của file, KHÔNG xóa gì *@
+        <!--Form Back Drop-->
+        <div class="form-back-drop"></div>
+        <!-- Hidden Sidebar -->
+        <section class="hidden-bar">
+            <div class="inner-box text-center">
+                <div class="cross-icon"><span class="fa fa-times"></span></div>
+                <div class="title">
+                    <h4>Get Appointment</h4>
+                </div>
+                <!--Appointment Form-->
+                <div class="appointment-form">
+                    <form method="post" action="https://webtendtheme.net/html/2024/ravelo/contact.html">
+                        <div class="form-group">
+                            <input type="text" name="text" value="" placeholder="Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="email" value="" placeholder="Email Address" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea placeholder="Message" rows="5"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="theme-btn style-two">
+                                <span data-hover="Submit now">Submit now</span>
+                                <i class="fal fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <!--Social Icons-->
+                <div class="social-style-one">
+                    <a href="contact.html"><i class="fab fa-twitter"></i></a>
+                    <a href="contact.html"><i class="fab fa-facebook-f"></i></a>
+                    <a href="contact.html"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                </div>
+            </div>
+        </section>
+        <!--End Hidden Sidebar -->
+        
+        @* --- Giữ nguyên toàn bộ phần nội dung giữa --- *@
+        
+        <!-- Page Banner Start -->
+        <section class="page-banner-two rel z-1" style="padding-top: 180px;">
+            <div class="container-fluid">
+                <hr class="mt-0">
+                <div class="container">
+                    <div class="banner-inner pt-15 pb-25">
+                        <h2 class="page-title mb-10" data-aos="fade-left" data-aos-duration="1500" data-aos-offset="50">@Model.DestinationName</h2>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb justify-content-center mb-20" data-aos="fade-right" data-aos-delay="200" data-aos-duration="1500" data-aos-offset="50">
+                                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                                <li class="breadcrumb-item active">@Model.DestinationName</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Page Banner End -->
+        
+        @{
+            var images = Model.DestinationImages.Take(5).ToList();
+        }
+        <div class="destination-gallery">
+            <div class="container-fluid">
+                <div class="row gap-10 justify-content-center rel">
+                    <div class="col-lg-4 col-md-6 d-flex flex-column gap-3">
+                        @if (images.Count > 0)
+                        {
+                            <div class="gallery-item">
+                                <img src="@images[0].ImageUrl" style="width:100%;height:316.05px;object-fit:cover;border-radius:16px;" alt="Destination Image 1" />
+                            </div>
+                        }
+                        @if (images.Count > 1)
+                        {
+                            <div class="gallery-item">
+                                <img src="@images[1].ImageUrl" style="width:100%;height:316.05px;object-fit:cover;border-radius:16px;" alt="Destination Image 2" />
+                            </div>
+                        }
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        @if (images.Count > 2)
+                        {
+                            <div class="gallery-item">
+                                <img src="@images[2].ImageUrl" style="width:100%;height:640.01px;object-fit:cover;border-radius:16px;" alt="Destination Image 3" />
+                            </div>
+                        }
+                    </div>
+                    <div class="col-lg-4 col-md-6 d-flex flex-column gap-3">
+                        @if (images.Count > 3)
+                        {
+                            <div class="gallery-item">
+                                <img src="@images[3].ImageUrl" style="width:100%;height:316.05px;object-fit:cover;border-radius:16px;" alt="Destination Image 4" />
+                            </div>
+                        }
+                        @if (images.Count > 4)
+                        {
+                            <div class="gallery-item">
+                                <img src="@images[4].ImageUrl" style="width:100%;height:316.05px;object-fit:cover;border-radius:16px;" alt="Destination Image 5" />
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Destination Gallery End -->
+        
+        <!-- About Us Area start -->
+        <section class="about-us-area pt-90 pb-100 rel z-1">
+            <div class="container">
+                <div class="row gap-100 align-items-center">
+                    <div class="col-lg-6">
+                        <div class="destination-details-content rmb-55" data-aos="fade-left" data-aos-duration="1500" data-aos-offset="50">
+                            <div class="section-title mb-25">
+                                <span class="h2 mb-15">Welcome to </span>
+                                <h2>@Model.DestinationName</h2>
+                            </div>
+                            <p>@Model.Description</p>
+                            <a href="/tour-list?destinationId=@Model.DestinationId" class="theme-btn mt-25 style-two">
+                                <span data-hover="Explore Destinations">Explore Destinations</span>
+                                <i class="fal fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6" data-aos="fade-right" data-aos-duration="1500" data-aos-offset="50">
+                        <div class="destination-map">
+                            <iframe width="100%" height="350" style="border:0" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=@Uri.EscapeDataString(Model.DestinationName)&output=embed"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- About Us Area end -->
+        
+        <!-- Features Tours Area start -->
+        <!-- XÓA TOÀN BỘ PHẦN NÀY, THAY BẰNG SECTION MỚI -->
+        <section class="popular-destinations-area pt-100 pb-90 rel z-1 bgc-black">
+            <div class="container pb-5">
+                <div class="section-title text-center counter-text-wrap mb-50" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                    <h2>Danh sách tour nổi bật</h2>
+                    <p>One site <span class="count-text plus" data-speed="3000" data-stop="34500">0</span> most popular experience you'll remember</p>
+                </div>
+                <div class="swiper destinations-swiper">
+                    <div class="swiper-wrapper">
+                        @if (ViewBag.Tours != null)
+                        {
+                            foreach (var tour in (IEnumerable<GoEASy.Models.Tour>)ViewBag.Tours)
+                            {
+                                var coverImg = tour.TourImages?.FirstOrDefault(img => img.IsCover == true)?.ImageUrl
+                                    ?? tour.TourImages?.FirstOrDefault()?.ImageUrl
+                                    ?? "/assets/images/destinations/destination1.jpg";
+                                <div class="swiper-slide">
+                                    <div class="destination-item style-two" data-aos="flip-up" data-aos-duration="1500" data-aos-offset="50">
+                                        <div class="image">
+                                            <a href="#" class="heart"><i class="fas fa-heart"></i></a>
+                                            <img src="@coverImg" alt="@tour.TourName" style="width:100%;height:220px;object-fit:cover;">
+                                        </div>
+                                        <div class="content">
+                                            <h6><a href="/tour-details/@tour.TourId">@tour.TourName</a></h6>
+                                            <span class="time">@tour.AdultPrice.ToString("N0") VNĐ/người</span>
+                                            <a href="/tour-details/@tour.TourId" class="more"><i class="fas fa-chevron-right"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="swiper-controls-wrapper mt-4">
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-next"></div>
+                </div>
+            </div>
+        </section>
+        <!-- Features Tours Area end -->
+        
+        <!-- Popular Activity Area start -->
+       
+        
+        <!-- CTA Area start -->
+      
+        
+        <!-- Newsletter Area start -->
+       
+        <!-- Newsletter Area end -->
+        
+        <!-- Popular Destinations Area start -->
+        <section class="popular-destinations-area pt-100 pb-90 rel z-1">
+            <div class="container pb-5">
+                <div class="section-title text-center counter-text-wrap mb-50" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                    <h2>Những điểm đến hấp dẫn</h2>
+                    <p>One site <span class="count-text plus" data-speed="3000" data-stop="34500">0</span> most popular experience you'll remember</p>
+                </div>
+                <div class="swiper destinations-swiper">
+                    <div class="swiper-wrapper">
+                        @if (ViewBag.PopularDestinations != null)
+                        {
+                            foreach (var dest in (IEnumerable<GoEASy.Models.Destination>)ViewBag.PopularDestinations)
+                            {
+                                var coverImg = dest.DestinationImages.FirstOrDefault(img => img.IsCover == true)?.ImageUrl
+                                    ?? dest.DestinationImages.FirstOrDefault()?.ImageUrl
+                                    ?? "/assets/images/destinations/destination1.jpg";
+                                <div class="swiper-slide">
+                                    <div class="destination-item style-two" data-aos="flip-up" data-aos-duration="1500" data-aos-offset="50">
+                                        <div class="image">
+                                            <a href="#" class="heart"><i class="fas fa-heart"></i></a>
+                                            <img src="@coverImg" alt="@dest.DestinationName" style="width:100%;height:220px;object-fit:cover;">
+                                        </div>
+                                        <div class="content">
+                                            <h6><a href="/destination/details/@dest.DestinationId">@dest.DestinationName</a></h6>
+                                            <a href="/destination/details/@dest.DestinationId" class="more"><i class="fas fa-chevron-right"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+                <!-- Đưa các controls ra ngoài grid -->
+                <div class="swiper-controls-wrapper mt-4">
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-next"></div>
+                </div>
+            </div>
+        </section>
+        <!-- Popular Destinations Area end -->
+        
+        <!-- footer area start -->
+        @Html.Partial("~/Views/client/share/footer.cshtml")
+        <!-- footer area end -->
+
+    </div>
+    <!--End pagewrapper-->
+    @Html.Partial("~/Views/client/share/script.cshtml")
+    <script src="/assets/js/jquery-3.6.0.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/appear.min.js"></script>
+    <script src="/assets/js/slick.min.js"></script>
+    <script src="/assets/js/jquery.magnific-popup.min.js"></script>
+    <script src="/assets/js/jquery.nice-select.min.js"></script>
+    <script src="/assets/js/imagesloaded.pkgd.min.js"></script>
+    <script src="/assets/js/skill.bars.jquery.min.js"></script>
+    <script src="/assets/js/isotope.pkgd.min.js"></script>
+    <script src="/assets/js/aos.js"></script>
+    <script src="/assets/js/script.js"></script>
+    <script src="/assets/js/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Đổi logo chính
+        var logo = document.querySelector('.logo-outer .logo img');
+        if (logo) logo.src = "/assets/images/logos/logo.png";
+        // Đổi logo mobile
+        var mobileLogo = document.querySelector('.mobile-logo img');
+        if (mobileLogo) mobileLogo.src = "/assets/images/logos/logo.png";
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+        new Swiper('.destinations-swiper', {
+            slidesPerView: 4,
+            spaceBetween: 30,
+            loop: true,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            breakpoints: {
+                1200: { slidesPerView: 4 },
+                992: { slidesPerView: 3 },
+                768: { slidesPerView: 2 },
+                0: { slidesPerView: 1 }
+            }
+        });
+    });
+    </script>
+    <style>
+        /* Chỉ áp dụng cho section danh sách tour nổi bật (section đầu tiên) */
+        section.popular-destinations-area.bgc-black .destination-item.style-two {
+            min-height: 370px;
+            max-height: 370px;
+            height: 370px;
+            border: 2.5px dashed #FFC300 !important; /* vàng gạch đậm */
+            background: #181818 !important;
+            box-shadow: 0 2px 12px 0 rgba(0,0,0,0.04);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        section.popular-destinations-area.bgc-black .destination-item.style-two .image {
+            flex-shrink: 0;
+        }
+        section.popular-destinations-area.bgc-black .destination-item.style-two .content {
+            flex-grow: 1;
+        }
+        section.popular-destinations-area.bgc-black .destination-item.style-two .content h6 a,
+        section.popular-destinations-area.bgc-black .destination-item.style-two .content .time,
+        section.popular-destinations-area.bgc-black .destination-item.style-two .content .more {
+            color: #fff !important;
+        }
+        section.popular-destinations-area.bgc-black .section-title,
+        section.popular-destinations-area.bgc-black .section-title h2,
+        section.popular-destinations-area.bgc-black .section-title p {
+            color: #fff !important;
+        }
+    </style>
+</body>
+</html> 

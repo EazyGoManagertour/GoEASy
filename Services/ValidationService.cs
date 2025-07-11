@@ -296,6 +296,38 @@ namespace GoEASy.Services
 
             return (errors.Count == 0, errors);
         }
+        public static (bool IsValid, List<string> Errors) ValidateDestination(Destination destination, bool isUpdate = false)
+        {
+            var errors = new List<string>();
+
+            // DestinationName validation
+            if (string.IsNullOrWhiteSpace(destination.DestinationName))
+            {
+                errors.Add("Tên điểm đến không được để trống");
+            }
+            else if (destination.DestinationName.Length < 3)
+            {
+                errors.Add("Tên điểm đến phải có ít nhất 3 ký tự");
+            }
+            else if (destination.DestinationName.Length > 100)
+            {
+                errors.Add("Tên điểm đến không được quá 100 ký tự");
+            }
+
+            // Description validation
+            if (!string.IsNullOrWhiteSpace(destination.Description) && destination.Description.Length > 1000)
+            {
+                errors.Add("Mô tả điểm đến không được quá 1000 ký tự");
+            }
+
+            // Location validation
+            if (!string.IsNullOrWhiteSpace(destination.Location) && destination.Location.Length > 200)
+            {
+                errors.Add("Địa điểm không được quá 200 ký tự");
+            }
+
+            return (errors.Count == 0, errors);
+        }
 
     }
 } 

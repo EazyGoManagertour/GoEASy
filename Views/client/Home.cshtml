@@ -1,7 +1,9 @@
 ﻿<!DOCTYPE html>
 <html lang="zxx">
 
- @Html.Partial("~/Views/client/share/head.cshtml")
+     @Html.Partial("~/Views/client/share/head.cshtml")
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
 <body>
     <div class="page-wrapper">
@@ -258,86 +260,52 @@
                             </div>
                         </div>
                     </div>
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-xl-3 col-md-6">
-                                <div class="destination-item style-two" data-aos="flip-up" data-aos-duration="1500" data-aos-offset="50">
-                                    <div class="image">
-                                        <a href="#" class="heart"><i class="fas fa-heart"></i></a>
-                                        <img src="assets/images/destinations/destination1.jpg" alt="Destination">
-                                    </div>
-                                    <div class="content">
-                                        <h6><a href="destination-details.html">Thailand beach</a></h6>
-                                        <span class="time">5352+ tours & 856+ Activity</span>
-                                        <a href="#" class="more"><i class="fas fa-chevron-right"></i></a>
-                                    </div>
-                                </div>
+                    <div class="container pb-5">
+                        <div class="swiper destinations-swiper">
+                            <div class="swiper-wrapper">
+                                @if (Model != null)
+                                {
+                                    @foreach (var dest in Model)
+                                    {
+                                        GoEASy.Models.DestinationImage coverImage = null;
+                                        foreach (var img in dest.DestinationImages)
+                                        {
+                                            if (img.IsCover == true)
+                                            {
+                                                coverImage = img;
+                                                break;
+                                            }
+                                        }
+                                        var imageUrl = coverImage != null ? coverImage.ImageUrl : "/assets/images/destinations/destination1.jpg";
+                                        <div class="swiper-slide">
+                                            <div class="destination-item style-two" data-aos="flip-up" data-aos-duration="1500" data-aos-offset="50">
+                                                <div class="image">
+                                                    <a href="#" class="heart"><i class="fas fa-heart"></i></a>
+                                                    <img src="@imageUrl" alt="@dest.DestinationName">
+                                                </div>
+                                                <div class="content">
+                                                    <h6><a href="/destination/details/@dest.DestinationId">@dest.DestinationName</a></h6>
+                                                    @{
+                                                        var tourCount = dest.Tours?.Count ?? 0;
+                                                    }
+                                                    <span class="time">@tourCount tours available</span>
+                                                    <a href="/destination/details/@dest.DestinationId" class="more"><i class="fas fa-chevron-right"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <div style="color: red; padding: 10px;">Debug: Model is NULL!</div>
+                                }
                             </div>
-                            <div class="col-xl-3 col-md-6">
-                                <div class="destination-item style-two" data-aos="flip-up" data-aos-delay="100" data-aos-duration="1500" data-aos-offset="50">
-                                    <div class="image">
-                                        <a href="#" class="heart"><i class="fas fa-heart"></i></a>
-                                        <img src="assets/images/destinations/destination2.jpg" alt="Destination">
-                                    </div>
-                                    <div class="content">
-                                        <h6><a href="destination-details.html">Parga, Greece</a></h6>
-                                        <span class="time">5352+ tours & 856+ Activity</span>
-                                        <a href="#" class="more"><i class="fas fa-chevron-right"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="destination-item style-two" data-aos="flip-up" data-aos-delay="200" data-aos-duration="1500" data-aos-offset="50">
-                                    <div class="image">
-                                        <a href="#" class="heart"><i class="fas fa-heart"></i></a>
-                                        <img src="assets/images/destinations/destination3.jpg" alt="Destination">
-                                    </div>
-                                    <div class="content">
-                                        <h6><a href="destination-details.html">Castellammare del Golfo, Italy</a></h6>
-                                        <span class="time">5352+ tours & 856+ Activity</span>
-                                        <a href="#" class="more"><i class="fas fa-chevron-right"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="destination-item style-two" data-aos="flip-up" data-aos-duration="1500" data-aos-offset="50">
-                                    <div class="image">
-                                        <a href="#" class="heart"><i class="fas fa-heart"></i></a>
-                                        <img src="assets/images/destinations/destination4.jpg" alt="Destination">
-                                    </div>
-                                    <div class="content">
-                                        <h6><a href="destination-details.html">Reserve of Canada, Canada</a></h6>
-                                        <span class="time">5352+ tours & 856+ Activity</span>
-                                        <a href="#" class="more"><i class="fas fa-chevron-right"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-6">
-                                <div class="destination-item style-two" data-aos="flip-up" data-aos-delay="100" data-aos-duration="1500" data-aos-offset="50">
-                                    <div class="image">
-                                        <a href="#" class="heart"><i class="fas fa-heart"></i></a>
-                                        <img src="assets/images/destinations/destination5.jpg" alt="Destination">
-                                    </div>
-                                    <div class="content">
-                                        <h6><a href="destination-details.html">Dubai united states</a></h6>
-                                        <span class="time">5352+ tours & 856+ Activity</span>
-                                        <a href="#" class="more"><i class="fas fa-chevron-right"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-6">
-                                <div class="destination-item style-two" data-aos="flip-up" data-aos-delay="200" data-aos-duration="1500" data-aos-offset="50">
-                                    <div class="image">
-                                        <a href="#" class="heart"><i class="fas fa-heart"></i></a>
-                                        <img src="assets/images/destinations/destination6.jpg" alt="Destination">
-                                    </div>
-                                    <div class="content">
-                                        <h6><a href="destination-details.html">Milos, Greece</a></h6>
-                                        <span class="time">5352+ tours & 856+ Activity</span>
-                                        <a href="#" class="more"><i class="fas fa-chevron-right"></i></a>
-                                    </div>
-                                </div>
-                            </div>
+                        </div>
+                        <!-- Đưa các controls ra ngoài grid -->
+                        <div class="swiper-controls-wrapper mt-4">
+                            <div class="swiper-button-prev"></div>
+                            <div class="swiper-pagination"></div>
+                            <div class="swiper-button-next"></div>
                         </div>
                     </div>
                 </div>
@@ -744,6 +712,39 @@
     <!--End pagewrapper-->
 
     @Html.Partial("~/Views/client/share/script.cshtml")
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('DOM loaded, initializing Swiper...');
+            var swiperElement = document.querySelector('.destinations-swiper');
+            console.log('Swiper element:', swiperElement);
+            
+            if (swiperElement) {
+                var swiper = new Swiper('.destinations-swiper', {
+                slidesPerView: 4,
+                spaceBetween: 30,
+                loop: true,
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                breakpoints: {
+                    1200: { slidesPerView: 4 },
+                    992: { slidesPerView: 3 },
+                    768: { slidesPerView: 2 },
+                    0: { slidesPerView: 1 }
+                }
+            });
+            } else {
+                console.log('Swiper element not found!');
+            }
+        });
+    </script>
 
 </body>
 
