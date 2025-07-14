@@ -5,6 +5,8 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GoEASy.Controllers
 {
@@ -22,7 +24,7 @@ namespace GoEASy.Controllers
         [HttpGet("")]
         public async Task<IActionResult> Index()
         {
-            var tours = await _tourService.GetAllToursAsync();
+            var tours = await _tourService.GetAllToursForAdminAsync();
             
             // Lấy danh sách ảnh có sẵn trong thư mục Tourimg
             var availableImages = GetAvailableImages();
@@ -34,8 +36,9 @@ namespace GoEASy.Controllers
         private List<string> GetAvailableImages()
         {
             var images = new List<string>();
-            var tourImgPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "image", "Tourimg");
             
+            // Lấy ảnh từ thư mục cũ (backward compatibility)
+            var tourImgPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "image", "Tourimg");
             if (Directory.Exists(tourImgPath))
             {
                 var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
@@ -47,7 +50,110 @@ namespace GoEASy.Controllers
                 images.AddRange(files);
             }
             
+            // Lấy ảnh từ cấu trúc thư mục mới theo tour
+            var toursPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "assets", "tours");
+            if (Directory.Exists(toursPath))
+            {
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                var tourFolders = Directory.GetDirectories(toursPath);
+                
+                foreach (var tourFolder in tourFolders)
+                {
+                    var tourFolderName = Path.GetFileName(tourFolder);
+                    var files = Directory.GetFiles(tourFolder)
+                        .Where(file => allowedExtensions.Contains(Path.GetExtension(file).ToLowerInvariant()))
+                        .Select(file => $"/assets/tours/{tourFolderName}/{Path.GetFileName(file)}")
+                        .ToList();
+                    
+                    images.AddRange(files);
+                }
+            }
+            
             return images;
+        }
+
+        private List<string> GetAvailableImagesByTour(int tourId)
+        {
+            var images = new List<string>();
+            
+            // Lấy tour để biết tên folder
+            var tour = _tourService.GetTourByIdForAdminAsync(tourId).Result;
+            if (tour == null) return images;
+            
+            // Tạo tên folder từ tên tour
+            var folderName = tour.TourName?.ToLowerInvariant()
+                .Replace(" ", "-")
+                .Replace("đ", "d").Replace("ă", "a").Replace("â", "a")
+                .Replace("ê", "e").Replace("ô", "o").Replace("ơ", "o").Replace("ư", "u")
+                .Replace(":", "").Replace(";", "").Replace(",", "").Replace(".", "")
+                .Replace("!", "").Replace("?", "").Replace("(", "").Replace(")", "")
+                .Replace("[", "").Replace("]", "").Replace("{", "").Replace("}", "")
+                .Replace("'", "").Replace("\"", "").Replace("\\", "").Replace("/", "")
+                .Replace("|", "").Replace("<", "").Replace(">", "");
+            
+            if (string.IsNullOrEmpty(folderName))
+            {
+                folderName = "tour-" + tour.TourId;
+            }
+            
+            var tourPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "assets", "tours", folderName);
+            if (Directory.Exists(tourPath))
+            {
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                var files = Directory.GetFiles(tourPath)
+                    .Where(file => allowedExtensions.Contains(Path.GetExtension(file).ToLowerInvariant()))
+                    .Select(file => $"/assets/tours/{folderName}/{Path.GetFileName(file)}")
+                    .ToList();
+                
+                images.AddRange(files);
+            }
+            
+            return images;
+        }
+
+        private List<string> GetAvailableImagesByDestination(int? destinationId)
+        {
+            var images = new List<string>();
+            
+            if (destinationId == null) return images;
+            
+            // Lấy tên destination từ database
+            var destination = _tourService.GetDestinationById(destinationId.Value);
+            if (destination == null) return images;
+            
+            // Tạo tên thư mục từ tên destination (lowercase, replace spaces with hyphens)
+            var folderName = destination.DestinationName?.ToLowerInvariant().Replace(" ", "-").Replace("đ", "d").Replace("ă", "a").Replace("â", "a").Replace("ê", "e").Replace("ô", "o").Replace("ơ", "o").Replace("ư", "u");
+            
+            if (string.IsNullOrEmpty(folderName)) return images;
+            
+            var destinationPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "assets", "tours", folderName);
+            if (Directory.Exists(destinationPath))
+            {
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                var files = Directory.GetFiles(destinationPath)
+                    .Where(file => allowedExtensions.Contains(Path.GetExtension(file).ToLowerInvariant()))
+                    .Select(file => $"/assets/tours/{folderName}/{Path.GetFileName(file)}")
+                    .ToList();
+                
+                images.AddRange(files);
+            }
+            
+            return images;
+        }
+
+        // GET: admin/tour-admin/get-images-by-tour/{tourId}
+        [HttpGet("get-images-by-tour/{tourId}")]
+        public async Task<IActionResult> GetImagesByTour(int tourId)
+        {
+            try
+            {
+                var images = GetAvailableImagesByTour(tourId);
+                return Json(new { success = true, images = images });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
         }
 
         // POST: admin/tour-admin/create
@@ -85,7 +191,7 @@ namespace GoEASy.Controllers
                     }
                 }
 
-                // Process selected images from existing folder
+                // Process selected images from existing folders
                 var allImages = new List<IFormFile>();
                 if (images != null)
                 {
@@ -94,15 +200,43 @@ namespace GoEASy.Controllers
 
                 if (!string.IsNullOrEmpty(selectedImages))
                 {
-                    var selectedImageNames = selectedImages.Split(',', StringSplitOptions.RemoveEmptyEntries);
-                    foreach (var imageName in selectedImageNames)
+                    var selectedImagePaths = selectedImages.Split(',', StringSplitOptions.RemoveEmptyEntries);
+                    foreach (var imagePath in selectedImagePaths)
                     {
-                        var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "image", "Tourimg", imageName.Trim());
-                        if (System.IO.File.Exists(imagePath))
+                        var trimmedPath = imagePath.Trim();
+                        
+                        // Xử lý ảnh từ thư mục cũ
+                        if (trimmedPath.StartsWith("/image/Tourimg/"))
                         {
-                            // Create a mock IFormFile from existing file
-                            var mockImage = CreateMockFormFile(imagePath, imageName);
-                            allImages.Add(mockImage);
+                            var imageName = Path.GetFileName(trimmedPath);
+                            var fullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "image", "Tourimg", imageName);
+                            if (System.IO.File.Exists(fullPath))
+                            {
+                                var mockImage = CreateMockFormFile(fullPath, imageName);
+                                allImages.Add(mockImage);
+                            }
+                        }
+                        // Xử lý ảnh từ cấu trúc thư mục mới
+                        else if (trimmedPath.StartsWith("/assets/tours/"))
+                        {
+                            var relativePath = trimmedPath.TrimStart('/');
+                            var fullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", relativePath);
+                            if (System.IO.File.Exists(fullPath))
+                            {
+                                var imageName = Path.GetFileName(trimmedPath);
+                                var mockImage = CreateMockFormFile(fullPath, imageName);
+                                allImages.Add(mockImage);
+                            }
+                        }
+                        // Xử lý ảnh chỉ có tên file (từ thư mục cũ)
+                        else if (!trimmedPath.Contains("/"))
+                        {
+                            var fullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "image", "Tourimg", trimmedPath);
+                            if (System.IO.File.Exists(fullPath))
+                            {
+                                var mockImage = CreateMockFormFile(fullPath, trimmedPath);
+                                allImages.Add(mockImage);
+                            }
                         }
                     }
                 }
@@ -162,7 +296,7 @@ namespace GoEASy.Controllers
                     return RedirectToAction("Index");
                 }
 
-                var existingTour = await _tourService.GetTourByIdAsync(tour.TourId);
+                var existingTour = await _tourService.GetTourByIdForAdminAsync(tour.TourId);
                 if (existingTour == null)
                 {
                     TempData["Error"] = "Tour not found!";
@@ -199,15 +333,43 @@ namespace GoEASy.Controllers
 
                 if (!string.IsNullOrEmpty(selectedImages))
                 {
-                    var selectedImageNames = selectedImages.Split(',', StringSplitOptions.RemoveEmptyEntries);
-                    foreach (var imageName in selectedImageNames)
+                    var selectedImagePaths = selectedImages.Split(',', StringSplitOptions.RemoveEmptyEntries);
+                    foreach (var imagePath in selectedImagePaths)
                     {
-                        var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "image", "Tourimg", imageName.Trim());
-                        if (System.IO.File.Exists(imagePath))
+                        var trimmedPath = imagePath.Trim();
+                        
+                        // Xử lý ảnh từ thư mục cũ
+                        if (trimmedPath.StartsWith("/image/Tourimg/"))
                         {
-                            // Create a mock IFormFile from existing file
-                            var mockImage = CreateMockFormFile(imagePath, imageName);
-                            allImages.Add(mockImage);
+                            var imageName = Path.GetFileName(trimmedPath);
+                            var fullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "image", "Tourimg", imageName);
+                            if (System.IO.File.Exists(fullPath))
+                            {
+                                var mockImage = CreateMockFormFile(fullPath, imageName);
+                                allImages.Add(mockImage);
+                            }
+                        }
+                        // Xử lý ảnh từ cấu trúc thư mục mới
+                        else if (trimmedPath.StartsWith("/assets/tours/"))
+                        {
+                            var relativePath = trimmedPath.TrimStart('/');
+                            var fullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", relativePath);
+                            if (System.IO.File.Exists(fullPath))
+                            {
+                                var imageName = Path.GetFileName(trimmedPath);
+                                var mockImage = CreateMockFormFile(fullPath, imageName);
+                                allImages.Add(mockImage);
+                            }
+                        }
+                        // Xử lý ảnh chỉ có tên file (từ thư mục cũ)
+                        else if (!trimmedPath.Contains("/"))
+                        {
+                            var fullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "image", "Tourimg", trimmedPath);
+                            if (System.IO.File.Exists(fullPath))
+                            {
+                                var mockImage = CreateMockFormFile(fullPath, trimmedPath);
+                                allImages.Add(mockImage);
+                            }
                         }
                     }
                 }
@@ -235,19 +397,44 @@ namespace GoEASy.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost("toggle-status")]
+        public async Task<IActionResult> ToggleStatus(int id)
+        {
+            try
+            {
+                var tour = await _tourService.GetTourByIdForAdminAsync(id);
+                if (tour == null)
+                {
+                    return NotFound();
+                }
+
+                // Toggle status
+                tour.Status = !tour.Status;
+                await _tourService.UpdateTourAsync(tour, null);
+                
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost("delete-confirm")]
         public async Task<IActionResult> DeleteConfirm(int id)
         {
             try
             {
-                var tour = await _tourService.GetTourByIdAsync(id);
+                var tour = await _tourService.GetTourByIdForAdminAsync(id);
                 if (tour == null)
                 {
                     TempData["Error"] = "Tour not found!";
                     return RedirectToAction("Index");
                 }
 
-                await _tourService.DeleteTourAsync(id);
+                // Xóa mềm - chỉ set status = false
+                tour.Status = false;
+                await _tourService.UpdateTourAsync(tour, null);
                 TempData["Success"] = "Tour deleted successfully!";
             }
             catch (Exception ex)

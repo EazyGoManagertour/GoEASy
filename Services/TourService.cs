@@ -25,16 +25,58 @@ namespace GoEASy.Services
                 .Include(t => t.TourImages)
                 .Include(t => t.Destination)
                 .Include(t => t.Category)
+                .Where(t => t.Status == true || t.Status == null) // Chỉ lấy tours active hoặc chưa set status
                 .ToListAsync();
         }
 
-        public async Task<Tour?> GetTourByIdAsync(int id)
+        public async Task<IEnumerable<Tour>> GetAllToursForAdminAsync()
         {
             return await _context.Tours
                 .Include(t => t.TourImages)
                 .Include(t => t.Destination)
                 .Include(t => t.Category)
+                .ToListAsync(); // Lấy tất cả tours cho admin
+        }
+
+        public async Task<Tour?> GetTourByIdAsync(int id)
+        {
+            var tour = await _context.Tours
+                .Include(t => t.TourImages)
+                .Include(t => t.Destination)
+                .Include(t => t.Category)
+                .Include(t => t.TourDetail)
+                .Where(t => t.TourId == id && (t.Status == true || t.Status == null))
+                .FirstOrDefaultAsync();
+            return tour;
+        }
+
+        public async Task<Tour?> GetTourByIdForAdminAsync(int id)
+        {
+            var tour = await _context.Tours
+                .Include(t => t.TourImages)
+                .Include(t => t.Destination)
+                .Include(t => t.Category)
+                .Include(t => t.TourDetail)
                 .FirstOrDefaultAsync(t => t.TourId == id);
+            return tour;
+        }
+
+        public List<string> GetIncludedList(Tour tour)
+        {
+            var included = tour.TourDetail?.Included ?? string.Empty;
+            return included.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToList();
+        }
+
+        public List<string> GetExcludedList(Tour tour)
+        {
+            var excluded = tour.TourDetail?.Excluded ?? string.Empty;
+            return excluded.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToList();
+        }
+
+        public List<string> GetActivitiesList(Tour tour)
+        {
+            var activities = tour.TourDetail?.Activities ?? string.Empty;
+            return activities.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToList();
         }
 
         // Phương thức search và filter tours
@@ -53,6 +95,7 @@ namespace GoEASy.Services
                 .Include(t => t.TourImages)
                 .Include(t => t.Destination)
                 .Include(t => t.Category)
+                .Where(t => t.Status == true || t.Status == null) // Chỉ lấy tours active
                 .AsQueryable();
 
             // Filter theo search term
@@ -155,7 +198,7 @@ namespace GoEASy.Services
                 .Include(t => t.TourImages)
                 .Include(t => t.Destination)
                 .Include(t => t.Category)
-                .Where(t => t.CategoryId == categoryId)
+                .Where(t => t.CategoryId == categoryId && (t.Status == true || t.Status == null))
                 .ToListAsync();
         }
 
@@ -166,7 +209,7 @@ namespace GoEASy.Services
                 .Include(t => t.TourImages)
                 .Include(t => t.Destination)
                 .Include(t => t.Category)
-                .Where(t => t.DestinationId == destinationId)
+                .Where(t => t.DestinationId == destinationId && (t.Status == true || t.Status == null))
                 .ToListAsync();
         }
 
@@ -177,7 +220,7 @@ namespace GoEASy.Services
                 .Include(t => t.TourImages)
                 .Include(t => t.Destination)
                 .Include(t => t.Category)
-                .Where(t => t.AdultPrice >= minPrice && t.AdultPrice <= maxPrice)
+                .Where(t => t.AdultPrice >= minPrice && t.AdultPrice <= maxPrice && (t.Status == true || t.Status == null))
                 .ToListAsync();
         }
 
@@ -188,7 +231,17 @@ namespace GoEASy.Services
                 .Include(t => t.TourImages)
                 .Include(t => t.Destination)
                 .Include(t => t.Category)
-                .Where(t => t.StartDate >= startDate)
+                .Where(t => t.StartDate >= startDate && (t.Status == true || t.Status == null))
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Tour>> GetToursByProviderAsync(int providerId)
+        {
+            return await _context.Tours
+                .Include(t => t.TourImages)
+                .Include(t => t.Destination)
+                .Include(t => t.Category)
+                .Where(t => t.CreatedBy == providerId)
                 .ToListAsync();
         }
 
@@ -199,9 +252,26 @@ namespace GoEASy.Services
 
             if (images != null && images.Count > 0)
             {
-                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "tours");
+                // Tạo tên folder từ tên tour
+                var folderName = tour.TourName?.ToLowerInvariant()
+                    .Replace(" ", "-")
+                    .Replace("đ", "d").Replace("ă", "a").Replace("â", "a")
+                    .Replace("ê", "e").Replace("ô", "o").Replace("ơ", "o").Replace("ư", "u")
+                    .Replace(":", "").Replace(";", "").Replace(",", "").Replace(".", "")
+                    .Replace("!", "").Replace("?", "").Replace("(", "").Replace(")", "")
+                    .Replace("[", "").Replace("]", "").Replace("{", "").Replace("}", "")
+                    .Replace("'", "").Replace("\"", "").Replace("\\", "").Replace("/", "")
+                    .Replace("|", "").Replace("<", "").Replace(">", "");
+                
+                if (string.IsNullOrEmpty(folderName))
+                {
+                    folderName = "tour-" + tour.TourId;
+                }
+                
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "assets", "tours", folderName);
                 if (!Directory.Exists(uploadsFolder))
                     Directory.CreateDirectory(uploadsFolder);
+
                 for (int i = 0; i < images.Count; i++)
                 {
                     var image = images[i];
@@ -211,7 +281,9 @@ namespace GoEASy.Services
                     {
                         await image.CopyToAsync(stream);
                     }
-                    var imageUrl = "/uploads/tours/" + fileName;
+                    
+                    var imageUrl = $"/assets/tours/{folderName}/{fileName}";
+                    
                     var tourImage = new TourImage
                     {
                         TourId = tour.TourId,
@@ -233,13 +305,31 @@ namespace GoEASy.Services
 
             if (images != null && images.Count > 0)
             {
-                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "tours");
+                // Tạo tên folder từ tên tour
+                var folderName = tour.TourName?.ToLowerInvariant()
+                    .Replace(" ", "-")
+                    .Replace("đ", "d").Replace("ă", "a").Replace("â", "a")
+                    .Replace("ê", "e").Replace("ô", "o").Replace("ơ", "o").Replace("ư", "u")
+                    .Replace(":", "").Replace(";", "").Replace(",", "").Replace(".", "")
+                    .Replace("!", "").Replace("?", "").Replace("(", "").Replace(")", "")
+                    .Replace("[", "").Replace("]", "").Replace("{", "").Replace("}", "")
+                    .Replace("'", "").Replace("\"", "").Replace("\\", "").Replace("/", "")
+                    .Replace("|", "").Replace("<", "").Replace(">", "");
+                
+                if (string.IsNullOrEmpty(folderName))
+                {
+                    folderName = "tour-" + tour.TourId;
+                }
+                
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "assets", "tours", folderName);
                 if (!Directory.Exists(uploadsFolder))
                     Directory.CreateDirectory(uploadsFolder);
+                    
                 // Xóa tất cả ảnh cũ của tour này
                 var oldImages = _context.TourImages.Where(i => i.TourId == tour.TourId).ToList();
                 _context.TourImages.RemoveRange(oldImages);
                 await _context.SaveChangesAsync();
+                
                 for (int i = 0; i < images.Count; i++)
                 {
                     var image = images[i];
@@ -249,7 +339,7 @@ namespace GoEASy.Services
                     {
                         await image.CopyToAsync(stream);
                     }
-                    var imageUrl = "/uploads/tours/" + fileName;
+                    var imageUrl = $"/assets/tours/{folderName}/{fileName}";
                     var tourImage = new TourImage
                     {
                         TourId = tour.TourId,
@@ -279,6 +369,26 @@ namespace GoEASy.Services
                 return true;
             }
             return false;
+        }
+
+        public async Task<List<TourItinerary>> GetTourItinerariesAsync(int tourId)
+        {
+            return await _context.TourItineraries
+                .Where(i => i.TourId == tourId)
+                .OrderBy(i => i.DayNumber)
+                .ToListAsync();
+        }
+
+        public async Task<List<TourFAQ>> GetTourFAQsAsync(int tourId)
+        {
+            return await _context.TourFAQs
+                .Where(faq => faq.TourId == tourId)
+                .ToListAsync();
+        }
+
+        public Destination? GetDestinationById(int destinationId)
+        {
+            return _context.Destinations.FirstOrDefault(d => d.DestinationId == destinationId);
         }
     }
 }
