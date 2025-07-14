@@ -90,6 +90,7 @@
                             <th>Available Seats</th>
                             <th>Destination</th>
                             <th>Category</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -124,6 +125,13 @@
                                 <td>@(tour.AvailableSeats?.ToString() ?? "N/A")</td>
                                 <td>@(tour.Destination?.DestinationName ?? "N/A")</td>
                                 <td>@(tour.Category?.CategoryName ?? "N/A")</td>
+                                <td>
+                                    <button class="status admit"
+                                            style="border: none; outline: none; background-color:@(tour.Status == true ? "" : "#dc3545")"
+                                            onclick="toggleStatus(this, '@tour.TourId', @(tour.Status.ToString().ToLower()))">
+                                        @(tour.Status == true ? "Active" : "Disable")
+                                    </button>
+                                </td>
                                 <td>
                                     <div class="action-btns">
                                         <button class="action-btn edit"
@@ -500,6 +508,43 @@
 
     <script src="~/js/tour-admin.js"></script> 
     @Html.Partial("~/Views/admin/share/script.cshtml")
+
+    <script>
+        function toggleStatus(button, tourId, currentStatus) {
+            fetch(`/admin/tour-admin/toggle-status?id=${tourId}`, {
+                method: 'POST'
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Cập nhật UI
+                    const newStatus = !(currentStatus === true || currentStatus === "true");
+                    button.textContent = newStatus ? "Active" : "Disable";
+                    button.style.backgroundColor = newStatus ? "" : "#dc3545";
+                    button.setAttribute("onclick", `toggleStatus(this, '${tourId}', ${newStatus})`);
+
+                    // Show success toast
+                    const msg = "Status updated successfully!";
+                    document.getElementById("toast-success-msg").value = msg;
+                    const successToast = new bootstrap.Toast(document.getElementById("successToast"));
+                    successToast.show();
+                } else {
+                    // Show error toast
+                    const msg = "Failed to update status!";
+                    document.getElementById("toast-error-msg").value = msg;
+                    const errorToast = new bootstrap.Toast(document.getElementById("errorToast"));
+                    errorToast.show();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Show error toast
+                const msg = "Failed to update status!";
+                document.getElementById("toast-error-msg").value = msg;
+                const errorToast = new bootstrap.Toast(document.getElementById("errorToast"));
+                errorToast.show();
+            });
+        }
+    </script>
 
 </body>
 </html> 

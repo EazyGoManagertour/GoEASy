@@ -1,0 +1,218 @@
+@using Newtonsoft.Json
+@model IEnumerable<GoEASy.Models.Booking>
+
+<!DOCTYPE html>
+<html lang="vi">
+@Html.Partial("~/Views/admin/share/head.cshtml")
+<body>
+    @Html.Partial("~/Views/admin/share/header.cshtml")
+    <div class="overlay" onclick="toggleSidebar()"></div>
+    <div class="container-content">
+        @Html.Partial("~/Views/admin/share/menu.cshtml")
+        <!-- Toast Notification Area -->
+        <div id="toastArea"
+             aria-live="polite"
+             aria-atomic="true"
+             class="toast-container position-fixed top-0 end-0 p-3"
+             style="z-index: 1060; margin-top: 75px;">
+            <input type="hidden" id="toast-success-msg" value="@TempData["Success"]" />
+            <input type="hidden" id="toast-error-msg" value="@TempData["Error"]" />
+            <div class="toast align-items-center text-white bg-success border-0"
+                 id="successToast"
+                 role="alert"
+                 aria-live="assertive"
+                 aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">@TempData["Success"]</div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="toast align-items-center text-white bg-danger border-0"
+                 id="errorToast"
+                 role="alert"
+                 aria-live="assertive"
+                 aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">@TempData["Error"]</div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+        <main class="main-content">
+            <div class="content-header">
+                <h1 class="content-title">Quản lý Booking Tour</h1>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Mã Booking</th>
+                            <th>Tên Tour</th>
+                            <th>Khách hàng</th>
+                            <th>Email</th>
+                            <th>SĐT</th>
+                            <th>Ngày đặt</th>
+                            <th>Người lớn</th>
+                            <th>Trẻ em</th>
+                            <th>Tổng tiền</th>
+                            <th>Thanh toán</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var booking in Model)
+                        {
+                            <tr>
+                                <td><input type="checkbox" /></td>
+                                <td>@booking.BookingId</td>
+                                <td>@booking.Tour?.TourName</td>
+                                <td>@booking.User?.FullName</td>
+                                <td>@booking.User?.Email</td>
+                                <td>@booking.User?.Phone</td>
+                                <td>@(booking.BookingDate?.ToString("dd/MM/yyyy") ?? "N/A")</td>
+                                <td>@booking.AdultGuests</td>
+                                <td>@booking.ChildGuests</td>
+                                <td>@(booking.TotalPrice?.ToString("N0") ?? "0") VND</td>
+                                <td>@booking.PaymentStatus</td>
+                                <td>
+                                    <span class="badge @(booking.Status == true ? "bg-success" : "bg-warning text-dark")">
+                                        @(booking.Status == true ? "Đang hoạt động" : "Đang duyệt")
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="action-btns">
+                                        <button class="action-btn view" data-bs-toggle="modal" data-bs-target="#detailModal" onclick="showBookingDetail(@booking.BookingId)">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="action-btn edit" data-bs-toggle="modal" data-bs-target="#editModal" onclick="fillEditModal(@booking.BookingId)">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    <!-- Modal: Booking Detail -->
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailModalLabel">Chi tiết Booking</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="bookingDetailBody">
+                    <!-- Nội dung chi tiết booking sẽ được load bằng JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal: Edit Booking -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Cập nhật Booking</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="editBookingForm" method="post" action="/provider/booking/update">
+                    <div class="modal-body">
+                        <input type="hidden" name="BookingId" id="editBookingId" />
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Tên Tour</label>
+                                <input type="text" class="form-control" id="editTourName" readonly />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Khách hàng</label>
+                                <input type="text" class="form-control" id="editUserName" readonly />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Ngày đặt</label>
+                                <input type="text" class="form-control" id="editBookingDate" readonly />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Tổng tiền</label>
+                                <input type="text" class="form-control" id="editTotalPrice" readonly />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Trạng thái thanh toán</label>
+                                <input type="text" class="form-control" id="editPaymentStatus" readonly />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Trạng thái Booking</label>
+                                <select class="form-select" id="editStatus" name="Status">
+                                    <option value="false">Đang duyệt</option>
+                                    <option value="true">Đang hoạt động</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <style>
+        .badge.bg-success { background-color: #28a745; color: #fff; padding: 4px 10px; border-radius: 8px; }
+        .badge.bg-danger { background-color: #dc3545; color: #fff; padding: 4px 10px; border-radius: 8px; }
+        .table-container { margin-top: 30px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 10px; border: 1px solid #dee2e6; text-align: center; }
+        th { background: #f8f9fa; }
+        .action-btns { display: flex; gap: 8px; justify-content: center; }
+        .action-btn { border: none; background: none; cursor: pointer; color: #007bff; font-size: 18px; }
+        .action-btn.view:hover { color: #28a745; }
+        .action-btn.edit:hover { color: #ffc107; }
+    </style>
+    @Html.Partial("~/Views/admin/share/script.cshtml")
+    <script>
+        function showBookingDetail(bookingId) {
+            var booking = @Html.Raw(JsonConvert.SerializeObject(Model.ToDictionary(b => b.BookingId), new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }));
+            var b = booking[bookingId];
+            if (!b) {
+                document.getElementById('bookingDetailBody').innerHTML = '<div class="text-danger">Không tìm thấy thông tin booking!</div>';
+                return;
+            }
+            var html = `<div class='row'>
+                <div class='col-md-6'><b>Mã Booking:</b> ${b.BookingId}</div>
+                <div class='col-md-6'><b>Ngày đặt:</b> ${b.BookingDate ? new Date(b.BookingDate).toLocaleDateString() : 'N/A'}</div>
+                <div class='col-md-6'><b>Tour:</b> ${b.Tour ? b.Tour.TourName : ''}</div>
+                <div class='col-md-6'><b>Khách hàng:</b> ${b.User ? b.User.FullName : ''}</div>
+                <div class='col-md-6'><b>Email:</b> ${b.User ? b.User.Email : ''}</div>
+                <div class='col-md-6'><b>SĐT:</b> ${b.User ? b.User.Phone : ''}</div>
+                <div class='col-md-6'><b>Người lớn:</b> ${b.AdultGuests}</div>
+                <div class='col-md-6'><b>Trẻ em:</b> ${b.ChildGuests}</div>
+                <div class='col-md-6'><b>Tổng tiền:</b> ${b.TotalPrice ? b.TotalPrice.toLocaleString() + ' VND' : '0 VND'}</div>
+                <div class='col-md-6'><b>Thanh toán:</b> ${b.PaymentStatus}</div>
+                <div class='col-md-6'><b>Trạng thái:</b> <span class='badge ${b.Status ? 'bg-success' : 'bg-warning text-dark'}'>${b.Status ? 'Đang hoạt động' : 'Đang duyệt'}</span></div>
+            </div>`;
+            document.getElementById('bookingDetailBody').innerHTML = html;
+        }
+        function fillEditModal(bookingId) {
+            var booking = @Html.Raw(JsonConvert.SerializeObject(Model.ToDictionary(b => b.BookingId), new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }));
+            var b = booking[bookingId];
+            if (!b) return;
+            document.getElementById('editBookingId').value = b.BookingId;
+            document.getElementById('editTourName').value = b.Tour ? b.Tour.TourName : '';
+            document.getElementById('editUserName').value = b.User ? b.User.FullName : '';
+            document.getElementById('editBookingDate').value = b.BookingDate ? new Date(b.BookingDate).toLocaleDateString() : '';
+            document.getElementById('editTotalPrice').value = b.TotalPrice ? b.TotalPrice.toLocaleString() + ' VND' : '';
+            document.getElementById('editPaymentStatus').value = b.PaymentStatus;
+            document.getElementById('editStatus').value = b.Status ? 'true' : 'false';
+        }
+    </script>
+</body>
+</html> 

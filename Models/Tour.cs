@@ -29,6 +29,8 @@ public partial class Tour
 
     public int? CategoryId { get; set; }
 
+    public bool? Status { get; set; }
+
     public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 
     public virtual TourCategory? Category { get; set; }
@@ -48,4 +50,6 @@ public partial class Tour
     public virtual ICollection<TourImage> TourImages { get; set; } = new List<TourImage>();
 
     public virtual ICollection<TourItinerary> TourItineraries { get; set; } = new List<TourItinerary>();
+
+    public virtual ICollection<TourFAQ> TourFAQs { get; set; } = new List<TourFAQ>();
 }

@@ -14,6 +14,38 @@ function fillEditModal(tourId, tourName, description, adultPrice, childPrice, st
     document.getElementById('editAvailableSeats').value = availableSeats;
     document.getElementById('editDestinationId').value = destinationId;
     document.getElementById('editCategoryId').value = categoryId;
+    
+    // Load ảnh theo tour
+    loadTourImages(tourId);
+}
+
+// Load ảnh theo tour
+async function loadTourImages(tourId) {
+    try {
+        const response = await fetch(`/admin/tour-admin/get-images-by-tour/${tourId}`);
+        const data = await response.json();
+        
+        if (data.success) {
+            const container = document.getElementById('editAvailableImagesContainer');
+            container.innerHTML = '';
+            
+            data.images.forEach(imagePath => {
+                const imageDiv = document.createElement('div');
+                imageDiv.className = 'col-md-3 mb-2';
+                imageDiv.innerHTML = `
+                    <div class="image-select-item" onclick="selectEditImage(this, '${imagePath}')">
+                        <img src="${imagePath}" alt="Tour Image" class="img-thumbnail" style="width: 80px; height: 80px; object-fit: cover;">
+                        <div class="image-overlay">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(imageDiv);
+            });
+        }
+    } catch (error) {
+        console.error('Error loading tour images:', error);
+    }
 }
 
 // Image selection functions
@@ -31,7 +63,15 @@ function updateSelectedImages() {
     const selectedElements = document.querySelectorAll('#availableImagesContainer .image-select-item.selected');
     const selectedPaths = Array.from(selectedElements).map(el => {
         const img = el.querySelector('img');
-        return img ? img.src.split('/image/Tourimg/')[1] : '';
+        if (img) {
+            const src = img.src;
+            if (src.includes('/image/Tourimg/')) {
+                return src.split('/image/Tourimg/')[1];
+            } else if (src.includes('/assets/tours/')) {
+                return src.split('/assets/tours/')[1];
+            }
+        }
+        return '';
     }).filter(path => path);
     
     document.getElementById('selectedImages').value = selectedPaths.join(',');
@@ -41,7 +81,15 @@ function updateEditSelectedImages() {
     const selectedElements = document.querySelectorAll('#editAvailableImagesContainer .image-select-item.selected');
     const selectedPaths = Array.from(selectedElements).map(el => {
         const img = el.querySelector('img');
-        return img ? img.src.split('/image/Tourimg/')[1] : '';
+        if (img) {
+            const src = img.src;
+            if (src.includes('/image/Tourimg/')) {
+                return src.split('/image/Tourimg/')[1];
+            } else if (src.includes('/assets/tours/')) {
+                return src.split('/assets/tours/')[1];
+            }
+        }
+        return '';
     }).filter(path => path);
     
     document.getElementById('editSelectedImages').value = selectedPaths.join(',');

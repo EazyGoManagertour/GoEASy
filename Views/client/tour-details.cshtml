@@ -1,0 +1,897 @@
+﻿@using GoEASy.Models
+@model GoEASy.Models.Tour
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+    <link rel="shortcut icon" href="/assets/images/logos/favicon.png" type="image/x-icon">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+
+    <!-- Flaticon -->
+    <link rel="stylesheet" href="/assets/css/flaticon.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/assets/css/fontawesome-5.14.0.min.css">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <!-- Magnific Popup -->
+    <link rel="stylesheet" href="/assets/css/magnific-popup.min.css">
+    <!-- Nice Select -->
+    <link rel="stylesheet" href="/assets/css/nice-select.min.css">
+    <!-- Animate -->
+    <link rel="stylesheet" href="/assets/css/aos.css">
+    <!-- Slick -->
+    <link rel="stylesheet" href="/assets/css/slick.min.css">
+    <!-- Main Style -->
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Preloader -->
+        <div class="preloader"><div class="custom-loader"></div></div>
+        <!-- main header -->
+        <header class="main-header header-one white-menu menu-absolute">
+            @Html.Partial("~/Views/client/share/header.cshtml")
+        </header>
+
+        <!--Form Back Drop-->
+        <div class="form-back-drop"></div>
+        <!-- Hidden Sidebar -->
+        <section class="hidden-bar">
+            <div class="inner-box text-center">
+                <div class="cross-icon"><span class="fa fa-times"></span></div>
+                <div class="title">
+                    <h4>Get Appointment</h4>
+                </div>
+                <!--Appointment Form-->
+                <div class="appointment-form">
+                    <form method="post" action="https://webtendtheme.net/html/2024/ravelo/contact.html">
+                        <div class="form-group">
+                            <input type="text" name="text" value="" placeholder="Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="email" value="" placeholder="Email Address" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea placeholder="Message" rows="5"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="theme-btn style-two">
+                                <span data-hover="Submit now">Submit now</span>
+                                <i class="fal fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <!--Social Icons-->
+                <div class="social-style-one">
+                    <a href="contact.html"><i class="fab fa-twitter"></i></a>
+                    <a href="contact.html"><i class="fab fa-facebook-f"></i></a>
+                    <a href="contact.html"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                </div>
+            </div>
+        </section>
+        <!--End Hidden Sidebar -->
+
+        <!-- Page Banner Start -->
+        <section class="page-banner-two rel z-1" style="padding-top: 180px;">
+            <div class="container-fluid">
+                <hr class="mt-0">
+                <div class="container">
+                    <div class="banner-inner pt-15 pb-25">
+                        <h2 class="page-title mb-10" data-aos="fade-left" data-aos-duration="1500" data-aos-offset="50">@Model.TourName</h2>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb justify-content-center mb-20" data-aos="fade-right" data-aos-delay="200" data-aos-duration="1500" data-aos-offset="50">
+                                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                                <li class="breadcrumb-item active">Tour Details</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Page Banner End -->
+        <!-- Tour Gallery start -->
+        @{
+            var images = Model.TourImages.Take(5).ToList();
+        }
+        <div class="tour-gallery">
+            <div class="container-fluid">
+                <div class="row gap-10 justify-content-center rel">
+                    <div class="col-lg-4 col-md-6 d-flex flex-column gap-3">
+                        @if (images.Count > 0)
+                        {
+                            <div class="gallery-item">
+                                <img src="@Url.Content(images[0].ImageUrl)" style="width:100%;height:316.05px;object-fit:cover;border-radius:16px;" alt="Tour Image 1" />
+                            </div>
+                        }
+                        @if (images.Count > 1)
+                        {
+                            <div class="gallery-item">
+                                <img src="@Url.Content(images[1].ImageUrl)" style="width:100%;height:316.05px;object-fit:cover;border-radius:16px;" alt="Tour Image 2" />
+                            </div>
+                        }
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        @if (images.Count > 2)
+                        {
+                            <div class="gallery-item">
+                                <img src="@Url.Content(images[2].ImageUrl)" style="width:100%;height:640.01px;object-fit:cover;border-radius:16px;" alt="Tour Image 3" />
+                            </div>
+                        }
+                    </div>
+                    <div class="col-lg-4 col-md-6 d-flex flex-column gap-3">
+                        @if (images.Count > 3)
+                        {
+                            <div class="gallery-item">
+                                <img src="@Url.Content(images[3].ImageUrl)" style="width:100%;height:316.05px;object-fit:cover;border-radius:16px;" alt="Tour Image 4" />
+                            </div>
+                        }
+                        @if (images.Count > 4)
+                        {
+                            <div class="gallery-item">
+                                <img src="@Url.Content(images[4].ImageUrl)" style="width:100%;height:316.05px;object-fit:cover;border-radius:16px;" alt="Tour Image 5" />
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Tour Gallery End -->
+        <!-- Tour Header Area start -->
+        <section class="tour-header-area pt-70 rel z-1">
+            <div class="container">
+                <div class="row justify-content-between">
+                    <div class="col-xl-6 col-lg-7">
+                        <div class="tour-header-content mb-15" data-aos="fade-left" data-aos-duration="1500" data-aos-offset="50">
+                            <span class="location d-inline-block mb-10"><i class="fal fa-map-marker-alt"></i> @Model.Destination?.DestinationName</span>
+                            <div class="section-title pb-5">    
+                                <h2>@Model.TourName</h2>
+                            </div>
+                            <div class="ratting">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-5 text-lg-end" data-aos="fade-right" data-aos-duration="1500" data-aos-offset="50">
+                        <div class="tour-header-social mb-10">
+                            <a href="#"><i class="far fa-share-alt"></i>Share tours</a>
+                            <a href="#"><i class="fas fa-heart bgc-secondary"></i>Wish list</a>
+                        </div>
+                    </div>
+                </div>
+                <hr class="mt-50 mb-70">
+            </div>
+        </section>
+        <!-- Tour Header Area end -->
+        <!-- Tour Details Area start -->
+        <section class="tour-details-page pb-100">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="tour-details-content">
+                            <h3>Explore Tours</h3>
+                            <p>@Model.Description</p>
+                            <div class="row pb-55">
+                                <div class="col-md-6">
+                                    <div class="tour-include-exclude mt-30">
+                                        <h5>Included and Excluded</h5>
+                                        <ul class="list-style-one check mt-25">
+                                            @foreach (var item in (List<string>)ViewBag.IncludedList)
+                                            {
+                                                <li><i class="far fa-check"></i> @item</li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="tour-include-exclude mt-30">
+                                        <h5>Excluded</h5>
+                                        <ul class="list-style-one mt-25">
+                                            @foreach (var item in (List<string>)ViewBag.ExcludedList)
+                                            {
+                                                <li><i class="far fa-times"></i> @item</li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button id="showCustomBooking" class="theme-btn style-two mt-3 mb-3" style="border-radius: 8px; font-weight: 500; letter-spacing: 0.5px;">Custom Booking</button>
+    <!-- Khung Custom Booking ẩn -->
+    <div class="widget widget-booking" id="customBookingBox" style="display:none; width:100%; margin-bottom:24px; background:#f9f9f9; border:1px solid #e5e5e5; border-radius:16px; box-shadow:0 4px 24px rgba(0,0,0,0.07); padding:32px 28px 24px 28px;">
+        <h5 class="widget-title">Custom Booking</h5>
+        <form id="customBookingForm" method="post" action="/booking/create">
+            <input type="hidden" name="tourId" value="@Model.TourId" />
+            <input type="hidden" name="adultGuests" id="customAdultGuests" value="0" />
+            <input type="hidden" name="childGuests" id="customChildGuests" value="0" />
+            <input type="hidden" name="totalPrice" id="customTotalPrice" value="0" />
+            <input type="hidden" name="isCustom" value="true" />
+            
+            <div class="date mb-3">
+                <label class="form-label" style="font-weight:600;">Ngày khởi hành</label>
+                <input type="date" class="form-control" name="customStartDate" id="customStartDate" style="border-radius:8px; border:1px solid #e5e5e5; background:#fff; width:100%;" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" style="font-weight:600;">Số vé người lớn</label>
+                <input type="number" class="form-control" id="customAdult" min="0" value="0" style="border-radius:8px; border:1px solid #e5e5e5; background:#fff; width:100%;" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" style="font-weight:600;">Số vé trẻ em</label>
+                <input type="number" class="form-control" id="customChild" min="0" value="0" style="border-radius:8px; border:1px solid #e5e5e5; background:#fff; width:100%;" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" style="font-weight:600;">Mã giảm giá (tùy chọn)</label>
+                <input type="text" class="form-control" name="customDiscount" placeholder="Nhập mã giảm giá nếu có" style="border-radius:8px; border:1px solid #e5e5e5; background:#fff; width:100%;" />
+            </div>
+            <button type="button" id="customCalcBtn" class="theme-btn style-two w-100 mb-2" style="border-radius:8px;">Tính tổng</button>
+            <hr>
+            <h6 style="font-weight:600;">Total: <span class="price" id="customTotal">0</span> đ</h6>
+            <button type="submit" class="theme-btn style-two w-100 mt-2" style="border-radius:8px;">Đặt tour với VNPAY</button>
+        </form>
+    </div>
+                        
+                        <h3>Activities</h3>
+                        <div class="tour-activities mt-30 mb-45">
+                            @if (ViewBag.ActivitiesList != null && ((List<string>)ViewBag.ActivitiesList).Count > 0)
+                            {
+                                foreach (var activity in (List<string>)ViewBag.ActivitiesList)
+                                {
+                                    <div class="tour-activity-item">
+                                        <i class="flaticon-hiking"></i>
+                                        <b>@activity</b>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <!-- Default activities if no data -->
+                                <div class="tour-activity-item">
+                                    <i class="flaticon-hiking"></i>
+                                    <b>Hiking</b>
+                                </div>
+                                <div class="tour-activity-item">
+                                    <i class="flaticon-fishing"></i>
+                                    <b>Fishing</b>
+                                </div>
+                                <div class="tour-activity-item">
+                                    <i class="flaticon-man"></i>
+                                    <b>Kayak shooting</b>
+                                </div>
+                                <div class="tour-activity-item">
+                                    <i class="flaticon-kayak-1"></i>
+                                    <b>Kayak</b>
+                                </div>
+                                <div class="tour-activity-item">
+                                    <i class="flaticon-bonfire"></i>
+                                    <b>Campfire</b>
+                                </div>
+                                <div class="tour-activity-item">
+                                    <i class="flaticon-flashlight"></i>
+                                    <b>Night Exploring</b>
+                                </div>
+                                <div class="tour-activity-item">
+                                    <i class="flaticon-cycling"></i>
+                                    <b>Biking</b>
+                                </div>
+                                <div class="tour-activity-item">
+                                    <i class="flaticon-meditation"></i>
+                                    <b>Yoga</b>
+                                </div>
+                            }
+                        </div>
+
+                        <h3>Lịch trình tour</h3>
+                        <div class="accordion" id="itineraryAccordion">
+                            @if (ViewBag.Itineraries != null)
+                            {
+                                int idx = 0;
+                                foreach (var item in (IEnumerable<GoEASy.Models.TourItinerary>)ViewBag.Itineraries)
+                                {
+                                    var collapseId = $"collapseDay{item.DayNumber}";
+                                    <div class="accordion-item">
+                                        <h5 class="accordion-header">
+                                            <button class="accordion-button @(idx == 0 ? "" : "collapsed")" type="button" data-bs-toggle="collapse" data-bs-target="#@collapseId" aria-expanded="@(idx == 0 ? "true" : "false")">
+                                                @item.Title
+                                            </button>
+                                        </h5>
+                                        <div id="@collapseId" class="accordion-collapse collapse @(idx == 0 ? "show" : "")" data-bs-parent="#itineraryAccordion">
+                                            <div class="accordion-body">
+                                                <p>@item.Description</p>
+                                                @if (!string.IsNullOrEmpty(item.Meals)) { <p><b>Bữa ăn:</b> @item.Meals</p> }
+                                                @if (!string.IsNullOrEmpty(item.Accommodation)) { <p><b>Lưu trú:</b> @item.Accommodation</p> }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    idx++;
+                                }
+                            }
+                        </div>
+
+                        <h3>FAQs</h3>
+                        <div class="accordion" id="faqAccordion">
+                            @if (ViewBag.FAQs != null)
+                            {
+                                int idx = 0;
+                                foreach (var faq in (IEnumerable<GoEASy.Models.TourFAQ>)ViewBag.FAQs)
+                                {
+                                    var collapseId = $"collapseFaq{faq.FaqId}";
+                                    <div class="accordion-item">
+                                        <h5 class="accordion-header">
+                                            <button class="accordion-button @(idx == 0 ? "" : "collapsed")" type="button" data-bs-toggle="collapse" data-bs-target="#@collapseId" aria-expanded="@(idx == 0 ? "true" : "false")">
+                                                @faq.Question
+                                            </button>
+                                        </h5>
+                                        <div id="@collapseId" class="accordion-collapse collapse @(idx == 0 ? "show" : "")" data-bs-parent="#faqAccordion">
+                                            <div class="accordion-body">
+                                                <p>@faq.Answer</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    idx++;
+                                }
+                            }
+                        </div>
+
+                        <h3>Bản đồ</h3>
+                        <div class="tour-map mt-30 mb-50">
+                            <iframe
+                                width="100%"
+                                height="350"
+                                style="border:0"
+                                loading="lazy"
+                                allowfullscreen
+                                referrerpolicy="no-referrer-when-downgrade"
+                                src="https://www.google.com/maps?q=@Uri.EscapeDataString(Model.Destination?.Location ?? Model.Destination?.DestinationName ?? "Việt Nam")&output=embed">
+                            </iframe>
+                        </div>
+
+                        <h3>Clients Reviews</h3>
+                        <div class="clients-reviews bgc-black mt-30 mb-60">
+                            <div class="left">
+                                <b>4.8</b>
+                                <span>(586 reviews)</span>
+                                <div class="ratting">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                            </div>
+                            <div class="right">
+                                <div class="ratting-item">
+                                    <span class="title">Services</span>
+                                    <span class="line"><span style="width: 80%;"></span></span>
+                                    <div class="ratting">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                </div>
+                                <div class="ratting-item">
+                                    <span class="title">Guides</span>
+                                    <span class="line"><span style="width: 70%;"></span></span>
+                                    <div class="ratting">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                </div>
+                                <div class="ratting-item">
+                                    <span class="title">Price</span>
+                                    <span class="line"><span style="width: 80%;"></span></span>
+                                    <div class="ratting">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                </div>
+                                <div class="ratting-item">
+                                    <span class="title">Safety</span>
+                                    <span class="line"><span style="width: 80%;"></span></span>
+                                    <div class="ratting">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                </div>
+                                <div class="ratting-item">
+                                    <span class="title">Foods</span>
+                                    <span class="line"><span style="width: 80%;"></span></span>
+                                    <div class="ratting">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                </div>
+                                <div class="ratting-item">
+                                    <span class="title">Hotels</span>
+                                    <span class="line"><span style="width: 80%;"></span></span>
+                                    <div class="ratting">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3>Clients Comments</h3>
+                        <div class="comments mt-30 mb-60">
+                            @if (ViewBag.ClientFeedbacks != null && ((List<GoEASy.Models.Review>)ViewBag.ClientFeedbacks).Count > 0)
+                            {
+                                foreach (var feedback in (List<GoEASy.Models.Review>)ViewBag.ClientFeedbacks)
+                                {
+                                    <div class="comment-body" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                                        <div class="author-thumb">
+                                            <img src="@Url.Content("~/assets/images/blog/comment-author1.jpg")" alt="Author">
+                                        </div>
+                                        <div class="content">
+                                            <h6>@feedback.User?.FullName</h6>
+                                            <div class="ratting">
+                                                @for (int i = 1; i <= 5; i++)
+                                                {
+                                                    if (i <= feedback.Rating)
+                                                    {
+                                                        <i class="fas fa-star"></i>
+                                                    }
+                                                    else
+                                                    {
+                                                        <i class="far fa-star"></i>
+                                                    }
+                                                }
+                                            </div>
+                                            <span class="time">@feedback.CreatedDate?.ToString("dd/MM/yyyy HH:mm")</span>
+                                            <p>@feedback.Comment</p>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div>Chưa có bình luận nào.</div>
+                            }
+                        </div>
+                        
+                        <h3>Thêm bình luận</h3>
+                        @if (ViewBag.CanComment == true)
+                        {
+                        <form id="comment-form" class="comment-form bgc-lighter z-1 rel mt-30" name="review-form" action="/review/post" method="post" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                            <input type="hidden" name="tourId" value="@Model.TourId" />
+                            <div class="form-group">
+                                <label>Đánh giá (1-5 sao)</label>
+                                <div id="star-rating" style="font-size: 2rem; color: #ffc107; cursor: pointer;">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <i class="far fa-star" data-value="@i"></i>
+                                    }
+                                </div>
+                                <input type="hidden" name="rating" id="rating" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="comment">Bình luận</label>
+                                <textarea name="comment" id="comment" class="form-control" rows="4" required></textarea>
+                            </div>
+                            <div class="form-group mb-0">
+                                <button type="submit" class="theme-btn bgc-secondary style-two">
+                                    <span data-hover="Gửi bình luận">Gửi bình luận</span>
+                                    <i class="fal fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </form>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                var stars = document.querySelectorAll('#star-rating i');
+                                var ratingInput = document.getElementById('rating');
+                                var form = document.getElementById('comment-form');
+                                var selected = 0;
+                                stars.forEach(function (star, idx) {
+                                    star.addEventListener('click', function () {
+                                        var rating = idx + 1;
+                                        selected = rating;
+                                        ratingInput.value = rating;
+                                        stars.forEach(function (s, i) {
+                                            if (i < rating) {
+                                                s.classList.remove('far');
+                                                s.classList.add('fas');
+                                            } else {
+                                                s.classList.remove('fas');
+                                                s.classList.add('far');
+                                            }
+                                        });
+                                    });
+                                });
+                                form.addEventListener('submit', function (e) {
+                                    e.preventDefault();
+                                    if (!ratingInput.value || selected === 0) {
+                                        alert('Vui lòng chọn số sao đánh giá!');
+                                        return;
+                                    }
+                                    var formData = new FormData(form);
+                                    fetch('/review/post', {
+                                        method: 'POST',
+                                        body: formData,
+                                        headers: {
+                                            'X-Requested-With': 'XMLHttpRequest'
+                                        }
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.success) {
+                                            // Thêm bình luận mới vào đầu danh sách
+                                            var commentsDiv = document.querySelector('.comments.mt-30.mb-60');
+                                            var html = `
+                                            <div class="comment-body" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                                                <div class="author-thumb">
+                                                    <img src="/assets/images/blog/comment-author1.jpg" alt="Author">
+                                                </div>
+                                                <div class="content">
+                                                    <h6>${data.review.fullName}</h6>
+                                                    <div class="ratting">
+                                                        ${[1,2,3,4,5].map(i => i <= data.review.rating ? '<i class="fas fa-star"></i>' : '<i class="far fa-star"></i>').join('')}
+                                                    </div>
+                                                    <span class="time">${data.review.createdDate}</span>
+                                                    <p>${data.review.comment}</p>
+                                                </div>
+                                            </div>`;
+                                            commentsDiv.insertAdjacentHTML('afterbegin', html);
+                                            form.reset();
+                                            // Reset sao
+                                            stars.forEach(function (s) {
+                                                s.classList.remove('fas');
+                                                s.classList.add('far');
+                                            });
+                                            selected = 0;
+                                            ratingInput.value = '';
+                                        } else {
+                                            alert(data.error || 'Có lỗi xảy ra!');
+                                        }
+                                    })
+                                    .catch(() => alert('Có lỗi xảy ra!'));
+                                });
+                            });
+                        </script>
+                        }
+                        else
+                        {
+                            <div style="background: #f1f1f1; border-radius: 12px; padding: 32px 24px; margin-top: 24px; text-align: center; color: #888; font-size: 1.1rem; font-style: italic;">
+                                Bạn cần đặt và thanh toán tour này để có thể bình luận.
+                            </div>
+                        }
+                        
+                    </div>
+                    <div class="col-lg-4 col-md-8 col-sm-10 rmt-75">
+                        <div class="blog-sidebar tour-sidebar">
+                           
+                            <div class="widget widget-booking" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                                <h5 class="widget-title">Tour Booking</h5>
+                                <form id="booking-form" method="post" action="/booking/create">
+                                    <input type="hidden" name="tourId" value="@Model.TourId" />
+                                    <input type="hidden" name="adultGuests" id="adultGuests" value="0" />
+                                    <input type="hidden" name="childGuests" id="childGuests" value="0" />
+                                    <input type="hidden" name="totalPrice" id="totalPriceInput" value="0" />
+                                    <div class="date mb-25">
+                                        <b>From Date</b>
+                                        <input type="text" value="@(((DateTime)Model.StartDate).ToString("yyyy-MM-dd"))" readonly style="background:#f9f9f9;cursor:not-allowed;">
+                                    </div>
+                                    <hr>
+                                    <div class="time py-5">
+                                        <b>Time :</b>
+                                        <ul class="radio-filter">
+                                            <li>
+                                                <input class="form-check-input" checked type="radio" name="time" id="time1" value="12:00">
+                                                <label for="time1">12:00</label>
+                                            </li>
+                                            <li>
+                                                <input class="form-check-input" type="radio" name="time" id="time2" value="08:00">
+                                                <label for="time2">08:00</label>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <hr class="mb-25">
+                                    <h6>Tickets:</h6>
+                                    <ul class="tickets clearfix">
+                                        <li>
+                                            Adult (18+ years) <span class="price">@(((decimal)Model.AdultPrice).ToString("N0")) đ</span>
+                                            <select name="adultQty" id="adultQty">
+                                                @for (int i = 0; i <= 10; i++)
+                                                {
+                                                    <option value="@i" @(i == 0 ? "selected" : "")>@i.ToString("D2")</option>
+                                                }
+                                            </select>
+                                        </li>
+                                        <li>
+                                            Children (<18 years) <span class="price">@(((decimal)Model.ChildPrice).ToString("N0")) đ</span>
+                                            <select name="childQty" id="childQty">
+                                                @for (int i = 0; i <= 10; i++)
+                                                {
+                                                    <option value="@i" @(i == 0 ? "selected" : "")>@i.ToString("D2")</option>
+                                                }
+                                            </select>
+                                        </li>
+                                    </ul>
+                                    <hr class="mb-25">
+                                    <h6>Add Extra:</h6>
+                                    <ul class="radio-filter pt-5">
+                                        <li>
+                                            <input class="form-check-input" checked type="radio" name="AddExtra" id="add-extra1" value="50">
+                                            <label for="add-extra1">Add service per booking <span>50</span></label>
+                                        </li>
+                                        <li>
+                                            <input class="form-check-input" type="radio" name="AddExtra" id="add-extra2" value="24">
+                                            <label for="add-extra2">Add service per personal <span>24</span></label>
+                                        </li>
+                                        <li>
+                                            <input class="form-check-input" type="radio" name="AddExtra" id="add-extra0" value="0">
+                                            <label for="add-extra0">No extra</label>
+                                        </li>
+                                    </ul>
+                                    <hr>
+                                    <h6>Total: <span class="price" id="totalPrice">0</span> đ</h6>
+                                    <button type="button" id="calculateBtn" class="theme-btn style-two w-100 mt-15 mb-5">
+                                        <span data-hover="Calculate Total">Calculate Total</span>
+                                        <i class="fal fa-calculator"></i>
+                                    </button>
+                                    <button type="submit" class="theme-btn style-two w-100 mt-15 mb-5">
+                                        <span data-hover="Book Now">Book Now</span>
+                                        <i class="fal fa-arrow-right"></i>
+                                    </button>
+                                    <div class="text-center">
+                                        <a href="contact.html">Need some help?</a>
+                                    </div>
+                                </form>
+                            </div>
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    var calculateBtn = document.getElementById('calculateBtn');
+                                    var adultQty = document.getElementById('adultQty');
+                                    var childQty = document.getElementById('childQty');
+                                    var totalPriceSpan = document.getElementById('totalPrice');
+                                    var totalPriceInput = document.getElementById('totalPriceInput');
+                                    var adultGuestsInput = document.getElementById('adultGuests');
+                                    var childGuestsInput = document.getElementById('childGuests');
+
+                                    function updateBookingInputs() {
+                                        var adult = parseInt(adultQty.value) || 0;
+                                        var child = parseInt(childQty.value) || 0;
+                                        var adultPrice = @(((decimal)Model.AdultPrice).ToString(System.Globalization.CultureInfo.InvariantCulture));
+                                        var childPrice = @(((decimal)Model.ChildPrice).ToString(System.Globalization.CultureInfo.InvariantCulture));
+                                        var total = (adult * adultPrice) + (child * childPrice);
+                                        totalPriceSpan.innerText = total.toLocaleString();
+                                        totalPriceInput.value = total;
+                                        adultGuestsInput.value = adult;
+                                        childGuestsInput.value = child;
+                                    }
+
+                                    calculateBtn.addEventListener('click', function() {
+                                        updateBookingInputs();
+                                    });
+
+                                    // Tự động cập nhật khi submit (phòng trường hợp user không bấm Calculate)
+                                    document.getElementById('booking-form').addEventListener('submit', function(e) {
+                                        updateBookingInputs();
+                                    });
+                                });
+                            </script>
+                            
+                            <div class="widget widget-contact" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                                <h5 class="widget-title">Need Help?</h5>
+                                <ul class="list-style-one">
+                                    <li><i class="far fa-envelope"></i> <a href="emilto:helpxample@gmail.com">helpxample@gmail.com</a></li>
+                                    <li><i class="far fa-phone-volume"></i> <a href="callto:+000(123)45688">+000 (123) 456 88</a></li>
+                                </ul>
+                            </div>
+                            
+                            <div class="widget widget-cta" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                                <div class="content text-white">
+                                    <span class="h6">Explore The World</span>
+                                    <h3>Best Tourist Place</h3>
+                                    <a href="tour-grid.html" class="theme-btn style-two bgc-secondary">
+                                        <span data-hover="Explore Now">Explore Now</span>
+                                        <i class="fal fa-arrow-right"></i>
+                                    </a>
+                                </div>
+                                <div class="image">
+                                    <img src="@Url.Content("~/assets/images/widgets/cta-widget.png")" alt="CTA">
+                                </div>
+                                <div class="cta-shape"><img src="@Url.Content("~/assets/images/widgets/cta-shape3.png")" alt="Shape"></div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Tour Details Area end -->
+        <!-- Newsletter Area start -->
+        <section class="newsletter-three bgc-primary py-100 rel z-1" style="background-image: url(@Url.Content("~/assets/images/newsletter/newsletter-bg-lines.png"));">
+            <div class="container container-1500">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="newsletter-content-part text-white rmb-55" data-aos="zoom-in-right" data-aos-duration="1500" data-aos-offset="50">
+                            <div class="section-title counter-text-wrap mb-45">
+                                <h2>Subscribe Our Newsletter to Get more offer & Tips</h2>
+                                <p>One site <span class="count-text plus" data-speed="3000" data-stop="34500">0</span> most popular experience you’ll remember</p>
+                            </div>
+                            <form class="newsletter-form mb-15" action="#">
+                                <input id="news-email" type="email" placeholder="Email Address" required>
+                                <button type="submit" class="theme-btn bgc-secondary style-two">
+                                    <span data-hover="Subscribe">Subscribe</span>
+                                    <i class="fal fa-arrow-right"></i>
+                                </button>
+                            </form>
+                            <p>No credit card requirement. No commitments</p>
+                        </div>
+                        <div class="newsletter-bg-image" data-aos="zoom-in-up" data-aos-delay="100" data-aos-duration="1500" data-aos-offset="50">
+                            <img src="@Url.Content("~/assets/images/newsletter/newsletter-bg-image.png")" alt="Newsletter">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="newsletter-image-part bgs-cover" style="background-image: url(@Url.Content("~/assets/images/newsletter/newsletter-two-right.jpg"));" data-aos="fade-left" data-aos-duration="1500" data-aos-offset="50"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Newsletter Area end -->
+
+        @Html.Partial("~/Views/client/share/footer-area.cshtml")
+    </div>
+    <script src="/assets/js/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <!-- Appear Js -->
+    <script src="/assets/js/appear.min.js"></script>
+    <!-- Slick -->
+    <script src="/assets/js/slick.min.js"></script>
+    <!-- Magnific Popup -->
+    <script src="/assets/js/jquery.magnific-popup.min.js"></script>
+    <!-- Nice Select -->
+    <script src="/assets/js/jquery.nice-select.min.js"></script>
+    <!-- Image Loader -->
+    <script src="/assets/js/imagesloaded.pkgd.min.js"></script>
+    <!-- Skillbar -->
+    <script src="/assets/js/skill.bars.jquery.min.js"></script>
+    <!-- Isotope -->
+    <script src="/assets/js/isotope.pkgd.min.js"></script>
+    <!--  AOS Animation -->
+    <script src="/assets/js/aos.js"></script>
+    <!-- Custom script -->
+    <script src="/assets/js/script.js"></script>
+    <style>
+        /* Ghi đè background footer-two.png thành tuyệt đối */
+        .main-footer.footer-two {
+            background-image: url('/assets/images/backgrounds/footer-two.png') !important;
+        }
+    </style>
+    <script>
+        // Ghi đè logo header/footer thành tuyệt đối sau khi partial render
+        document.addEventListener('DOMContentLoaded', function() {
+            // Header logo
+            var logos = document.querySelectorAll('img[src*="assets/images/logos/logo.png"]');
+            logos.forEach(function(logo) {
+                logo.src = '/assets/images/logos/logo.png';
+            });
+            // Footer logo
+            var footerLogos = document.querySelectorAll('.footer-logo img');
+            footerLogos.forEach(function(logo) {
+                logo.src = '/assets/images/logos/logo.png';
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var btn = document.getElementById('showCustomBooking');
+            var box = document.getElementById('customBookingBox');
+            if (btn && box) {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    box.style.display = (box.style.display === 'none' || box.style.display === '') ? 'block' : 'none';
+                });
+            }
+
+            // Custom Booking JavaScript
+            var customCalcBtn = document.getElementById('customCalcBtn');
+            var customAdult = document.getElementById('customAdult');
+            var customChild = document.getElementById('customChild');
+            var customTotal = document.getElementById('customTotal');
+            var customAdultGuests = document.getElementById('customAdultGuests');
+            var customChildGuests = document.getElementById('customChildGuests');
+            var customTotalPrice = document.getElementById('customTotalPrice');
+            var customBookingForm = document.getElementById('customBookingForm');
+
+            function updateCustomBookingInputs() {
+                var adult = parseInt(customAdult.value) || 0;
+                var child = parseInt(customChild.value) || 0;
+                var adultPrice = @(((decimal)Model.AdultPrice).ToString(System.Globalization.CultureInfo.InvariantCulture));
+                var childPrice = @(((decimal)Model.ChildPrice).ToString(System.Globalization.CultureInfo.InvariantCulture));
+                var total = (adult * adultPrice) + (child * childPrice);
+                
+                customTotal.innerText = total.toLocaleString();
+                customTotalPrice.value = total;
+                customAdultGuests.value = adult;
+                customChildGuests.value = child;
+                
+                // Cập nhật ngày khởi hành
+                var startDate = document.getElementById('customStartDate').value;
+                document.getElementById('customStartDateHidden').value = startDate;
+            }
+
+            if (customCalcBtn) {
+                customCalcBtn.addEventListener('click', function() {
+                    updateCustomBookingInputs();
+                });
+            }
+
+            // Tự động cập nhật khi thay đổi số lượng
+            if (customAdult) {
+                customAdult.addEventListener('change', updateCustomBookingInputs);
+            }
+            if (customChild) {
+                customChild.addEventListener('change', updateCustomBookingInputs);
+            }
+            
+            // Tự động cập nhật khi thay đổi ngày khởi hành
+            var customStartDateInput = document.getElementById('customStartDate');
+            if (customStartDateInput) {
+                customStartDateInput.addEventListener('change', updateCustomBookingInputs);
+            }
+
+            // Validate form trước khi submit
+            if (customBookingForm) {
+                customBookingForm.addEventListener('submit', function(e) {
+                    updateCustomBookingInputs();
+                    
+                    var adult = parseInt(customAdult.value) || 0;
+                    var child = parseInt(customChild.value) || 0;
+                    var startDate = document.getElementById('customStartDate').value;
+                    
+                    if (adult === 0 && child === 0) {
+                        e.preventDefault();
+                        alert('Vui lòng chọn ít nhất 1 vé người lớn hoặc trẻ em!');
+                        return false;
+                    }
+                    
+                    if (!startDate) {
+                        e.preventDefault();
+                        alert('Vui lòng chọn ngày khởi hành!');
+                        return false;
+                    }
+                    
+                    // Kiểm tra ngày khởi hành không được trong quá khứ
+                    var selectedDate = new Date(startDate);
+                    var today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    
+                    if (selectedDate < today) {
+                        e.preventDefault();
+                        alert('Ngày khởi hành không được trong quá khứ!');
+                        return false;
+                    }
+                    
+                    // Hiển thị thông báo đang xử lý
+                    var submitBtn = customBookingForm.querySelector('button[type="submit"]');
+                    submitBtn.innerHTML = '<span>Đang xử lý...</span>';
+                    submitBtn.disabled = true;
+                });
+            }
+        });
+    </script>
+</body>
+</html> 
