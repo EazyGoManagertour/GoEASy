@@ -11,7 +11,9 @@ public partial class BlogImage
 
     public string ImageUrl { get; set; } = null!;
 
-    public string? Caption { get; set; }
+    public int? Position { get; set; }
+
+    public string? Type { get; set; }
 
     public bool? IsMain { get; set; }
 
