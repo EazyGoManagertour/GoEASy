@@ -34,8 +34,16 @@ builder.Services.AddScoped<TourService>();
 builder.Services.AddScoped<DestinationService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 
+
 // Đăng ký LoginService
 builder.Services.AddScoped<LoginService>();
+
+builder.Services.AddScoped<IBlogTagService, BlogTagService>();
+
+builder.Services.AddScoped<IBlogService, BlogService>();
+
+builder.Services.AddScoped<IBlogDetailService, BlogDetailService>();
+
 
 var app = builder.Build();
 

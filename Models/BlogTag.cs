@@ -9,5 +9,7 @@ public partial class BlogTag
 
     public string? Name { get; set; }
 
-    public virtual ICollection<Blog> Blogs { get; set; } = new List<Blog>();
+    public bool? Status { get; set; }
+
+    public virtual ICollection<BlogTagMapping> BlogTagMappings { get; set; } = new List<BlogTagMapping>();
 }
