@@ -11,13 +11,13 @@ public partial class Blog
 
     public string? ShortDescription { get; set; }
 
-    public string? Category { get; set; }
+    public int CategoryId { get; set; }
 
     public int? AuthorUserId { get; set; }
 
     public int? AuthorAdminId { get; set; }
 
-    public bool? IsApproved { get; set; }
+    public byte? IsApproved { get; set; }
 
     public bool? Status { get; set; }
 
@@ -35,5 +35,7 @@ public partial class Blog
 
     public virtual ICollection<BlogImage> BlogImages { get; set; } = new List<BlogImage>();
 
-    public virtual ICollection<BlogTag> Tags { get; set; } = new List<BlogTag>();
+    public virtual ICollection<BlogTagMapping> BlogTagMappings { get; set; } = new List<BlogTagMapping>();
+
+    public virtual TourCategory Category { get; set; } = null!;
 }
