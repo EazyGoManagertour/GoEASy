@@ -17,5 +17,7 @@ public partial class TourCategory
 
     public DateTime? UpdatedAt { get; set; }
 
+    public virtual ICollection<Blog> Blogs { get; set; } = new List<Blog>();
+
     public virtual ICollection<Tour> Tours { get; set; } = new List<Tour>();
 }

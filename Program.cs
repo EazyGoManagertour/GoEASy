@@ -23,9 +23,15 @@ builder.Services.AddScoped<IAdminService, AdminService>();
 
 builder.Services.AddScoped<IFavoriteService, FavoriteService>();
 
-builder.Services.AddScoped<TourService>();
+//builder.Services.AddScoped<TourService>();
 
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+
+builder.Services.AddScoped<IBlogTagService, BlogTagService>();
+
+builder.Services.AddScoped<IBlogService, BlogService>();
+
+builder.Services.AddScoped<IBlogDetailService, BlogDetailService>();
 
 var app = builder.Build();
 
