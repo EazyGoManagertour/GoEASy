@@ -11,8 +11,6 @@ public partial class BlogDetail
 
     public string? Introduction { get; set; }
 
-    public string? MainImage { get; set; }
-
     public string? Section1Title { get; set; }
 
     public string? Section1Content { get; set; }
@@ -24,6 +22,8 @@ public partial class BlogDetail
     public string? Quote { get; set; }
 
     public string? QuoteAuthor { get; set; }
+
+    public bool? Status { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 

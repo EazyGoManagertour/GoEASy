@@ -1,0 +1,299 @@
+﻿<!DOCTYPE html>
+<html lang="zxx">
+
+@Html.Partial("~/Views/client/share/head.cshtml")
+
+<body>
+    <div class="page-wrapper">
+
+        <!-- Preloader -->
+        <div class="preloader"><div class="custom-loader"></div></div>
+
+        <!-- main header -->
+        @Html.Partial("~/Views/client/share/header2.cshtml")
+
+
+        <!--Form Back Drop-->
+        <div class="form-back-drop"></div>
+
+        <!-- Hidden Sidebar -->
+        <section class="hidden-bar">
+            <div class="inner-box text-center">
+                <div class="cross-icon"><span class="fa fa-times"></span></div>
+                <div class="title">
+                    <h4>Get Appointment</h4>
+                </div>
+
+                <!--Appointment Form-->
+                <div class="appointment-form">
+                    <form method="post" action="https://webtendtheme.net/html/2024/ravelo/contact.html">
+                        <div class="form-group">
+                            <input type="text" name="text" value="" placeholder="Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="email" value="" placeholder="Email Address" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea placeholder="Message" rows="5"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="theme-btn style-two">
+                                <span data-hover="Submit now">Submit now</span>
+                                <i class="fal fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!--Social Icons-->
+                <div class="social-style-one">
+                    <a href="contact.html"><i class="fab fa-twitter"></i></a>
+                    <a href="contact.html"><i class="fab fa-facebook-f"></i></a>
+                    <a href="contact.html"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                </div>
+            </div>
+        </section>
+        <!--End Hidden Sidebar -->
+        <!-- Page Banner Start -->
+        <section class="page-banner-area pt-50 pb-35 rel z-1 bgs-cover" style="background-image: url(assets/images/banner/banner.jpg);">
+            <div class="container">
+                <div class="banner-inner text-white">
+
+                    <h2 class="page-title mb-10" data-aos="fade-left" data-aos-duration="1500" data-aos-offset="50">@Model.Title</h2>
+
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center mb-20" data-aos="fade-right" data-aos-delay="200" data-aos-duration="1500" data-aos-offset="50">
+                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item active">Blog Details</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </section>
+        <!-- Page Banner End -->
+        <!-- Blog Detaisl Area start -->
+        <section class="blog-detaisl-page py-100 rel z-1">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-lg-8">
+                        <div class="blog-details-content" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                            <!-- Category -->
+                            <a href="#" class="category">@Model.Category?.CategoryName</a>
+
+                            <!-- Meta -->
+                            <ul class="blog-meta mb-30">
+                                <li>
+                                    <img src="/assets/images/blog/prev-post.jpg" alt="Admin">
+                                    <a href="#">@((Model.AuthorAdmin?.FullName ?? Model.AuthorUser?.FullName) ?? "Unknown")</a>
+                                </li>
+                                <li>
+                                    <i class="far fa-calendar-alt"></i>
+                                    <a href="#">@Model.CreatedAt?.ToString("dd MMM yyyy")</a>
+                                </li>
+                                <li>
+                                    <i class="far fa-comments"></i>
+                                    <a href="#">Comments (0)</a> <!-- ✅ Nếu có comment real thì đổ ViewBag.CommentCount -->
+                                </li>
+                            </ul>
+
+                            <!-- Introduction -->
+                            <p>@Model.BlogDetail?.Introduction</p>
+
+                            <!-- Main Image -->
+                            @{
+                                var blogImages = Model.BlogImages as List<GoEASy.Models.BlogImage> ?? new List<GoEASy.Models.BlogImage>();
+                                var mainImg = blogImages.FirstOrDefault(i => i.Type == "main")?.ImageUrl
+                                ?? "/image/default.jpg";
+                            }
+                            <div class="image mt-40 mb-30" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                                <img src="@Url.Content(mainImg)" alt="@Model.Title">
+                            </div>
+
+                            <!-- Section 1 -->
+                            <h5>@Model.BlogDetail?.Section1Title</h5>
+                            <p>@Model.BlogDetail?.Section1Content</p>
+
+                            <!-- Gallery Images -->
+                            @{
+                                var Galleryimg = Model.BlogImages as IEnumerable<GoEASy.Models.BlogImage> ?? Enumerable.Empty<GoEASy.Models.BlogImage>();
+                                var gallery = Galleryimg.Where(i => i.Type == "gallery").ToList();
+                            }
+                            <div class="row mb-10">
+                                @foreach (var img in gallery)
+                                {
+                                    <div class="col-sm-6">
+                                        <div class="image mb-30" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                                            <img src="@Url.Content(img.ImageUrl)" alt="Gallery">
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
+                            <!-- Section 2 -->
+                            <h5>@Model.BlogDetail?.Section2Title</h5>
+                            <p>@Model.BlogDetail?.Section2Content</p>
+                        </div>
+
+
+                        <hr class="mb-45">
+
+                        <div class="tag-share mb-50">
+                            @{
+                                var tagMappings = Model.BlogTagMappings as List<GoEASy.Models.BlogTagMapping> ?? new List<GoEASy.Models.BlogTagMapping>();
+                            }
+
+                            @if (tagMappings.Any())
+                            {
+                                <div class="item" data-aos="fade-left" data-aos-duration="1500" data-aos-offset="50">
+                                    <h6>Tags</h6>
+                                    <div class="tag-coulds">
+                                        @foreach (var tagMap in tagMappings)
+                                        {
+                                            if (tagMap.Tag != null)
+                                            {
+                                                <a href="/blog?keyword=@tagMap.Tag.Name">@tagMap.Tag.Name</a>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            }
+
+                            <div class="item" data-aos="fade-right" data-aos-duration="1500" data-aos-offset="50">
+                                <h6>Share </h6>
+                                <div class="social-style-one">
+                                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                    <a href="#"><i class="fab fa-twitter"></i></a>
+                                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                    <a href="#"><i class="fab fa-instagram"></i></a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="admin-comment bgc-lighter" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                            <div class="comment-body">
+                                <div class="author-thumb">
+                                    <img src="@Url.Content("~/assets/images/blog/admin-comment.jpg")" alt="Author">
+                                </div>
+                                <div class="content">
+                                    <h4>@Model.BlogDetail?.QuoteAuthor</h4>
+                                    <p>@Model.BlogDetail?.Quote</p>
+                                </div>
+                            </div>
+                        </div>
+
+ 
+
+                        <form id="comment-form" class="comment-form bgc-lighter z-1 rel mt-25" name="review-form" action="#" method="post" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                            <h5>Leave A Comments</h5>
+                            <p>Your email address will not be published. Required fields are marked *</p>
+                            <div class="row gap-20 mt-30">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input type="text" id="full-name" name="full-name" class="form-control" placeholder="Name" value="" required="">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input type="email" id="email-address" name="email" class="form-control" placeholder="Email" value="" required="">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <textarea name="message" id="message" class="form-control" rows="5" placeholder="Message" required=""></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group mb-0">
+                                        <ul class="radio-filter mb-25">
+                                            <li>
+                                                <input class="form-check-input" type="radio" name="terms-condition" id="terms-condition">
+                                                <label for="terms-condition">Save my name, email, and website in this browser for the next time I comment.</label>
+                                            </li>
+                                        </ul>
+                                        <button type="submit" class="theme-btn style-two">
+                                            <span data-hover="Send Comments">Send Comments</span>
+                                            <i class="fal fa-arrow-right"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+
+
+
+
+                    <div class="col-lg-4 col-md-8 col-sm-10 rmt-75">
+                        <div class="blog-sidebar">
+
+                            <div class="widget widget-search" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                                <form method="get" action="/blog-detail/@Model.BlogId" class="default-search-form">
+                                    <input type="text" name="keyword" placeholder="Search"
+                                           value="@ViewBag.Keyword" required />
+                                    <button type="submit" class="searchbutton far fa-search"></button>
+                                </form>
+                            </div>
+
+                            <div class="widget widget-category" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                                <h5 class="widget-title">Category</h5>
+                                <ul class="list-style-three">
+                                    @foreach (var cat in ViewBag.Categories as List<GoEASy.Models.TourCategory>)
+                                    {
+                                        var isActive = (cat.CategoryName == (ViewBag.SelectedCategory as string)) ? "active" : "";
+                                        <li>
+                                            <a class="@isActive"
+                                               href="/blog-detail/@Model.BlogId?category=@cat.CategoryName">
+                                                @cat.CategoryName
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+
+                            <div class="widget widget-news" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                                <h5 class="widget-title">Recent News</h5>
+                                <ul>
+                                    @foreach (var blog in ViewBag.RecentBlogs as List<GoEASy.Models.Blog>)
+                                    {
+                                        var img = blog.BlogImages?.FirstOrDefault(i => i.IsMain == true)?.ImageUrl ?? "/assets/images/widgets/news-default.jpg";
+                                        var date = blog.CreatedAt?.ToString("dd MMM yyyy") ?? "";
+                                        <li>
+                                            <div class="image">
+                                                <img src="@img" alt="@blog.Title" style="width: 80px; height: 60px; object-fit: cover;" />
+                                            </div>
+                                            <div class="content">
+                                                <h6>
+                                                    <a href="/blog-detail/@blog.BlogId">@blog.Title</a>
+                                                </h6>
+                                                <span class="date"><i class="far fa-calendar-alt"></i> @date</span>
+                                            </div>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Blog Detaisl Area end -->
+        <!-- footer area start -->
+        @Html.Partial("~/Views/client/share/footer-area.cshtml")
+
+        <!-- footer area end -->
+
+    </div>
+
+
+    <!--End pagewrapper-->
+    @Html.Partial("~/Views/client/share/script.cshtml")
+
+</body>
+
+<!-- Mirrored from webtendtheme.net/html/2024/ravelo/blog-details.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 07 Oct 2024 09:28:49 GMT -->
+</html>

@@ -29,6 +29,8 @@ public partial class GoEasyContext : DbContext
 
     public virtual DbSet<BlogTag> BlogTags { get; set; }
 
+    public virtual DbSet<BlogTagMapping> BlogTagMappings { get; set; }
+
     public virtual DbSet<Booking> Bookings { get; set; }
 
     public virtual DbSet<Companion> Companions { get; set; }
@@ -73,7 +75,7 @@ public partial class GoEasyContext : DbContext
     {
         modelBuilder.Entity<AccessLog>(entity =>
         {
-            entity.HasKey(e => e.LogId).HasName("PK__AccessLo__5E5499A82D0500D4");
+            entity.HasKey(e => e.LogId).HasName("PK__AccessLo__5E5499A8C5013286");
 
             entity.ToTable("AccessLog");
 
@@ -92,11 +94,11 @@ public partial class GoEasyContext : DbContext
 
         modelBuilder.Entity<Admin>(entity =>
         {
-            entity.HasKey(e => e.AdminId).HasName("PK__Admins__719FE4E8F2A01619");
+            entity.HasKey(e => e.AdminId).HasName("PK__Admins__719FE4E88053CE9A");
 
-            entity.HasIndex(e => e.Username, "UQ__Admins__536C85E4943470E4").IsUnique();
+            entity.HasIndex(e => e.Username, "UQ__Admins__536C85E44A5D2D0A").IsUnique();
 
-            entity.HasIndex(e => e.Email, "UQ__Admins__A9D10534DC0FBED6").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__Admins__A9D10534160FA1D2").IsUnique();
 
             entity.Property(e => e.AdminId).HasColumnName("AdminID");
             entity.Property(e => e.Address).HasMaxLength(255);
@@ -113,14 +115,14 @@ public partial class GoEasyContext : DbContext
 
         modelBuilder.Entity<Blog>(entity =>
         {
-            entity.HasKey(e => e.BlogId).HasName("PK__Blogs__54379E502ADFF003");
+            entity.HasKey(e => e.BlogId).HasName("PK__Blogs__54379E500C91A16F");
 
             entity.Property(e => e.BlogId).HasColumnName("BlogID");
             entity.Property(e => e.AuthorAdminId).HasColumnName("AuthorAdminID");
             entity.Property(e => e.AuthorUserId).HasColumnName("AuthorUserID");
-            entity.Property(e => e.Category).HasMaxLength(50);
+            entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetime())");
-            entity.Property(e => e.IsApproved).HasDefaultValue(false);
+            entity.Property(e => e.IsApproved).HasDefaultValue((byte)0);
             entity.Property(e => e.ShortDescription).HasMaxLength(255);
             entity.Property(e => e.Status).HasDefaultValue(true);
             entity.Property(e => e.Title).HasMaxLength(200);
@@ -128,33 +130,21 @@ public partial class GoEasyContext : DbContext
 
             entity.HasOne(d => d.AuthorAdmin).WithMany(p => p.Blogs)
                 .HasForeignKey(d => d.AuthorAdminId)
-                .HasConstraintName("FK__Blogs__AuthorAdm__55F4C372");
+                .HasConstraintName("FK__Blogs__AuthorAdm__2F9A1060");
 
             entity.HasOne(d => d.AuthorUser).WithMany(p => p.Blogs)
                 .HasForeignKey(d => d.AuthorUserId)
-                .HasConstraintName("FK__Blogs__AuthorUse__55009F39");
+                .HasConstraintName("FK__Blogs__AuthorUse__2EA5EC27");
 
-            entity.HasMany(d => d.Tags).WithMany(p => p.Blogs)
-                .UsingEntity<Dictionary<string, object>>(
-                    "BlogTagMapping",
-                    r => r.HasOne<BlogTag>().WithMany()
-                        .HasForeignKey("TagId")
-                        .HasConstraintName("FK__BlogTagMa__TagID__6AEFE058"),
-                    l => l.HasOne<Blog>().WithMany()
-                        .HasForeignKey("BlogId")
-                        .HasConstraintName("FK__BlogTagMa__BlogI__69FBBC1F"),
-                    j =>
-                    {
-                        j.HasKey("BlogId", "TagId").HasName("PK__BlogTagM__826051F46BC7CBC7");
-                        j.ToTable("BlogTagMapping");
-                        j.IndexerProperty<int>("BlogId").HasColumnName("BlogID");
-                        j.IndexerProperty<int>("TagId").HasColumnName("TagID");
-                    });
+            entity.HasOne(d => d.Category).WithMany(p => p.Blogs)
+                .HasForeignKey(d => d.CategoryId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Blogs__CategoryI__308E3499");
         });
 
         modelBuilder.Entity<BlogComment>(entity =>
         {
-            entity.HasKey(e => e.CommentId).HasName("PK__BlogComm__C3B4DFAA2757BEDA");
+            entity.HasKey(e => e.CommentId).HasName("PK__BlogComm__C3B4DFAA52D22796");
 
             entity.Property(e => e.CommentId).HasColumnName("CommentID");
             entity.Property(e => e.BlogId).HasColumnName("BlogID");
@@ -166,63 +156,83 @@ public partial class GoEasyContext : DbContext
             entity.HasOne(d => d.Blog).WithMany(p => p.BlogComments)
                 .HasForeignKey(d => d.BlogId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__BlogComme__BlogI__5E8A0973");
+                .HasConstraintName("FK__BlogComme__BlogI__3A179ED3");
 
             entity.HasOne(d => d.User).WithMany(p => p.BlogComments)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__BlogComme__UserI__5F7E2DAC");
+                .HasConstraintName("FK__BlogComme__UserI__3B0BC30C");
         });
 
         modelBuilder.Entity<BlogDetail>(entity =>
         {
-            entity.HasKey(e => e.BlogDetailId).HasName("PK__BlogDeta__2383E81E5C55CC6D");
+            entity.HasKey(e => e.BlogDetailId).HasName("PK__BlogDeta__2383E81EAE2D6D97");
 
-            entity.HasIndex(e => e.BlogId, "UQ__BlogDeta__54379E51AFC04DFF").IsUnique();
+            entity.HasIndex(e => e.BlogId, "UQ__BlogDeta__54379E51E6C39BDD").IsUnique();
 
             entity.Property(e => e.BlogDetailId).HasColumnName("BlogDetailID");
             entity.Property(e => e.BlogId).HasColumnName("BlogID");
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetime())");
-            entity.Property(e => e.MainImage).HasMaxLength(255);
             entity.Property(e => e.QuoteAuthor).HasMaxLength(100);
             entity.Property(e => e.Section1Title).HasMaxLength(255);
             entity.Property(e => e.Section2Title).HasMaxLength(255);
+            entity.Property(e => e.Status).HasDefaultValue(true);
 
             entity.HasOne(d => d.Blog).WithOne(p => p.BlogDetail)
                 .HasForeignKey<BlogDetail>(d => d.BlogId)
-                .HasConstraintName("FK__BlogDetai__BlogI__5AB9788F");
+                .HasConstraintName("FK__BlogDetai__BlogI__36470DEF");
         });
 
         modelBuilder.Entity<BlogImage>(entity =>
         {
-            entity.HasKey(e => e.ImageId).HasName("PK__BlogImag__7516F4EC613B291D");
+            entity.HasKey(e => e.ImageId).HasName("PK__BlogImag__7516F4EC838794B4");
 
             entity.Property(e => e.ImageId).HasColumnName("ImageID");
             entity.Property(e => e.BlogId).HasColumnName("BlogID");
-            entity.Property(e => e.Caption).HasMaxLength(255);
             entity.Property(e => e.ImageUrl)
                 .HasMaxLength(255)
                 .HasColumnName("ImageURL");
             entity.Property(e => e.IsMain).HasDefaultValue(false);
+            entity.Property(e => e.Type).HasMaxLength(50);
             entity.Property(e => e.UploadedAt).HasDefaultValueSql("(sysdatetime())");
 
             entity.HasOne(d => d.Blog).WithMany(p => p.BlogImages)
                 .HasForeignKey(d => d.BlogId)
-                .HasConstraintName("FK__BlogImage__BlogI__6442E2C9");
+                .HasConstraintName("FK__BlogImage__BlogI__3FD07829");
         });
 
         modelBuilder.Entity<BlogTag>(entity =>
         {
-            entity.HasKey(e => e.TagId).HasName("PK__BlogTags__657CFA4C943A6324");
+            entity.HasKey(e => e.TagId).HasName("PK__BlogTags__657CFA4C1B2FB88C");
 
-            entity.HasIndex(e => e.Name, "UQ__BlogTags__737584F680A87096").IsUnique();
+            entity.HasIndex(e => e.Name, "UQ__BlogTags__737584F6F5B04F15").IsUnique();
 
             entity.Property(e => e.TagId).HasColumnName("TagID");
             entity.Property(e => e.Name).HasMaxLength(50);
+            entity.Property(e => e.Status).HasDefaultValue(true);
+        });
+
+        modelBuilder.Entity<BlogTagMapping>(entity =>
+        {
+            entity.HasKey(e => new { e.BlogId, e.TagId }).HasName("PK__BlogTagM__826051F4AE1227AC");
+
+            entity.ToTable("BlogTagMapping");
+
+            entity.Property(e => e.BlogId).HasColumnName("BlogID");
+            entity.Property(e => e.TagId).HasColumnName("TagID");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetime())");
+
+            entity.HasOne(d => d.Blog).WithMany(p => p.BlogTagMappings)
+                .HasForeignKey(d => d.BlogId)
+                .HasConstraintName("FK__BlogTagMa__BlogI__477199F1");
+
+            entity.HasOne(d => d.Tag).WithMany(p => p.BlogTagMappings)
+                .HasForeignKey(d => d.TagId)
+                .HasConstraintName("FK__BlogTagMa__TagID__4865BE2A");
         });
 
         modelBuilder.Entity<Booking>(entity =>
         {
-            entity.HasKey(e => e.BookingId).HasName("PK__Bookings__73951ACDA3B4BA9D");
+            entity.HasKey(e => e.BookingId).HasName("PK__Bookings__73951ACD034E3881");
 
             entity.Property(e => e.BookingId).HasColumnName("BookingID");
             entity.Property(e => e.BookingDate).HasDefaultValueSql("(sysdatetime())");
@@ -260,7 +270,7 @@ public partial class GoEasyContext : DbContext
 
         modelBuilder.Entity<Companion>(entity =>
         {
-            entity.HasKey(e => e.CompanionId).HasName("PK__Companio__8B53BE8BFB05524F");
+            entity.HasKey(e => e.CompanionId).HasName("PK__Companio__8B53BE8B302CA2DB");
 
             entity.Property(e => e.CompanionId).HasColumnName("CompanionID");
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetime())");
@@ -279,7 +289,7 @@ public partial class GoEasyContext : DbContext
 
         modelBuilder.Entity<Destination>(entity =>
         {
-            entity.HasKey(e => e.DestinationId).HasName("PK__Destinat__DB5FE4AC2F32CEC0");
+            entity.HasKey(e => e.DestinationId).HasName("PK__Destinat__DB5FE4AC1B181B13");
 
             entity.Property(e => e.DestinationId).HasColumnName("DestinationID");
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetime())");
@@ -291,7 +301,7 @@ public partial class GoEasyContext : DbContext
 
         modelBuilder.Entity<DestinationImage>(entity =>
         {
-            entity.HasKey(e => e.ImageId).HasName("PK__Destinat__7516F4ECF9939271");
+            entity.HasKey(e => e.ImageId).HasName("PK__Destinat__7516F4ECE2C6D330");
 
             entity.Property(e => e.ImageId).HasColumnName("ImageID");
             entity.Property(e => e.Caption).HasMaxLength(255);
@@ -310,9 +320,9 @@ public partial class GoEasyContext : DbContext
 
         modelBuilder.Entity<Discount>(entity =>
         {
-            entity.HasKey(e => e.DiscountId).HasName("PK__Discount__E43F6DF69E3FEAC8");
+            entity.HasKey(e => e.DiscountId).HasName("PK__Discount__E43F6DF6BBE73E9F");
 
-            entity.HasIndex(e => e.Code, "UQ__Discount__A25C5AA7709C5027").IsUnique();
+            entity.HasIndex(e => e.Code, "UQ__Discount__A25C5AA7CF5E81FE").IsUnique();
 
             entity.Property(e => e.DiscountId).HasColumnName("DiscountID");
             entity.Property(e => e.Code).HasMaxLength(50);
@@ -325,7 +335,7 @@ public partial class GoEasyContext : DbContext
 
         modelBuilder.Entity<Favorite>(entity =>
         {
-            entity.HasKey(e => new { e.UserId, e.TourId }).HasName("PK__Favorite__018C020DD69A0388");
+            entity.HasKey(e => new { e.UserId, e.TourId }).HasName("PK__Favorite__018C020D8724C370");
 
             entity.Property(e => e.UserId).HasColumnName("UserID");
             entity.Property(e => e.TourId).HasColumnName("TourID");
@@ -345,7 +355,7 @@ public partial class GoEasyContext : DbContext
 
         modelBuilder.Entity<Payment>(entity =>
         {
-            entity.HasKey(e => e.PaymentId).HasName("PK__Payments__9B556A58147F863E");
+            entity.HasKey(e => e.PaymentId).HasName("PK__Payments__9B556A581F4698EE");
 
             entity.Property(e => e.PaymentId).HasColumnName("PaymentID");
             entity.Property(e => e.Amount).HasColumnType("decimal(10, 2)");
@@ -362,7 +372,7 @@ public partial class GoEasyContext : DbContext
 
         modelBuilder.Entity<Review>(entity =>
         {
-            entity.HasKey(e => e.ReviewId).HasName("PK__Reviews__74BC79AE992B4988");
+            entity.HasKey(e => e.ReviewId).HasName("PK__Reviews__74BC79AE6C0F7CB6");
 
             entity.Property(e => e.ReviewId).HasColumnName("ReviewID");
             entity.Property(e => e.CreatedDate).HasDefaultValueSql("(sysdatetime())");
@@ -381,9 +391,9 @@ public partial class GoEasyContext : DbContext
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.RoleId).HasName("PK__Roles__8AFACE3A7727A3AD");
+            entity.HasKey(e => e.RoleId).HasName("PK__Roles__8AFACE3AD5B55E61");
 
-            entity.HasIndex(e => e.RoleName, "UQ__Roles__8A2B6160E1B9EAFE").IsUnique();
+            entity.HasIndex(e => e.RoleName, "UQ__Roles__8A2B61608C4C044E").IsUnique();
 
             entity.Property(e => e.RoleId).HasColumnName("RoleID");
             entity.Property(e => e.RoleName).HasMaxLength(50);
@@ -391,7 +401,7 @@ public partial class GoEasyContext : DbContext
 
         modelBuilder.Entity<Schedule>(entity =>
         {
-            entity.HasKey(e => e.ScheduleId).HasName("PK__Schedule__9C8A5B692414E6D0");
+            entity.HasKey(e => e.ScheduleId).HasName("PK__Schedule__9C8A5B6901078A75");
 
             entity.Property(e => e.ScheduleId).HasColumnName("ScheduleID");
             entity.Property(e => e.Location).HasMaxLength(200);
@@ -406,7 +416,7 @@ public partial class GoEasyContext : DbContext
 
         modelBuilder.Entity<Tour>(entity =>
         {
-            entity.HasKey(e => e.TourId).HasName("PK__Tours__604CEA10FD171ACE");
+            entity.HasKey(e => e.TourId).HasName("PK__Tours__604CEA10CE54B1F9");
 
             entity.Property(e => e.TourId).HasColumnName("TourID");
             entity.Property(e => e.AdultPrice).HasColumnType("decimal(10, 2)");
@@ -431,9 +441,9 @@ public partial class GoEasyContext : DbContext
 
         modelBuilder.Entity<TourCategory>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__TourCate__19093A2B19A02E03");
+            entity.HasKey(e => e.CategoryId).HasName("PK__TourCate__19093A2B32BE57E3");
 
-            entity.HasIndex(e => e.CategoryName, "UQ__TourCate__8517B2E0260B9DBF").IsUnique();
+            entity.HasIndex(e => e.CategoryName, "UQ__TourCate__8517B2E0A9F2D18C").IsUnique();
 
             entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
             entity.Property(e => e.CategoryName).HasMaxLength(50);
@@ -444,9 +454,9 @@ public partial class GoEasyContext : DbContext
 
         modelBuilder.Entity<TourDetail>(entity =>
         {
-            entity.HasKey(e => e.TourDetailId).HasName("PK__TourDeta__5055BCFC699C2D94");
+            entity.HasKey(e => e.TourDetailId).HasName("PK__TourDeta__5055BCFCC2B2AD30");
 
-            entity.HasIndex(e => e.TourId, "UQ__TourDeta__604CEA1155020946").IsUnique();
+            entity.HasIndex(e => e.TourId, "UQ__TourDeta__604CEA11E63094B2").IsUnique();
 
             entity.Property(e => e.TourDetailId).HasColumnName("TourDetailID");
             entity.Property(e => e.Included).HasMaxLength(1000);
@@ -458,12 +468,12 @@ public partial class GoEasyContext : DbContext
             entity.HasOne(d => d.Tour).WithOne(p => p.TourDetail)
                 .HasForeignKey<TourDetail>(d => d.TourId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__TourDetai__TourI__2180FB33");
+                .HasConstraintName("FK__TourDetai__TourI__208CD6FA");
         });
 
         modelBuilder.Entity<TourImage>(entity =>
         {
-            entity.HasKey(e => e.ImageId).HasName("PK__TourImag__7516F4ECF3B4CB5B");
+            entity.HasKey(e => e.ImageId).HasName("PK__TourImag__7516F4EC0EDF9DB7");
 
             entity.Property(e => e.ImageId).HasColumnName("ImageID");
             entity.Property(e => e.Caption).HasMaxLength(255);
@@ -482,7 +492,7 @@ public partial class GoEasyContext : DbContext
 
         modelBuilder.Entity<TourItinerary>(entity =>
         {
-            entity.HasKey(e => e.ItineraryId).HasName("PK__TourItin__361216A6CB7C9AAC");
+            entity.HasKey(e => e.ItineraryId).HasName("PK__TourItin__361216A6031E6025");
 
             entity.Property(e => e.ItineraryId).HasColumnName("ItineraryID");
             entity.Property(e => e.Accommodation).HasMaxLength(255);
@@ -494,16 +504,16 @@ public partial class GoEasyContext : DbContext
             entity.HasOne(d => d.Tour).WithMany(p => p.TourItineraries)
                 .HasForeignKey(d => d.TourId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__TourItine__TourI__245D67DE");
+                .HasConstraintName("FK__TourItine__TourI__236943A5");
         });
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCACED1EBA43");
+            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCAC05F96054");
 
-            entity.HasIndex(e => e.Username, "UQ__Users__536C85E451D46F53").IsUnique();
+            entity.HasIndex(e => e.Username, "UQ__Users__536C85E4C18EE7BE").IsUnique();
 
-            entity.HasIndex(e => e.Email, "UQ__Users__A9D105342CB05A92").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__Users__A9D105344B5362D5").IsUnique();
 
             entity.Property(e => e.UserId).HasColumnName("UserID");
             entity.Property(e => e.Address).HasMaxLength(255);
@@ -530,7 +540,7 @@ public partial class GoEasyContext : DbContext
 
         modelBuilder.Entity<VippointHistory>(entity =>
         {
-            entity.HasKey(e => e.HistoryId).HasName("PK__VIPPoint__4D7B4ADDE9D419A5");
+            entity.HasKey(e => e.HistoryId).HasName("PK__VIPPoint__4D7B4ADDE91936A1");
 
             entity.ToTable("VIPPointHistory");
 
