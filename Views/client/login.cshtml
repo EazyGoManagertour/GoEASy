@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập - EasyGo Travel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2ed573;
+            --secondary: #0099ff;
+            --bg: #f8fafc;
+            --form-bg: #fff;
+            --shadow: 0 10px 40px rgba(0,0,0,0.15);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            min-height: 100vh;
+            font-family: 'Montserrat', Arial, sans-serif;
+            background: linear-gradient(120deg, rgba(46,213,115,0.2), rgba(0,153,255,0.15)), url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-container {
+            background: var(--form-bg);
+            border-radius: 30px;
+            box-shadow: var(--shadow);
+            padding: 3rem 2.5rem 2.5rem 2.5rem;
+            max-width: 400px;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+            animation: fadeIn 1s cubic-bezier(.39,.575,.56,1.000);
+        }
+        @@keyframes fadeIn {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .logo img {
+            height: 56px;
+            margin-bottom: 0.5rem;
+        }
+        .logo h1 {
+            color: var(--primary);
+            font-size: 2.1rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .login-title {
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #22223b;
+            margin-bottom: 1.2rem;
+        }
+        .login-desc {
+            text-align: center;
+            color: #4a5568;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1.3rem;
+        }
+        .form-group label {
+            display: block;
+            color: #374151;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.9rem 1rem 0.9rem 2.7rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 15px;
+            font-size: 1rem;
+            background: #f9fafb;
+            transition: border-color 0.3s;
+            outline: none;
+        }
+        .form-group input:focus {
+            border-color: var(--secondary);
+            background: #fff;
+        }
+        .form-group .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--secondary);
+            font-size: 1.2rem;
+            pointer-events: none;
+        }
+        .input-wrapper {
+            position: relative;
+        }
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: #fff;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(46,213,115,0.15);
+            transition: background 0.3s, transform 0.2s;
+            margin-top: 0.5rem;
+        }
+        .login-btn:hover {
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
+            transform: translateY(-2px) scale(1.03);
+        }
+        .login-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.2rem;
+            font-size: 0.97rem;
+        }
+        .login-links a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .login-links a:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+        /* Floating travel icons */
+        .floating-icon {
+            position: absolute;
+            opacity: 0.13;
+            font-size: 3.5rem;
+            z-index: 1;
+            animation: float 7s ease-in-out infinite;
+            pointer-events: none;
+        }
+        .floating-icon:nth-child(1) {
+            top: -30px; left: -30px; animation-delay: 0s; }
+        .floating-icon:nth-child(2) {
+            bottom: -30px; right: -30px; animation-delay: 2s; }
+        .floating-icon:nth-child(3) {
+            top: 50%; left: -40px; animation-delay: 4s; }
+        @@keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-18px) rotate(8deg); }
+        }
+        @@media (max-width: 500px) {
+            .login-container {
+                padding: 1.5rem 0.7rem 1.2rem 0.7rem;
+                border-radius: 18px;
+            }
+            .logo h1 { font-size: 1.3rem; }
+            .login-title { font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-icon">✈️</div>
+    <div class="floating-icon">🌴</div>
+    <div class="floating-icon">🗺️</div>
+    
+    <!-- Login Form -->
+    <form class="login-container" method="POST" action="/login">
+        <div class="logo">
+            <img src="https://cdn-icons-png.flaticon.com/512/201/201623.png" alt="EasyGo Logo"/>
+            <h1>EasyGo</h1>
+        </div>
+        <div class="login-title">Chào mừng bạn đến với EasyGo!</div>
+        <div class="login-desc">Khám phá thế giới dễ dàng hơn cùng nền tảng du lịch thông minh.</div>
+        
+        @if (TempData["Error"] != null)
+        {
+            <div style="background: #fee; color: #c33; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center;">
+                @TempData["Error"]
+            </div>
+        }
+        
+        @if (TempData["Success"] != null)
+        {
+            <div style="background: #efe; color: #363; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center;">
+                @TempData["Success"]
+            </div>
+        }
+        
+        <div class="form-group">
+            <label for="email">Email</label>
+            <div class="input-wrapper">
+                <span class="input-icon">📧</span>
+                <input type="email" id="email" name="email" placeholder="Nhập email" required autocomplete="username">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="password">Mật khẩu</label>
+            <div class="input-wrapper">
+                <span class="input-icon">🔒</span>
+                <input type="password" id="password" name="password" placeholder="Nhập mật khẩu" required autocomplete="current-password">
+            </div>
+        </div>
+        <button class="login-btn" type="submit">Đăng nhập</button>
+        <div class="login-links">
+            <a href="#" onclick="alert('Chức năng đang phát triển!')">Quên mật khẩu?</a>
+            <a href="#" onclick="showRegisterForm()">Đăng ký</a>
+        </div>
+    </form>
+
+    <!-- Register Form (Hidden by default) -->
+    <form class="login-container" id="registerForm" style="display: none;" method="POST" action="/login/register">
+        <div class="logo">
+            <img src="https://cdn-icons-png.flaticon.com/512/201/201623.png" alt="EasyGo Logo"/>
+            <h1>EasyGo</h1>
+        </div>
+        <div class="login-title">Đăng ký tài khoản</div>
+        <div class="login-desc">Tạo tài khoản để trải nghiệm dịch vụ tốt nhất.</div>
+        <div class="form-group">
+            <label for="regFullName">Họ và tên</label>
+            <div class="input-wrapper">
+                <span class="input-icon">👤</span>
+                <input type="text" id="regFullName" name="fullName" placeholder="Nhập họ và tên" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="regEmail">Email</label>
+            <div class="input-wrapper">
+                <span class="input-icon">📧</span>
+                <input type="email" id="regEmail" name="email" placeholder="Nhập email" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="regPassword">Mật khẩu</label>
+            <div class="input-wrapper">
+                <span class="input-icon">🔒</span>
+                <input type="password" id="regPassword" name="password" placeholder="Nhập mật khẩu" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="regPhone">Số điện thoại (tùy chọn)</label>
+            <div class="input-wrapper">
+                <span class="input-icon">📱</span>
+                <input type="tel" id="regPhone" name="phone" placeholder="Nhập số điện thoại">
+            </div>
+        </div>
+        <button class="login-btn" type="submit">Đăng ký</button>
+        <div class="login-links">
+            <a href="#" onclick="showLoginForm()">Đã có tài khoản? Đăng nhập</a>
+        </div>
+    </form>
+
+    <script>
+        function showRegisterForm() {
+            document.querySelector('.login-container').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'block';
+        }
+
+        function showLoginForm() {
+            document.querySelector('.login-container').style.display = 'block';
+            document.getElementById('registerForm').style.display = 'none';
+        }
+
+        // Hiệu ứng focus input
+        document.querySelectorAll('.form-group input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.03)';
+                this.parentElement.style.transition = 'transform 0.3s';
+            });
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+        
+        // Auto-focus email
+        window.addEventListener('load', function() {
+            document.getElementById('email').focus();
+        });
+    </script>
+</body>
+</html> 

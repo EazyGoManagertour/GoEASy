@@ -65,6 +65,8 @@ public partial class GoEasyContext : DbContext
 
     public virtual DbSet<VippointHistory> VippointHistories { get; set; }
 
+    public virtual DbSet<TourFAQ> TourFAQs { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=localhost,1433;Database=GoEasy;User Id=sa;Password=123456;TrustServerCertificate=True;");
@@ -422,6 +424,7 @@ public partial class GoEasyContext : DbContext
             entity.Property(e => e.ChildPrice).HasColumnType("decimal(10, 2)");
             entity.Property(e => e.DestinationId).HasColumnName("DestinationID");
             entity.Property(e => e.TourName).HasMaxLength(100);
+            entity.Property(e => e.Status).HasDefaultValue(true);
 
             entity.HasOne(d => d.Category).WithMany(p => p.Tours)
                 .HasForeignKey(d => d.CategoryId)
@@ -456,6 +459,9 @@ public partial class GoEasyContext : DbContext
             entity.HasIndex(e => e.TourId, "UQ__TourDeta__604CEA11E63094B2").IsUnique();
 
             entity.Property(e => e.TourDetailId).HasColumnName("TourDetailID");
+            entity.Property(e => e.Included).HasMaxLength(1000);
+            entity.Property(e => e.Excluded).HasMaxLength(1000);
+            entity.Property(e => e.Activities).HasMaxLength(1000);
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetime())");
             entity.Property(e => e.TourId).HasColumnName("TourID");
 
@@ -548,6 +554,8 @@ public partial class GoEasyContext : DbContext
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__VIPPointH__UserI__0C85DE4D");
         });
+
+
 
         OnModelCreatingPartial(modelBuilder);
     }

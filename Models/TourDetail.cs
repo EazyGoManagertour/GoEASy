@@ -9,11 +9,13 @@ public partial class TourDetail
 
     public int? TourId { get; set; }
 
-    public string? Intro { get; set; }
+    public string? Description { get; set; }
 
     public string? Included { get; set; }
 
     public string? Excluded { get; set; }
+
+    public string? Activities { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 
