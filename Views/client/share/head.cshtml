@@ -1,4 +1,6 @@
-﻿<head>
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="description" content="">
@@ -7,25 +9,29 @@
 
     <!-- Title -->
     <title>Ravelo - Travel & Tour Booking HTML Template</title>
+
     <!-- Favicon Icon -->
-    <link rel="shortcut icon" href="assets/images/logos/favicon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="@Url.Content("~/assets/images/logos/favicon.png")" asp-append-version="true" type="image/x-icon">
+
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
 
     <!-- Flaticon -->
-    <link rel="stylesheet" href="assets/css/flaticon.min.css">
+    <link rel="stylesheet" href="@Url.Content("~/assets/css/flaticon.min.css")" asp-append-version="true" />
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="assets/css/fontawesome-5.14.0.min.css">
+    <link rel="stylesheet" href="@Url.Content("~/assets/css/fontawesome-5.14.0.min.css")" asp-append-version="true" />
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="@Url.Content("~/assets/css/bootstrap.min.css")" asp-append-version="true" />
     <!-- Magnific Popup -->
-    <link rel="stylesheet" href="assets/css/magnific-popup.min.css">
+    <link rel="stylesheet" href="@Url.Content("~/assets/css/magnific-popup.min.css")" asp-append-version="true" />
     <!-- Nice Select -->
-    <link rel="stylesheet" href="assets/css/nice-select.min.css">
+    <link rel="stylesheet" href="@Url.Content("~/assets/css/nice-select.min.css")" asp-append-version="true" />
+    <!-- jQuery UI -->
+    <link rel="stylesheet" href="@Url.Content("~/assets/css/jquery-ui.min.css")" asp-append-version="true" />
     <!-- Animate -->
-    <link rel="stylesheet" href="assets/css/aos.css">
+    <link rel="stylesheet" href="@Url.Content("~/assets/css/aos.css")" asp-append-version="true" />
     <!-- Slick -->
-    <link rel="stylesheet" href="assets/css/slick.min.css">
+    <link rel="stylesheet" href="@Url.Content("~/assets/css/slick.min.css")" asp-append-version="true" />
     <!-- Main Style -->
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="@Url.Content("~/assets/css/style.css")" asp-append-version="true" />
 </head>

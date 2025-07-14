@@ -1,0 +1,460 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+ @Html.Partial("~/Views/admin/share/head.cshtml")
+
+
+<body>
+    <!-- Header -->
+    @Html.Partial("~/Views/admin/share/header.cshtml")
+
+    <!-- Overlay for mobile -->
+    <div class="overlay" onclick="toggleSidebar()"></div>
+
+    <div class="container-content">
+        <!-- Sidebar -->
+        @Html.Partial("~/Views/admin/share/menu.cshtml")
+
+
+
+        <!-- Toast Notification Area (independent from sidebar and overlay) -->
+        <div id="toastArea"
+             aria-live="polite"
+             aria-atomic="true"
+             class="toast-container position-fixed top-0 end-0 p-3"
+             style="z-index: 1060; margin-top: 75px;">
+            <input type="hidden" id="toast-success-msg" value="@TempData["Success"]" />
+            <input type="hidden" id="toast-error-msg" value="@TempData["Error"]" />
+            <!-- Success Toast -->
+            <div class="toast align-items-center text-white bg-success border-0"
+                 id="successToast"
+                 role="alert"
+                 aria-live="assertive"
+                 aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        @TempData["Success"]
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+
+            <!-- Error Toast -->
+            <div class="toast align-items-center text-white bg-danger border-0"
+                 id="errorToast"
+                 role="alert"
+                 aria-live="assertive"
+                 aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        @TempData["Error"]
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-header">
+                <h1 class="content-title">Manage ContentApproval</h1>
+                <div class="action-buttons">
+                    @* <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
+                        <i class="fas fa-plus"></i>
+                        Add New
+                    </button> *@
+                    <!-- <button class="btn btn-success">
+                      <i class="fas fa-file-export"></i>
+                      Xuất Excel
+                    </button> -->
+                </div>
+            </div>
+
+
+            <!-- Table 2 -->
+            <div class="table-container">
+                <div class="table-header">
+
+                    <ul class="nav nav-tabs" id="userTab" role="tablist">
+
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="blog-tab" data-bs-toggle="tab" data-bs-target="#blog"
+                                    type="button" role="tab" aria-controls="blog" aria-selected="true">
+                                Blog
+                            </button>
+                        </li>
+
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="comment-blog-tab" data-bs-toggle="tab" data-bs-target="#comment-blog"
+                                    type="button" role="tab" aria-controls="comment-blog" aria-selected="false">
+                                Comment-Blog
+                            </button>
+                        </li>
+
+                         <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="comment-tour-tab" data-bs-toggle="tab" data-bs-target="#comment-tour"
+                                    type="button" role="tab" aria-controls="comment-tour" aria-selected="false">
+                                Comment-Tour
+                            </button>
+                        </li> 
+                    </ul>
+
+                </div>
+
+                <div class="tab-content" id="userTabContent">
+                    <!-- Settings Tab -->
+                    <div class="tab-pane fade show active" id="blog" role="tabpanel" aria-labelledby="blog-tab">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Title</th>
+                                    <th>Image</th>
+                                    <th>Preview</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            @* <tbody>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" />
+                                    </td>
+                                    
+                                    
+                                    <td>
+                                        <div class="action-btns">
+                                            <button class="action-btn edit" data-bs-toggle="modal" data-bs-target="#editModal">
+                                                <i class="fa-light fa-check"></i>
+
+                                            </button>
+                                            <button class="action-btn delete">
+                                                <i class="fa-light fa-xmark"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            </tbody> *@
+
+                            <tbody>
+                                @foreach (var blog in Model)
+                                {
+                                    
+
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" />
+                                        </td>
+                                        <td>@blog.Title</td>
+                                        <td>
+                                            @{
+                                                string avatar = "/image/default.jpg"; // đúng là "image" không có "s"
+
+                                                foreach (var img in blog.BlogImages)
+                                                {
+                                                    if (img.IsMain == true && !string.IsNullOrEmpty(img.ImageUrl))
+                                                    {
+                                                        avatar = "/" + img.ImageUrl.TrimStart('/'); // đảm bảo format đúng
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                            <img src="@avatar"
+                                                 width="60" height="45"
+                                                 style="object-fit: cover; border-radius: 4px;"
+                                                 onerror="this.src='/image/default.jpg'" />
+
+                                        </td>
+                                        
+                                        <td>
+                                            <a href="#" class="text-info preview-btn" data-id="@blog.BlogId">
+                                                <i class="fas fa-eye"></i> Preview
+                                            </a>
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="d-flex gap-2">
+                                                <form method="post" action="/admin/content-approval/approve">
+                                                    <input type="hidden" name="id" value="@blog.BlogId" />
+                                                    <button type="submit" class="action-btn edit">
+                                                        <i class="fas fa-check text-white"></i>
+                                                    </button>
+                                                </form>
+
+                                                <form method="post" action="/admin/content-approval/reject">
+                                                    <input type="hidden" name="id" value="@blog.BlogId" />
+                                                    <button type="submit" class="action-btn delete">
+                                                        <i class="fas fa-times text-white"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="tab-pane fade" id="comment-blog" role="tabpanel" aria-labelledby="comment-blog-tab">
+                         <table>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Password</th>
+                                    <th>Phone</th>
+                                    <th>Address</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" />
+                                    </td>
+                                    <td>
+                                        <div class="user-info">
+                                            Nguyễn Văn B
+                                        </div>
+                                    </td>
+                                    <td>caunguyen.221@gmail.com</td>
+                                    <td>********</td>
+                                    <td>0909090909</td>
+                                    <td>Quảng Nam</td>
+                                    <td>Normal</td>
+                                    <td><button class="status admit" style="border: none; outline: none;">Active</button></td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <button class="action-btn edit">
+                                                <i class="fa-light fa-check"></i>
+                                            </button>
+                                            <button class="action-btn delete">
+                                                <i class="fa-light fa-xmark"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" />
+                                    </td>
+                                    <td>
+                                        <div class="user-info">
+                                            Nguyễn Văn B
+                                        </div>
+                                    </td>
+                                    <td>caunguyen@gmail.com</td>
+                                    <td>********</td>
+                                    <td>0938080808</td>
+                                    <td>Quảng Nam Đà Nẵng</td>
+                                    <td>SVIP</td>
+                                    <td><button class="status admit" style="border: none; outline: none; background-color: #dc3545;">Disable</button></td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <button class="action-btn edit" data-bs-toggle="modal" data-bs-target="#editModal">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="action-btn delete">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table> 
+                    </div>
+
+                    <div class="tab-pane fade" id="comment-tour" role="tabpanel" aria-labelledby="comment-tour-tab">
+                         <table>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Password</th>
+                                    <th>Phone</th>
+                                    <th>Address</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" />
+                                    </td>
+                                    <td>
+                                        <div class="user-info">
+                                            Nguyễn Văn C
+                                        </div>
+                                    </td>
+                                    <td>caunguyen.221@gmail.com</td>
+                                    <td>********</td>
+                                    <td>0909090909</td>
+                                    <td>Quảng Nam</td>
+                                    <td>Normal</td>
+                                    <td><button class="status admit" style="border: none; outline: none;">Active</button></td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <button class="action-btn edit">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="action-btn delete">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" />
+                                    </td>
+                                    <td>
+                                        <div class="user-info">
+                                            Nguyễn Văn B
+                                        </div>
+                                    </td>
+                                    <td>caunguyen@gmail.com</td>
+                                    <td>********</td>
+                                    <td>0938080808</td>
+                                    <td>Quảng Nam Đà Nẵng</td>
+                                    <td>SVIP</td>
+                                    <td><button class="status admit" style="border: none; outline: none; background-color: #dc3545;">Disable</button></td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <button class="action-btn edit" data-bs-toggle="modal" data-bs-target="#editModal">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="action-btn delete">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table> 
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal fade" id="previewModal" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header text-white" style="background: #2ed573;">
+                    <h5 class="modal-title" id="previewTitle"></h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body px-4 py-3">
+                    <div class="mb-3">
+                        <strong>Author:</strong> <span id="previewAuthor" class="ms-1"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Short Description:</strong>
+                        <p class="text-muted mb-0" id="previewDescription"></p>
+                    </div>
+
+                    <div class="mb-4">
+                        <strong>Introduction:</strong>
+                        <p id="previewIntro"></p>
+                    </div>
+
+                    <hr />
+
+                    <div class="mb-4">
+                        <strong>Title 1:</strong>
+                        <h5 id="s1Title"></h5>
+                        <strong>Content 1:</strong>
+                        <p id="s1Content"></p>
+                    </div>
+
+                    <div class="mb-4">
+                        <strong>Title 2:</strong>
+                        <h5 id="s2Title"></h5>
+                        <strong>Content 2:</strong>
+                        <p id="s2Content"></p>
+                    </div>
+
+
+                    <div class="mb-3">
+                        <strong>Tags:</strong>
+                        <div id="previewTags" class="mt-1"></div>
+                    </div>
+
+                    <blockquote class="blockquote mb-4 border-start ps-3">
+                        <p class="mb-1 fst-italic" id="quote"></p>
+                        <footer class="blockquote-footer mt-1" id="quoteAuthor"></footer>
+                    </blockquote>
+
+
+                    <div class="mb-4">
+                        <strong>Main Image:</strong><br />
+                        <img id="mainImage" class="img-fluid rounded shadow-sm border" style="max-height: 300px;" />
+                    </div>
+
+                    <div class="mb-2">
+                        <strong>Gallery:</strong>
+                        <div id="galleryImages" class="row row-cols-2 row-cols-md-3 g-3 mt-1"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        document.querySelectorAll('.preview-btn').forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                const blogId = this.getAttribute('data-id');
+
+                fetch(`/admin/content-approval/get-blog-detail?blogId=${blogId}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        document.getElementById('previewTitle').textContent = data.title;
+                        document.getElementById('previewAuthor').textContent = data.author;
+                        document.getElementById('previewDescription').textContent = data.shortDescription;
+                        document.getElementById('previewIntro').textContent = data.introduction;
+
+                        document.getElementById('s1Title').textContent = data.section1Title;
+                        document.getElementById('s1Content').textContent = data.section1Content;
+                        document.getElementById('s2Title').textContent = data.section2Title;
+                        document.getElementById('s2Content').textContent = data.section2Content;
+
+                        document.getElementById('quote').textContent = data.quote;
+                        document.getElementById('quoteAuthor').textContent = data.quoteAuthor;
+                        document.getElementById('mainImage').src = data.mainImage || '/images/default.jpg';
+
+                        // gallery
+                        const gallery = document.getElementById('galleryImages');
+                        gallery.innerHTML = '';
+                        data.gallery.forEach(img => {
+                            gallery.innerHTML += `<div class="col-md-3"><img src="${img}" class="img-fluid rounded" /></div>`;
+                        });
+
+                        new bootstrap.Modal(document.getElementById('previewModal')).show();
+
+                                const tagContainer = document.getElementById('previewTags');
+                            tagContainer.innerHTML = '';
+                            data.tags.forEach(tag => {
+                                tagContainer.innerHTML += `<span class="badge bg-secondary me-1">${tag}</span>`;
+                            });
+                    });
+            });
+        });
+    </script>
+
+    @Html.Partial("~/Views/admin/share/script.cshtml")
+
+</body>
+</html>
