@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using GoEASy.Filters;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GoEASy.Controllers
 {
+    [AdminAuthorize]
     [Route("admin")]
     public class AdminController : Controller
     {

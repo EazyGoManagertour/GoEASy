@@ -1,4 +1,5 @@
-﻿using GoEASy.Models;
+﻿using GoEASy.Filters;
+using GoEASy.Models;
 using GoEASy.Repositories;
 using GoEASy.Services;
 using Microsoft.AspNetCore.Hosting;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace GoEASy.Controllers
 {
+    [AdminAuthorize]
     [Route("admin/blog")]
     public class BlogController : Controller
     {
