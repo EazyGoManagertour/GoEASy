@@ -1,3 +1,4 @@
+using GoEASy.Filters;
 using GoEASy.Models;
 using GoEASy.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace GoEASy.Controllers
 {
+    [AdminAuthorize]
     [Route("admin/user-manager")]
     public class UserManagerController : Controller
     {
