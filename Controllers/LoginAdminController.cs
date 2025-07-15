@@ -18,8 +18,16 @@ namespace GoEASy.Controllers
         [HttpGet("")]
         public IActionResult Index()
         {
+            // Nếu đã đăng nhập → chuyển hướng đến trang quản lý tài khoản
+            if (HttpContext.Session.GetInt32("AdminID") != null)
+            {
+                return RedirectToAction("account-admin", "admin"); // hoặc Dashboard, tùy bạn
+            }
+
+            // Chưa đăng nhập → hiển thị form đăng nhập
             return View("~/Views/Admin/LoginAdmin.cshtml");
         }
+
 
         // POST: /admin/login
         [HttpPost("")]
