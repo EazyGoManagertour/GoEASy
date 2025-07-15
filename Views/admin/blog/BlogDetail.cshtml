@@ -271,18 +271,18 @@
                             <label>Section 1 Title</label>
                             <input name="Section1Title" class="form-control" />
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <label>Section 1 Content</label>
-                            <textarea name="Section1Content" class="form-control"></textarea>
+                            <textarea name="Section1Content" id="section1Content" class="form-control"></textarea>
                         </div>
 
                         <div class="col-md-6">
                             <label>Section 2 Title</label>
                             <input name="Section2Title" class="form-control" />
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <label>Section 2 Content</label>
-                            <textarea name="Section2Content" class="form-control"></textarea>
+                            <textarea name="Section2Content" id="section2Content" class="form-control"></textarea>
                         </div>
 
                         <div class="col-md-6">
@@ -348,7 +348,7 @@
                             <label>Section 1 Title</label>
                             <input name="Section1Title" id="editS1Title" class="form-control" />
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <label>Section 1 Content</label>
                             <textarea name="Section1Content" id="editS1Content" class="form-control"></textarea>
                         </div>
@@ -357,7 +357,7 @@
                             <label>Section 2 Title</label>
                             <input name="Section2Title" id="editS2Title" class="form-control" />
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <label>Section 2 Content</label>
                             <textarea name="Section2Content" id="editS2Content" class="form-control"></textarea>
                         </div>
@@ -427,26 +427,61 @@
     </div>
 
 
+    <script src="https://cdn.ckeditor.com/ckeditor5/35.0.1/classic/ckeditor.js"></script>
+
     <script>
-        function fillEditDetail(btn) {
-            document.getElementById('editDetailId').value = btn.dataset.id;
-            document.getElementById('editIntro').value    = decodeURIComponent(btn.dataset.intro);
-            document.getElementById('editS1Title').value  = decodeURIComponent(btn.dataset.s1title);
-            document.getElementById('editS1Content').value= decodeURIComponent(btn.dataset.s1content);
-            document.getElementById('editS2Title').value  = decodeURIComponent(btn.dataset.s2title);
-            document.getElementById('editS2Content').value= decodeURIComponent(btn.dataset.s2content);
-            document.getElementById('editQuote').value    = decodeURIComponent(btn.dataset.quote);
+        ClassicEditor
+            .create(document.querySelector('#section1Content'))
+            .catch(error => {
+                console.error(error);
+            });
+
+        ClassicEditor
+            .create(document.querySelector('#section2Content'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+
+    <script>
+        let editorS1 = null;
+        let editorS2 = null;
+
+        async function fillEditDetail(btn) {
+            // Gán giá trị như cũ
+            document.getElementById('editDetailId').value    = btn.dataset.id;
+            document.getElementById('editIntro').value       = decodeURIComponent(btn.dataset.intro);
+            document.getElementById('editS1Title').value     = decodeURIComponent(btn.dataset.s1title);
+            document.getElementById('editS2Title').value     = decodeURIComponent(btn.dataset.s2title);
+            document.getElementById('editQuote').value       = decodeURIComponent(btn.dataset.quote);
             document.getElementById('editQuoteAuthor').value = decodeURIComponent(btn.dataset.quoteauthor);
 
+            // Gán dữ liệu CKEditor
+            const s1Content = decodeURIComponent(btn.dataset.s1content);
+            const s2Content = decodeURIComponent(btn.dataset.s2content);
 
-                   const selected = (btn.dataset.tags || "").split(',').map(Number);
-        document.querySelectorAll("input[name='selectedTags']").forEach(cb => {
-            cb.checked = selected.includes(parseInt(cb.value));
-        });
-        }
+            // Nếu đã khởi tạo rồi thì destroy trước
+            if (editorS1) await editorS1.destroy();
+            if (editorS2) await editorS2.destroy();
 
-        function setDeleteDetailId(id) {
-            document.getElementById('deleteDetailId').value = id;
+            // Gán lại textarea content trước khi khởi tạo
+            document.getElementById('editS1Content').value = s1Content;
+            document.getElementById('editS2Content').value = s2Content;
+
+            // Khởi tạo lại CKEditor
+            ClassicEditor.create(document.querySelector('#editS1Content'))
+                .then(editor => editorS1 = editor)
+                .catch(error => console.error('CKEditor Section1 error:', error));
+
+            ClassicEditor.create(document.querySelector('#editS2Content'))
+                .then(editor => editorS2 = editor)
+                .catch(error => console.error('CKEditor Section2 error:', error));
+
+            // Tags
+            const selected = (btn.dataset.tags || "").split(',').map(Number);
+            document.querySelectorAll("input[name='selectedTags']").forEach(cb => {
+                cb.checked = selected.includes(parseInt(cb.value));
+            });
         }
     </script>
 
