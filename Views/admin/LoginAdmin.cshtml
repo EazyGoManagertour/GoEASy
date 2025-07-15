@@ -1,12 +1,14 @@
-﻿<!DOCTYPE html>
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i%7COpen+Sans:300,300i,400,400i,600,600i,700,700i"
-          rel="stylesheet" />
-
-    <title>Admin Login - Travel Dashboard</title>
+    <title>Đăng Nhập Quản Trị - EasyGo Admin</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500&display=swap" rel="stylesheet" />
     <link href="~/css/style-login.css" rel="stylesheet" />
 </head>
 <body>
@@ -19,7 +21,7 @@
         </div>
 
         <div class="form-section">
-            <!-- Floating decorative elements -->
+            <!-- Biểu tượng trang trí -->
             <div class="floating-element">✈️</div>
             <div class="floating-element">🗺️</div>
             <div class="floating-element">🏖️</div>
@@ -31,7 +33,23 @@
                     <p>Admin Dashboard</p>
                 </div>
 
-                <form id="loginForm">
+                <!-- Thông báo lỗi/thành công -->
+                @if (TempData["Error"] != null)
+                {
+                    <div style="background: #fee; color: #c33; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center;">
+                        @TempData["Error"]
+                    </div>
+                }
+
+                @if (TempData["Success"] != null)
+                {
+                    <div style="background: #efe; color: #363; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center;">
+                        @TempData["Success"]
+                    </div>
+                }
+
+                <!-- Form đăng nhập Admin -->
+                <form id="loginForm" method="POST" action="/admin/login">
                     <div class="form-group">
                         <label for="username">Tên đăng nhập</label>
                         <input type="text" id="username" name="username" placeholder="Nhập tên đăng nhập" required>
@@ -55,40 +73,5 @@
             </div>
         </div>
     </div>
-
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            if (username && password) {
-                // Simulate login process
-                const btn = document.querySelector('.login-btn');
-                btn.innerHTML = 'Đang đăng nhập...';
-                btn.disabled = true;
-
-                setTimeout(() => {
-                    alert('Đăng nhập thành công! (Demo)');
-                    btn.innerHTML = 'Đăng nhập';
-                    btn.disabled = false;
-                }, 1500);
-            }
-        });
-
-        // Add smooth focus animations
-        const inputs = document.querySelectorAll('input[type="text"], input[type="password"]');
-        inputs.forEach(input => {
-            input.addEventListener('focus', function() {
-                this.parentElement.style.transform = 'scale(1.02)';
-                this.parentElement.style.transition = 'transform 0.3s ease';
-            });
-
-            input.addEventListener('blur', function() {
-                this.parentElement.style.transform = 'scale(1)';
-            });
-        });
-    </script>
 </body>
 </html>
