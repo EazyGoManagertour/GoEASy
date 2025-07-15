@@ -1,12 +1,13 @@
-using Microsoft.AspNetCore.Mvc;
+using GoEASy.Filters;
 using GoEASy.Models;
 using GoEASy.Services;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading.Tasks;
 
 namespace GoEASy.Controllers
 {
+    [AdminAuthorize]
     [Route("admin/user-manager")]
     public class UserManagerController : Controller
     {
@@ -17,166 +18,183 @@ namespace GoEASy.Controllers
             _userService = userService;
         }
 
-        // GET: Hiển thị danh sách users
+        // GET: admin/user-manager
         [HttpGet("")]
         public async Task<IActionResult> Index()
         {
             var users = await _userService.GetAllUsersAsync();
+            var roles = await _userService.GetAllRolesAsync();
+            
+            ViewBag.Roles = roles;
             return View("~/Views/admin/user_manager/UserManager.cshtml", users);
         }
 
-        // GET: Lấy thông tin user theo ID (cho edit)
-        [HttpGet("get/{id}")]
-        public async Task<IActionResult> GetUser(int id)
-        {
-            var user = await _userService.GetUserByIdAsync(id);
-            if (user == null)
-                return NotFound();
-            return Json(new
-            {
-                userId = user.UserId,
-                username = user.Username,
-                fullName = user.FullName,
-                email = user.Email,
-                phone = user.Phone,
-                address = user.Address,
-                isVip = user.IsVip,
-                vippoints = user.Vippoints,
-                roleId = user.RoleId,
-                status = user.Status
-            });
-        }
-
-        // POST: Thêm user mới
-        [HttpPost("add")]
-        public async Task<IActionResult> AddUser([FromBody] User user)
-        {
-            if (ModelState.IsValid)
-            {
-                // Validate user data
-                var (isValid, errors) = ValidationService.ValidateUser(user, false);
-                if (!isValid)
-                {
-                    return BadRequest(new { message = string.Join("; ", errors) });
-                }
-
-                if (await _userService.UsernameExistsAsync(user.Username))
-                {
-                    return BadRequest(new { message = "Username đã tồn tại!" });
-                }
-                if (!string.IsNullOrEmpty(user.Email) && await _userService.EmailExistsAsync(user.Email))
-                {
-                    return BadRequest(new { message = "Email đã tồn tại!" });
-                }
-
-                // Format data
-                user.FullName = ValidationService.FormatName(user.FullName);
-                user.Phone = ValidationService.FormatPhone(user.Phone);
-
-                await _userService.AddUserAsync(user);
-                return Json(new { success = true, message = "Thêm user thành công!" });
-            }
-            return BadRequest(new { message = "Dữ liệu không hợp lệ!" });
-        }
-
-        // PUT: Cập nhật user
-        [HttpPut("update/{id}")]
-        public async Task<IActionResult> UpdateUser(int id, [FromBody] User userUpdate)
+        // POST: admin/user-manager/create
+        [HttpPost("create")]
+        public async Task<IActionResult> Create(User user)
         {
             try
             {
-                // Kiểm tra userUpdate có null không
-                if (userUpdate == null)
-                {
-                    return BadRequest(new { message = "Dữ liệu cập nhật không hợp lệ!" });
-                }
+                // Format dữ liệu trước khi validate
+                user.FullName = ValidationService.FormatName(user.FullName);
+                user.Phone = ValidationService.FormatPhone(user.Phone);
 
-                var user = await _userService.GetUserByIdAsync(id);
-                if (user == null)
-                    return NotFound();
-
-                // Validate user data
-                var (isValid, errors) = ValidationService.ValidateUser(userUpdate, true);
+                // Validate sử dụng ValidationService
+                var (isValid, errors) = ValidationService.ValidateUser(user, isUpdate: false);
                 if (!isValid)
                 {
-                    return BadRequest(new { message = string.Join("; ", errors) });
+                    TempData["Error"] = string.Join("; ", errors);
+                    return RedirectToAction("Index");
                 }
 
-                // Kiểm tra username
-                if (string.IsNullOrEmpty(userUpdate.Username))
+                // Validate unique username and email
+                if (await _userService.UsernameExistsAsync(user.Username))
                 {
-                    return BadRequest(new { message = "Username không được để trống!" });
+                    TempData["Error"] = "Username đã tồn tại.";
+                    return RedirectToAction("Index");
                 }
 
-                if (await _userService.UsernameExistsAsync(userUpdate.Username, id))
+                if (!string.IsNullOrEmpty(user.Email) && await _userService.EmailExistsAsync(user.Email))
                 {
-                    return BadRequest(new { message = "Username đã tồn tại!" });
+                    TempData["Error"] = "Email đã tồn tại.";
+                    return RedirectToAction("Index");
                 }
 
-                if (!string.IsNullOrEmpty(userUpdate.Email) && await _userService.EmailExistsAsync(userUpdate.Email, id))
-                {
-                    return BadRequest(new { message = "Email đã tồn tại!" });
-                }
+                user.CreatedAt = DateTime.Now;
+                await _userService.CreateUserAsync(user);
 
-                // Cập nhật các trường với null safety
-                user.Username = userUpdate.Username;
-                user.FullName = ValidationService.FormatName(userUpdate.FullName ?? user.FullName);
-                user.Email = userUpdate.Email;
-                user.Phone = ValidationService.FormatPhone(userUpdate.Phone);
-                user.Address = userUpdate.Address;
-                user.IsVip = userUpdate.IsVip ?? user.IsVip;
-                user.Vippoints = userUpdate.Vippoints ?? user.Vippoints;
-                user.RoleId = userUpdate.RoleId ?? user.RoleId;
-                user.Status = userUpdate.Status ?? user.Status;
-
-                // Chỉ cập nhật password nếu có thay đổi và không trống
-                if (!string.IsNullOrEmpty(userUpdate.Password))
-                {
-                    user.Password = userUpdate.Password;
-                }
-                // Nếu password trống, giữ nguyên password cũ (không thay đổi)
-
-                await _userService.UpdateUserAsync(user);
-                return Json(new { success = true, message = "Cập nhật user thành công!" });
+                TempData["Success"] = "Thêm user thành công!";
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = $"Lỗi khi cập nhật: {ex.Message}" });
+                TempData["Error"] = "Lỗi khi tạo user: " + ex.Message;
             }
+
+            return RedirectToAction("Index");
         }
 
-        // DELETE: Xóa user
-        [HttpDelete("delete/{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
+        // POST: admin/user-manager/update
+        [HttpPost("update")]
+        public async Task<IActionResult> Update(User user)
         {
-            var user = await _userService.GetUserByIdAsync(id);
-            if (user == null)
-                return NotFound();
-            await _userService.DeleteUserAsync(id);
-            return Json(new { success = true, message = "Xóa user thành công!" });
+            try
+            {
+                if (user.UserId == 0)
+                {
+                    TempData["Error"] = "Dữ liệu cập nhật không hợp lệ!";
+                    return RedirectToAction("Index");
+                }
+
+                var existingUser = await _userService.GetUserByIdAsync(user.UserId);
+                if (existingUser == null)
+                {
+                    TempData["Error"] = "Không tìm thấy user!";
+                    return RedirectToAction("Index");
+                }
+
+                // Format dữ liệu trước khi validate
+                user.FullName = ValidationService.FormatName(user.FullName);
+                user.Phone = ValidationService.FormatPhone(user.Phone);
+
+                // Validate sử dụng ValidationService (isUpdate = true)
+                var (isValid, errors) = ValidationService.ValidateUser(user, isUpdate: true);
+                if (!isValid)
+                {
+                    TempData["Error"] = string.Join("; ", errors);
+                    return RedirectToAction("Index");
+                }
+
+                // Validate unique username and email (excluding current user)
+                if (await _userService.UsernameExistsAsync(user.Username, user.UserId))
+                {
+                    TempData["Error"] = "Username đã tồn tại.";
+                    return RedirectToAction("Index");
+                }
+
+                if (!string.IsNullOrEmpty(user.Email) && await _userService.EmailExistsAsync(user.Email, user.UserId))
+                {
+                    TempData["Error"] = "Email đã tồn tại.";
+                    return RedirectToAction("Index");
+                }
+
+                // Update user properties
+                existingUser.Username = user.Username;
+                existingUser.FullName = user.FullName;
+                existingUser.Email = user.Email;
+                if (!string.IsNullOrEmpty(user.Password))
+                    existingUser.Password = user.Password;
+                existingUser.Phone = user.Phone;
+                existingUser.Address = user.Address;
+                existingUser.RoleId = user.RoleId;
+                existingUser.IsVip = user.IsVip;
+                existingUser.Vippoints = user.Vippoints;
+                existingUser.Status = user.Status;
+                existingUser.UpdatedAt = DateTime.Now;
+
+                await _userService.UpdateUserAsync(existingUser);
+
+                TempData["Success"] = "Cập nhật user thành công!";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Lỗi khi cập nhật user: " + ex.Message;
+            }
+
+            return RedirectToAction("Index");
         }
 
-        // POST: Thay đổi trạng thái user
+        // POST: admin/user-manager/delete-confirm
+        [HttpPost("delete-confirm")]
+        public async Task<IActionResult> DeleteConfirm(int id)
+        {
+            try
+            {
+                var user = await _userService.GetUserByIdAsync(id);
+                if (user == null)
+                {
+                    TempData["Error"] = "Không tìm thấy user!";
+                    return RedirectToAction("Index");
+                }
+
+                await _userService.DeleteUserAsync(id);
+                TempData["Success"] = "Xóa user thành công!";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Lỗi khi xóa user: " + ex.Message;
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        // POST: admin/user-manager/toggle-status/{id}
         [HttpPost("toggle-status/{id}")]
         public async Task<IActionResult> ToggleStatus(int id)
         {
-            var user = await _userService.GetUserByIdAsync(id);
-            if (user == null)
-                return NotFound();
-            await _userService.ToggleStatusAsync(id);
-            return Json(new {
-                success = true,
-                message = (user.Status == true ? "Kích hoạt user thành công!" : "Vô hiệu hóa user thành công!"),
-                status = user.Status
-            });
+            try
+            {
+                await _userService.ToggleStatusAsync(id);
+                return Json(new { success = true, message = "Cập nhật trạng thái user thành công!" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Lỗi khi cập nhật trạng thái: " + ex.Message });
+            }
         }
 
-        // GET: Lấy danh sách roles
-        [HttpGet("roles")]
+        // GET: admin/user-manager/get-roles
+        [HttpGet("get-roles")]
         public async Task<IActionResult> GetRoles()
         {
-            var roles = await _userService.GetAllRolesAsync();
-            return Json(roles);
+            try
+            {
+                var roles = await _userService.GetAllRolesAsync();
+                return Json(roles);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = ex.Message });
+            }
         }
     }
-} 
+}
