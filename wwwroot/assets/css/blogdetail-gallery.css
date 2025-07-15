@@ -1,0 +1,18 @@
+﻿.carousel-item .image {
+    height: 400px; /* Điều chỉnh chiều cao theo ý muốn */
+    overflow: hidden;
+}
+
+    .carousel-item .image img {
+        height: 100%;
+        object-fit: cover;
+    }
+
+.carousel-indicators button {
+    background-color: #007bff;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    filter: invert(100%);
+}
