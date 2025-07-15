@@ -1,11 +1,13 @@
-﻿using GoEASy.Services;
+﻿using GoEASy.Filters;
+using GoEASy.Models;
+using GoEASy.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
-using GoEASy.Models;
 
 namespace GoEASy.Controllers
 {
+    [AdminAuthorize]
     [Route("admin/content-approval")]
     public class ContentApprovalController : Controller
     {

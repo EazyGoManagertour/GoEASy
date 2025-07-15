@@ -1,15 +1,17 @@
+using GoEASy.Filters;
 using GoEASy.Models;
 using GoEASy.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
 namespace GoEASy.Controllers
 {
+    [AdminAuthorize]
     [Route("booking")]
     public class BookingController : Controller
     {
