@@ -469,8 +469,54 @@
                                 <div>Chưa có bình luận nào.</div>
                             }
                         </div>
+                        @if (ViewBag.TotalPages > 1)
+                        {
+                            <div class="d-flex justify-content-center my-4">
+                                <nav aria-label="Page navigation">
+                                    <ul class="pagination pt-15 flex-wrap" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                                        <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                                            <a class="page-link" href="/tour-details/@Model.TourId?page=@(ViewBag.CurrentPage - 1)" tabindex="-1"><i class="far fa-chevron-left"></i></a>
+                                        </li>
+                                        @{
+                                            int startPage = Math.Max(1, ViewBag.CurrentPage - 1);
+                                            int endPage = Math.Min((int)ViewBag.TotalPages, ViewBag.CurrentPage + 1);
+                                            if (startPage > 1)
+                                            {
+                                                <li class="page-item"><a class="page-link" href="/tour-details/@Model.TourId?page=1">1</a></li>
+                                                if (startPage > 2)
+                                                {
+                                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                                }
+                                            }
+                                            for (int i = startPage; i <= endPage; i++)
+                                            {
+                                                if (i == ViewBag.CurrentPage)
+                                                {
+                                                    <li class="page-item active"><span class="page-link">@i</span></li>
+                                                }
+                                                else
+                                                {
+                                                    <li class="page-item"><a class="page-link" href="/tour-details/@Model.TourId?page=@i">@i</a></li>
+                                                }
+                                            }
+                                            if (endPage < (int)ViewBag.TotalPages)
+                                            {
+                                                if (endPage < (int)ViewBag.TotalPages - 1)
+                                                {
+                                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                                }
+                                                <li class="page-item"><a class="page-link" href="/tour-details/@Model.TourId?page=@ViewBag.TotalPages">@ViewBag.TotalPages</a></li>
+                                            }
+                                        }
+                                        <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                                            <a class="page-link" href="/tour-details/@Model.TourId?page=@(ViewBag.CurrentPage + 1)"><i class="far fa-chevron-right"></i></a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        }
                         
-                        <h3>Thêm bình luận</h3>
+                        <h3 class="mt-4">Thêm bình luận</h3>
                         @if (ViewBag.CanComment == true)
                         {
                         <form id="comment-form" class="comment-form bgc-lighter z-1 rel mt-30" name="review-form" action="/review/post" method="post" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
@@ -628,21 +674,14 @@
                                         </li>
                                     </ul>
                                     <hr class="mb-25">
-                                    <h6>Add Extra:</h6>
-                                    <ul class="radio-filter pt-5">
-                                        <li>
-                                            <input class="form-check-input" checked type="radio" name="AddExtra" id="add-extra1" value="50">
-                                            <label for="add-extra1">Add service per booking <span>50</span></label>
-                                        </li>
-                                        <li>
-                                            <input class="form-check-input" type="radio" name="AddExtra" id="add-extra2" value="24">
-                                            <label for="add-extra2">Add service per personal <span>24</span></label>
-                                        </li>
-                                        <li>
-                                            <input class="form-check-input" type="radio" name="AddExtra" id="add-extra0" value="0">
-                                            <label for="add-extra0">No extra</label>
-                                        </li>
-                                    </ul>
+                                    <h6>Mã giảm giá:</h6>
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" name="discountCode" id="discountCode" placeholder="Nhập mã giảm giá" autocomplete="off">
+                                        <button class="btn btn-outline-secondary" type="button" id="checkDiscountBtn">Áp dụng</button>
+                                    </div>
+                                    <div id="discountMessage" style="color: #28a745; font-size: 0.95em; min-height: 22px;"></div>
+                                    <input type="hidden" name="discountId" id="discountId" value="" />
+                                    <input type="hidden" name="discountAmount" id="discountAmount" value="0" />
                                     <hr>
                                     <h6>Total: <span class="price" id="totalPrice">0</span> đ</h6>
                                     <button type="button" id="calculateBtn" class="theme-btn style-two w-100 mt-15 mb-5">
@@ -691,29 +730,6 @@
                                 });
                             </script>
                             
-                            <div class="widget widget-contact" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                                <h5 class="widget-title">Need Help?</h5>
-                                <ul class="list-style-one">
-                                    <li><i class="far fa-envelope"></i> <a href="emilto:helpxample@gmail.com">helpxample@gmail.com</a></li>
-                                    <li><i class="far fa-phone-volume"></i> <a href="callto:+000(123)45688">+000 (123) 456 88</a></li>
-                                </ul>
-                            </div>
-                            
-                            <div class="widget widget-cta" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                                <div class="content text-white">
-                                    <span class="h6">Explore The World</span>
-                                    <h3>Best Tourist Place</h3>
-                                    <a href="tour-grid.html" class="theme-btn style-two bgc-secondary">
-                                        <span data-hover="Explore Now">Explore Now</span>
-                                        <i class="fal fa-arrow-right"></i>
-                                    </a>
-                                </div>
-                                <div class="image">
-                                    <img src="@Url.Content("~/assets/images/widgets/cta-widget.png")" alt="CTA">
-                                </div>
-                                <div class="cta-shape"><img src="@Url.Content("~/assets/images/widgets/cta-shape3.png")" alt="Shape"></div>
-                            </div>
-                            
                         </div>
                     </div>
                 </div>
@@ -754,8 +770,8 @@
         @Html.Partial("~/Views/client/share/footer-area.cshtml")
     </div>
     <script src="/assets/js/jquery-3.6.0.min.js"></script>
-    <!-- Bootstrap -->
-    <script src="/assets/js/bootstrap.min.js"></script>
+
+  
     <!-- Appear Js -->
     <script src="/assets/js/appear.min.js"></script>
     <!-- Slick -->
@@ -893,5 +909,81 @@
             }
         });
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var checkDiscountBtn = document.getElementById('checkDiscountBtn');
+            var discountCodeInput = document.getElementById('discountCode');
+            var discountMessage = document.getElementById('discountMessage');
+            var discountIdInput = document.getElementById('discountId');
+            var discountAmountInput = document.getElementById('discountAmount');
+            var discountValueSpan = document.getElementById('discountValue');
+            var totalPriceSpan = document.getElementById('totalPrice');
+            var totalPriceInput = document.getElementById('totalPriceInput');
+            var adultQty = document.getElementById('adultQty');
+            var childQty = document.getElementById('childQty');
+
+            function getBaseTotal() {
+                var adult = parseInt(adultQty.value) || 0;
+                var child = parseInt(childQty.value) || 0;
+                var adultPrice = @(((decimal)Model.AdultPrice).ToString(System.Globalization.CultureInfo.InvariantCulture));
+                var childPrice = @(((decimal)Model.ChildPrice).ToString(System.Globalization.CultureInfo.InvariantCulture));
+                return (adult * adultPrice) + (child * childPrice);
+            }
+
+            function updateTotalWithDiscount(discountAmount, discountText) {
+                var baseTotal = getBaseTotal();
+                var finalTotal = Math.max(0, baseTotal - discountAmount);
+                totalPriceSpan.innerText = finalTotal.toLocaleString();
+                totalPriceInput.value = finalTotal;
+                discountAmountInput.value = discountAmount;
+                if (discountText) {
+                    discountMessage.innerText = discountText;
+                }
+            }
+
+            checkDiscountBtn.addEventListener('click', function() {
+                var code = discountCodeInput.value.trim();
+                var baseTotal = getBaseTotal();
+                if (!code) {
+                    discountMessage.innerText = 'Vui lòng nhập mã giảm giá.';
+                    discountIdInput.value = '';
+                    updateTotalWithDiscount(0, '');
+                    return;
+                }
+                discountMessage.innerText = 'Đang kiểm tra...';
+                fetch('/booking/check-discount?code=' + encodeURIComponent(code) + '&total=' + baseTotal)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            let percent = data.percentage ? `Được giảm ${data.percentage}%` : '';
+                            let max = data.maxAmount ? ` (tối đa ${parseInt(data.maxAmount).toLocaleString()} đ)` : '';
+                            let text = percent + max;
+                            discountIdInput.value = data.discountId;
+                            updateTotalWithDiscount(data.discountAmount, text);
+                        } else {
+                            discountMessage.innerText = data.message || 'Mã không hợp lệ.';
+                            discountIdInput.value = '';
+                            updateTotalWithDiscount(0, '');
+                        }
+                    })
+                    .catch(() => {
+                        discountMessage.innerText = 'Lỗi kiểm tra mã.';
+                        discountIdInput.value = '';
+                        updateTotalWithDiscount(0, '');
+                    });
+            });
+
+            // Khi thay đổi số lượng vé, reset discount
+            [adultQty, childQty].forEach(function(el) {
+                el.addEventListener('change', function() {
+                    discountIdInput.value = '';
+                    discountCodeInput.value = '';
+                    discountMessage.innerText = '';
+                    updateTotalWithDiscount(0, '');
+                });
+            });
+        });
+    </script>
+    @Html.Partial("~/Views/client/share/script.cshtml")
 </body>
 </html> 
