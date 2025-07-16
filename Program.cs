@@ -44,6 +44,7 @@ builder.Services.AddScoped<IBlogService, BlogService>();
 
 builder.Services.AddScoped<IBlogDetailService, BlogDetailService>();
 
+builder.Services.AddScoped<IDiscountService, DiscountService>();
 
 var app = builder.Build();
 

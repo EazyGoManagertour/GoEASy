@@ -1,13 +1,15 @@
+using GoEASy.Filters;
 using GoEASy.Models;
 using GoEASy.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace GoEASy.Controllers
 {
+    [AdminAuthorize]
     [Route("admin/destination-admin")]
     public class AdminDestinationController : Controller
     {
