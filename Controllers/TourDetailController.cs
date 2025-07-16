@@ -29,7 +29,7 @@ namespace GoEASy.Controllers
             ViewBag.ExcludedList = _tourService.GetExcludedList(tour);
             ViewBag.ActivitiesList = _tourService.GetActivitiesList(tour);
             ViewBag.Itineraries = await _tourService.GetTourItinerariesAsync(id);
-            ViewBag.FAQs = await _tourService.GetTourFAQsAsync(id);
+            ViewBag.FAQs = await _tourService.GetTourFaqsAsync(id);
 
             // Lấy feedback (review) cho tour này, order mới nhất trước
             var feedbacks = await _context.Reviews

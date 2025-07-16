@@ -379,9 +379,9 @@ namespace GoEASy.Services
                 .ToListAsync();
         }
 
-        public async Task<List<TourFAQ>> GetTourFAQsAsync(int tourId)
+        public async Task<List<TourFaq>> GetTourFaqsAsync(int tourId)
         {
-            return await _context.TourFAQs
+            return await _context.TourFaqs
                 .Where(faq => faq.TourId == tourId)
                 .ToListAsync();
         }

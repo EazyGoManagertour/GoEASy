@@ -47,9 +47,9 @@ public partial class Tour
 
     public virtual TourDetail? TourDetail { get; set; }
 
+    public virtual ICollection<TourFaq> TourFaqs { get; set; } = new List<TourFaq>();
+
     public virtual ICollection<TourImage> TourImages { get; set; } = new List<TourImage>();
 
     public virtual ICollection<TourItinerary> TourItineraries { get; set; } = new List<TourItinerary>();
-
-    public virtual ICollection<TourFAQ> TourFAQs { get; set; } = new List<TourFAQ>();
 }

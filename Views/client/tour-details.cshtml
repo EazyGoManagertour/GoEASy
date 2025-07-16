@@ -318,9 +318,9 @@
                             @if (ViewBag.FAQs != null)
                             {
                                 int idx = 0;
-                                foreach (var faq in (IEnumerable<GoEASy.Models.TourFAQ>)ViewBag.FAQs)
+                                foreach (var faq in (IEnumerable<GoEASy.Models.TourFaq>)ViewBag.FAQs)
                                 {
-                                    var collapseId = $"collapseFaq{faq.FaqId}";
+                                    var collapseId = $"collapseFaq{faq.Faqid}";
                                     <div class="accordion-item">
                                         <h5 class="accordion-header">
                                             <button class="accordion-button @(idx == 0 ? "" : "collapsed")" type="button" data-bs-toggle="collapse" data-bs-target="#@collapseId" aria-expanded="@(idx == 0 ? "true" : "false")">
