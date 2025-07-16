@@ -43,7 +43,7 @@ namespace GoEASy.Controllers
 
                 // Lấy tất cả admin và kiểm tra
                 var allAdmins = await _adminService.GetAllAdminsAsync();
-                var admin = allAdmins.FirstOrDefault(a => a.Username == username && a.Password == password && a.Status == true);
+                var admin = allAdmins.FirstOrDefault(a => a.Username == username && BCrypt.Net.BCrypt.Verify(password, a.Password) && a.Status == true);
 
                 if (admin != null)
                 {
