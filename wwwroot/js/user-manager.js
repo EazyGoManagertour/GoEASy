@@ -4,7 +4,7 @@ function setDeleteUserId(id) {
 }
 
 // Fill edit modal with user data
-function fillEditModal(id, username, password, fullname, email, phone, address, role, isvip, vippoints, status) {
+function fillEditModal(id, username, password, fullname, email, phone, address, sex, role, isvip, vippoints, status) {
     document.getElementById("editUserID").value = id;
     document.getElementById("editUsername").value = username;
     document.getElementById("editPassword").value = ""; // ❗ Bảo mật: để trống!
@@ -12,6 +12,7 @@ function fillEditModal(id, username, password, fullname, email, phone, address, 
     document.getElementById("editEmail").value = email;
     document.getElementById("editPhone").value = phone;
     document.getElementById("editAddress").value = address;
+    document.getElementById("editSex").value = sex;
     document.getElementById("editRole").value = role;
     document.getElementById("editIsVip").value = isvip;
     document.getElementById("editVippoints").value = vippoints;

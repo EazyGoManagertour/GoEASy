@@ -528,6 +528,7 @@ public partial class GoEasyContext : DbContext
             entity.Property(e => e.Password).HasMaxLength(255);
             entity.Property(e => e.Phone).HasMaxLength(15);
             entity.Property(e => e.RoleId).HasColumnName("RoleID");
+            entity.Property(e => e.Sex).HasMaxLength(10);
             entity.Property(e => e.Status).HasDefaultValue(true);
             entity.Property(e => e.UpdatedAt).HasDefaultValueSql("(sysdatetime())");
             entity.Property(e => e.Username).HasMaxLength(50);

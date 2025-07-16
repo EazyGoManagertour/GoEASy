@@ -30,7 +30,7 @@ public partial class User
     public DateTime? CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
-
+    public string? Sex { get; set; }
     public virtual ICollection<AccessLog> AccessLogs { get; set; } = new List<AccessLog>();
 
     public virtual ICollection<BlogComment> BlogComments { get; set; } = new List<BlogComment>();

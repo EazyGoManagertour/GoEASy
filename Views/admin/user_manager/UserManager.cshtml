@@ -82,6 +82,7 @@
                             <th>Username</th>
                             <th>Phone</th>
                             <th>Address</th>
+                            <th>Sex</th>
                             <th>Role</th>
                             <th>VIP</th>
                             <th>Vippoints</th>
@@ -100,6 +101,7 @@
                                 <td>@user.Username</td> 
                                 <td>@user.Phone</td>
                                 <td>@user.Address</td>
+                                <td>@user.Sex</td>
                                 <td>@user.Role?.RoleName</td>
                                 <td>@(user.IsVip == true ? "VIP" : "Regular")</td>
                                 <td>@user.Vippoints</td>
@@ -122,6 +124,7 @@
                                                 '@user.Email',
                                                 '@user.Phone',
                                                 '@user.Address',
+                                                '@user.Sex',
                                                 '@user.RoleId',
                                                 '@(user.IsVip == true ? "true" : "false")',
                                                 '@user.Vippoints',
@@ -178,6 +181,13 @@
                         <div class="mb-3">
                             <label for="addAddress" class="form-label">Address</label>
                             <input type="text" class="form-control" id="addAddress" name="Address" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="addSex" class="form-label">Sex</label>
+                            <select class="form-control" id="addSex" name="Sex" required>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label for="addRole" class="form-label">Role</label>
@@ -275,6 +285,13 @@
                             <select class="form-control" id="editStatus" name="Status" required>
                                 <option value="true">Active</option>
                                 <option value="false">Disable</option>
+                            </select>
+                        </div>
+                        <div class="mb-3"></div>
+                            <label for="editSex" class="form-label">Sex</label>
+                            <select class="form-control" id="editSex" name="Sex" required>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
                             </select>
                         </div>
 

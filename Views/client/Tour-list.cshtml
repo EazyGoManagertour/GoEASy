@@ -17,6 +17,15 @@
     <link rel="stylesheet" href="/assets/css/style.css">
 
     <style>
+        .heart {
+            opacity: 0.4;
+            transition: opacity 0.2s;
+            cursor: pointer;
+        }
+        .heart.active {
+            opacity: 1;
+            color: #e74c3c;
+        }
         .filter-item {
             margin-bottom: 15px;
         }
@@ -309,7 +318,7 @@
                                         {
                                             <span class="badge bgc-primary">Popular</span>
                                         }
-                                        <a href="#" class="heart"><i class="fas fa-heart"></i></a>
+                                        <a href="javascript:void(0);" class="heart"><i class="fas fa-heart"></i></a>
                                         <img src="@coverImage" alt="@tour.TourName" class="tour-img-fixed">
                                     </div>
                                     <div class="content">

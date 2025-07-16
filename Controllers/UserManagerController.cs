@@ -60,6 +60,11 @@ namespace GoEASy.Controllers
                     return RedirectToAction("Index");
                 }
 
+                if (string.IsNullOrEmpty(user.Sex))
+                {
+                    user.Sex = "Male";
+                }
+
                 user.CreatedAt = DateTime.Now;
                 await _userService.CreateUserAsync(user);
 
@@ -125,6 +130,7 @@ namespace GoEASy.Controllers
                     existingUser.Password = user.Password;
                 existingUser.Phone = user.Phone;
                 existingUser.Address = user.Address;
+                existingUser.Sex = user.Sex;
                 existingUser.RoleId = user.RoleId;
                 existingUser.IsVip = user.IsVip;
                 existingUser.Vippoints = user.Vippoints;

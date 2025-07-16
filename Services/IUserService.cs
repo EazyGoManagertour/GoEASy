@@ -17,5 +17,6 @@ namespace GoEASy.Services
         Task DeleteUserAsync(int id);
         Task ToggleStatusAsync(int id);
         Task<IEnumerable<Role>> GetAllRolesAsync();
+        Task<IEnumerable<User>> GetUsersBySexAsync(string sex);
     }
-} 
+}
