@@ -1,13 +1,15 @@
-﻿using GoEASy.Models;
+﻿using BCrypt.Net;
+using GoEASy.Filters;
+using GoEASy.Models;
 using GoEASy.Services;
 using Microsoft.AspNetCore.Mvc;
-using BCrypt.Net;
 using System;
 using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace GoEASy.Controllers
 {
+    [AdminAuthorize]
     [Route("admin/account-admin")]
     public class AccountAdminController : Controller
     {

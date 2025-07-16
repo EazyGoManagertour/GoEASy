@@ -1,59 +1,85 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using GoEASy.Models;
 using GoEASy.Services;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GoEASy.Controllers
 {
-    [Route("Admin/login")]
+    [Route("admin/login")]
     public class LoginAdminController : Controller
     {
-        private readonly IUserService _userService;
-        public LoginAdminController(IUserService userService)
+        private readonly IAdminService _adminService;
+
+        public LoginAdminController(IAdminService adminService)
         {
-            _userService = userService;
+            _adminService = adminService;
         }
 
+        // GET: /admin/login
         [HttpGet("")]
         public IActionResult Index()
         {
-            return View("~/Views/admin/LoginAdmin.cshtml");
+            // Nếu đã đăng nhập → chuyển hướng đến trang quản lý tài khoản
+            if (HttpContext.Session.GetInt32("AdminID") != null)
+            {
+                return RedirectToAction("account-admin", "admin"); // hoặc Dashboard, tùy bạn
+            }
+
+            // Chưa đăng nhập → hiển thị form đăng nhập
+            return View("~/Views/Admin/LoginAdmin.cshtml");
         }
 
+
+        // POST: /admin/login
         [HttpPost("")]
         public async Task<IActionResult> Login(string username, string password)
         {
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            try
             {
-                TempData["Error"] = "Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu.";
-                return View("~/Views/admin/LoginAdmin.cshtml");
-            }
+                if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+                {
+                    TempData["Error"] = "Vui lòng nhập tên đăng nhập và mật khẩu.";
+                    return RedirectToAction("Index");
+                }
 
-            var user = await _userService.GetUserByUsernameAsync(username);
-            if (user == null || user.Password != password)
-            {
-                TempData["Error"] = "Tên đăng nhập hoặc mật khẩu không đúng.";
-                return View("~/Views/admin/LoginAdmin.cshtml");
-            }
+                // Lấy tất cả admin và kiểm tra
+                var allAdmins = await _adminService.GetAllAdminsAsync();
+                var admin = allAdmins.FirstOrDefault(a => a.Username == username && a.Password == password && a.Status == true);
 
-            // Lưu thông tin user vào session
-            HttpContext.Session.SetInt32("UserId", user.UserId);
-            HttpContext.Session.SetInt32("RoleId", user.RoleId ?? 1);
-            HttpContext.Session.SetString("FullName", user.FullName);
+                if (admin != null)
+                {
+                    // Tạo session cho admin
+                    HttpContext.Session.SetInt32("AdminID", admin.AdminId);
+                    HttpContext.Session.SetString("AdminUsername", admin.Username);
+                    HttpContext.Session.SetString("AdminFullName", admin.FullName);
+                    HttpContext.Session.SetString("AdminRole", admin.Role);
 
-            // Redirect theo role
-            if (user.RoleId == 1)
-            {
-                return RedirectToAction("Index", "Home");
+                    TempData["Success"] = "Đăng nhập quản trị thành công!";
+                    return RedirectToAction("category", "admin"); // Có thể điều chỉnh controller/action sau đăng nhập
+                }
+                else
+                {
+                    TempData["Error"] = "Tên đăng nhập hoặc mật khẩu không đúng, hoặc tài khoản bị vô hiệu hóa.";
+                    return RedirectToAction("Index");
+                }
             }
-            else if (user.RoleId == 2)
+            catch (Exception ex)
             {
-                return RedirectToAction("Index", "ProviderTour");
+                TempData["Error"] = "Lỗi hệ thống: " + ex.Message;
+                return RedirectToAction("Index");
             }
-            else // fallback: admin hoặc role khác
-            {
-                return RedirectToAction("Index", "AdminTour");
-            }
+        }
+
+        // POST: /admin/logout
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Remove("AdminID");
+            HttpContext.Session.Remove("AdminUsername");
+            HttpContext.Session.Remove("AdminFullName");
+            HttpContext.Session.Remove("AdminRole");
+
+            TempData["Success"] = "Đăng xuất quản trị thành công.";
+            return RedirectToAction("Index");
         }
     }
 }

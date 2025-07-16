@@ -410,9 +410,11 @@
         </div>
     </div>
 
-
-
+    <script src="https://cdn.ckeditor.com/ckeditor5/35.0.1/classic/ckeditor.js"></script>
+  
     <script>
+                           let section1Editor, section2Editor;
+
         document.querySelectorAll('.preview-btn').forEach(btn => {
             btn.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -420,35 +422,42 @@
 
                 fetch(`/admin/content-approval/get-blog-detail?blogId=${blogId}`)
                     .then(res => res.json())
-                    .then(data => {
+                    .then(async data => {
                         document.getElementById('previewTitle').textContent = data.title;
                         document.getElementById('previewAuthor').textContent = data.author;
                         document.getElementById('previewDescription').textContent = data.shortDescription;
                         document.getElementById('previewIntro').textContent = data.introduction;
 
                         document.getElementById('s1Title').textContent = data.section1Title;
-                        document.getElementById('s1Content').textContent = data.section1Content;
                         document.getElementById('s2Title').textContent = data.section2Title;
-                        document.getElementById('s2Content').textContent = data.section2Content;
-
                         document.getElementById('quote').textContent = data.quote;
                         document.getElementById('quoteAuthor').textContent = data.quoteAuthor;
                         document.getElementById('mainImage').src = data.mainImage || '/images/default.jpg';
 
-                        // gallery
+                        const tagContainer = document.getElementById('previewTags');
+                        tagContainer.innerHTML = '';
+                        data.tags.forEach(tag => {
+                            tagContainer.innerHTML += `<span class="badge bg-secondary me-1">${tag}</span>`;
+                        });
+
                         const gallery = document.getElementById('galleryImages');
                         gallery.innerHTML = '';
                         data.gallery.forEach(img => {
                             gallery.innerHTML += `<div class="col-md-3"><img src="${img}" class="img-fluid rounded" /></div>`;
                         });
 
-                        new bootstrap.Modal(document.getElementById('previewModal')).show();
+                        // Khởi tạo CKEditor và đổ dữ liệu nếu chưa có
+                        if (!section1Editor) {
+                            section1Editor = await ClassicEditor.create(document.querySelector('#s1Content'));
+                        }
+                        if (!section2Editor) {
+                            section2Editor = await ClassicEditor.create(document.querySelector('#s2Content'));
+                        }
 
-                                const tagContainer = document.getElementById('previewTags');
-                            tagContainer.innerHTML = '';
-                            data.tags.forEach(tag => {
-                                tagContainer.innerHTML += `<span class="badge bg-secondary me-1">${tag}</span>`;
-                            });
+                        section1Editor.setData(data.section1Content || '');
+                        section2Editor.setData(data.section2Content || '');
+
+                        new bootstrap.Modal(document.getElementById('previewModal')).show();
                     });
             });
         });

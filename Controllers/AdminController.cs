@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace GoEASy.Controllers
 {
     [AdminAuthorize]
-    [Route("admin/statistics")]
-    public class StatisticsAdminController : Controller
+    [Route("admin")]
+    public class AdminController : Controller
     {
         [HttpGet("")]
         public IActionResult Index()
         {
-            return View("~/Views/admin/statistics/StatisticsAdmin.cshtml");
+            return RedirectToAction("Index", "LoginAdmin");
         }
     }
 }
