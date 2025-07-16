@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
 
 namespace GoEASy.Services
 {
@@ -36,8 +37,33 @@ namespace GoEASy.Services
 
         public async Task UpdateBookingAsync(Booking booking)
         {
+            // Lấy trạng thái cũ trước khi update
+            var oldBooking = await _context.Bookings.AsNoTracking().FirstOrDefaultAsync(b => b.BookingId == booking.BookingId);
+            bool wasPending = oldBooking?.Status == false;
+            bool isNowConfirmed = booking.Status == true;
+
             _context.Bookings.Update(booking);
             await _context.SaveChangesAsync();
+
+            // Nếu chuyển từ chờ duyệt sang xác nhận, gửi notification cho user
+            if (wasPending && isNowConfirmed && booking.UserId != null && booking.TourId != null)
+            {
+                var tour = await _context.Tours.FirstOrDefaultAsync(t => t.TourId == booking.TourId);
+                string tourName = tour?.TourName ?? "[Tour]";
+                string startDate = tour?.StartDate?.ToString("dd/MM/yyyy") ?? "?";
+                var notification = new Notification
+                {
+                    UserId = booking.UserId.Value,
+                    Title = "Tour đã xác nhận",
+                    Message = $"Tour '{tourName}' khởi hành ngày {startDate} đã được xác nhận thành công.",
+                    Type = "BookingConfirmed",
+                    RelatedId = booking.BookingId,
+                    CreatedAt = DateTime.Now,
+                    IsRead = false
+                };
+                _context.Notifications.Add(notification);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 } 

@@ -72,7 +72,6 @@
             </div>
         </section>
         <!--End Hidden Sidebar -->
-
         <!-- Page Banner Start -->
         <section class="page-banner-two rel z-1" style="padding-top: 180px;">
             <div class="container-fluid">
@@ -145,7 +144,7 @@
                     <div class="col-xl-6 col-lg-7">
                         <div class="tour-header-content mb-15" data-aos="fade-left" data-aos-duration="1500" data-aos-offset="50">
                             <span class="location d-inline-block mb-10"><i class="fal fa-map-marker-alt"></i> @Model.Destination?.DestinationName</span>
-                            <div class="section-title pb-5">    
+                            <div class="section-title pb-5">
                                 <h2>@Model.TourName</h2>
                             </div>
                             <div class="ratting">
@@ -203,39 +202,39 @@
                         </div>
 
                         <button id="showCustomBooking" class="theme-btn style-two mt-3 mb-3" style="border-radius: 8px; font-weight: 500; letter-spacing: 0.5px;">Custom Booking</button>
-    <!-- Khung Custom Booking ẩn -->
-    <div class="widget widget-booking" id="customBookingBox" style="display:none; width:100%; margin-bottom:24px; background:#f9f9f9; border:1px solid #e5e5e5; border-radius:16px; box-shadow:0 4px 24px rgba(0,0,0,0.07); padding:32px 28px 24px 28px;">
-        <h5 class="widget-title">Custom Booking</h5>
-        <form id="customBookingForm" method="post" action="/booking/create">
-            <input type="hidden" name="tourId" value="@Model.TourId" />
-            <input type="hidden" name="adultGuests" id="customAdultGuests" value="0" />
-            <input type="hidden" name="childGuests" id="customChildGuests" value="0" />
-            <input type="hidden" name="totalPrice" id="customTotalPrice" value="0" />
-            <input type="hidden" name="isCustom" value="true" />
-            
-            <div class="date mb-3">
-                <label class="form-label" style="font-weight:600;">Ngày khởi hành</label>
-                <input type="date" class="form-control" name="customStartDate" id="customStartDate" style="border-radius:8px; border:1px solid #e5e5e5; background:#fff; width:100%;" required />
-            </div>
-            <div class="mb-3">
-                <label class="form-label" style="font-weight:600;">Số vé người lớn</label>
-                <input type="number" class="form-control" id="customAdult" min="0" value="0" style="border-radius:8px; border:1px solid #e5e5e5; background:#fff; width:100%;" />
-            </div>
-            <div class="mb-3">
-                <label class="form-label" style="font-weight:600;">Số vé trẻ em</label>
-                <input type="number" class="form-control" id="customChild" min="0" value="0" style="border-radius:8px; border:1px solid #e5e5e5; background:#fff; width:100%;" />
-            </div>
-            <div class="mb-3">
-                <label class="form-label" style="font-weight:600;">Mã giảm giá (tùy chọn)</label>
-                <input type="text" class="form-control" name="customDiscount" placeholder="Nhập mã giảm giá nếu có" style="border-radius:8px; border:1px solid #e5e5e5; background:#fff; width:100%;" />
-            </div>
-            <button type="button" id="customCalcBtn" class="theme-btn style-two w-100 mb-2" style="border-radius:8px;">Tính tổng</button>
-            <hr>
-            <h6 style="font-weight:600;">Total: <span class="price" id="customTotal">0</span> đ</h6>
-            <button type="submit" class="theme-btn style-two w-100 mt-2" style="border-radius:8px;">Đặt tour với VNPAY</button>
-        </form>
-    </div>
-                        
+                        <!-- Khung Custom Booking ẩn -->
+                        <div class="widget widget-booking" id="customBookingBox" style="display:none; width:100%; margin-bottom:24px; background:#f9f9f9; border:1px solid #e5e5e5; border-radius:16px; box-shadow:0 4px 24px rgba(0,0,0,0.07); padding:32px 28px 24px 28px;">
+                            <h5 class="widget-title">Custom Booking</h5>
+                            <form id="customBookingForm" method="post" action="/booking/create">
+                                <input type="hidden" name="tourId" value="@Model.TourId" />
+                                <input type="hidden" name="adultGuests" id="customAdultGuests" value="0" />
+                                <input type="hidden" name="childGuests" id="customChildGuests" value="0" />
+                                <input type="hidden" name="totalPrice" id="customTotalPrice" value="0" />
+                                <input type="hidden" name="isCustom" value="true" />
+
+                                <div class="date mb-3">
+                                    <label class="form-label" style="font-weight:600;">Ngày khởi hành</label>
+                                    <input type="date" class="form-control" name="customStartDate" id="customStartDate" style="border-radius:8px; border:1px solid #e5e5e5; background:#fff; width:100%;" required />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" style="font-weight:600;">Số vé người lớn</label>
+                                    <input type="number" class="form-control" id="customAdult" min="0" value="0" style="border-radius:8px; border:1px solid #e5e5e5; background:#fff; width:100%;" />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" style="font-weight:600;">Số vé trẻ em</label>
+                                    <input type="number" class="form-control" id="customChild" min="0" value="0" style="border-radius:8px; border:1px solid #e5e5e5; background:#fff; width:100%;" />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" style="font-weight:600;">Mã giảm giá (tùy chọn)</label>
+                                    <input type="text" class="form-control" name="customDiscount" placeholder="Nhập mã giảm giá nếu có" style="border-radius:8px; border:1px solid #e5e5e5; background:#fff; width:100%;" />
+                                </div>
+                                <button type="button" id="customCalcBtn" class="theme-btn style-two w-100 mb-2" style="border-radius:8px;">Tính tổng</button>
+                                <hr>
+                                <h6 style="font-weight:600;">Total: <span class="price" id="customTotal">0</span> đ</h6>
+                                <button type="submit" class="theme-btn style-two w-100 mt-2" style="border-radius:8px;">Đặt tour với VNPAY</button>
+                            </form>
+                        </div>
+
                         <h3>Activities</h3>
                         <div class="tour-activities mt-30 mb-45">
                             @if (ViewBag.ActivitiesList != null && ((List<string>)ViewBag.ActivitiesList).Count > 0)
@@ -303,8 +302,14 @@
                                         <div id="@collapseId" class="accordion-collapse collapse @(idx == 0 ? "show" : "")" data-bs-parent="#itineraryAccordion">
                                             <div class="accordion-body">
                                                 <p>@item.Description</p>
-                                                @if (!string.IsNullOrEmpty(item.Meals)) { <p><b>Bữa ăn:</b> @item.Meals</p> }
-                                                @if (!string.IsNullOrEmpty(item.Accommodation)) { <p><b>Lưu trú:</b> @item.Accommodation</p> }
+                                                @if (!string.IsNullOrEmpty(item.Meals))
+                                                {
+                                                    <p><b>Bữa ăn:</b> @item.Meals</p>
+                                                }
+                                                @if (!string.IsNullOrEmpty(item.Accommodation))
+                                                {
+                                                    <p><b>Lưu trú:</b> @item.Accommodation</p>
+                                                }
                                             </div>
                                         </div>
                                     </div>
@@ -340,14 +345,13 @@
 
                         <h3>Bản đồ</h3>
                         <div class="tour-map mt-30 mb-50">
-                            <iframe
-                                width="100%"
-                                height="350"
-                                style="border:0"
-                                loading="lazy"
-                                allowfullscreen
-                                referrerpolicy="no-referrer-when-downgrade"
-                                src="https://www.google.com/maps?q=@Uri.EscapeDataString(Model.Destination?.Location ?? Model.Destination?.DestinationName ?? "Việt Nam")&output=embed">
+                            <iframe width="100%"
+                                    height="350"
+                                    style="border:0"
+                                    loading="lazy"
+                                    allowfullscreen
+                                    referrerpolicy="no-referrer-when-downgrade"
+                                    src="https://www.google.com/maps?q=@Uri.EscapeDataString(Model.Destination?.Location ?? Model.Destination?.DestinationName ?? "Việt Nam")&output=embed">
                             </iframe>
                         </div>
 
@@ -432,7 +436,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <h3>Clients Comments</h3>
                         <div class="comments mt-30 mb-60">
                             @if (ViewBag.ClientFeedbacks != null && ((List<GoEASy.Models.Review>)ViewBag.ClientFeedbacks).Count > 0)
@@ -469,105 +473,105 @@
                                 <div>Chưa có bình luận nào.</div>
                             }
                         </div>
-                        
+
                         <h3>Thêm bình luận</h3>
                         @if (ViewBag.CanComment == true)
                         {
-                        <form id="comment-form" class="comment-form bgc-lighter z-1 rel mt-30" name="review-form" action="/review/post" method="post" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                            <input type="hidden" name="tourId" value="@Model.TourId" />
-                            <div class="form-group">
-                                <label>Đánh giá (1-5 sao)</label>
-                                <div id="star-rating" style="font-size: 2rem; color: #ffc107; cursor: pointer;">
-                                    @for (int i = 1; i <= 5; i++)
-                                    {
-                                        <i class="far fa-star" data-value="@i"></i>
-                                    }
+                            <form id="comment-form" class="comment-form bgc-lighter z-1 rel mt-30" name="review-form" action="/review/post" method="post" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                                <input type="hidden" name="tourId" value="@Model.TourId" />
+                                <div class="form-group">
+                                    <label>Đánh giá (1-5 sao)</label>
+                                    <div id="star-rating" style="font-size: 2rem; color: #ffc107; cursor: pointer;">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <i class="far fa-star" data-value="@i"></i>
+                                        }
+                                    </div>
+                                    <input type="hidden" name="rating" id="rating" required />
                                 </div>
-                                <input type="hidden" name="rating" id="rating" required />
-                            </div>
-                            <div class="form-group">
-                                <label for="comment">Bình luận</label>
-                                <textarea name="comment" id="comment" class="form-control" rows="4" required></textarea>
-                            </div>
-                            <div class="form-group mb-0">
-                                <button type="submit" class="theme-btn bgc-secondary style-two">
-                                    <span data-hover="Gửi bình luận">Gửi bình luận</span>
-                                    <i class="fal fa-arrow-right"></i>
-                                </button>
-                            </div>
-                        </form>
-                        <script>
-                            document.addEventListener('DOMContentLoaded', function () {
-                                var stars = document.querySelectorAll('#star-rating i');
-                                var ratingInput = document.getElementById('rating');
-                                var form = document.getElementById('comment-form');
-                                var selected = 0;
-                                stars.forEach(function (star, idx) {
-                                    star.addEventListener('click', function () {
-                                        var rating = idx + 1;
-                                        selected = rating;
-                                        ratingInput.value = rating;
-                                        stars.forEach(function (s, i) {
-                                            if (i < rating) {
-                                                s.classList.remove('far');
-                                                s.classList.add('fas');
-                                            } else {
-                                                s.classList.remove('fas');
-                                                s.classList.add('far');
-                                            }
+                                <div class="form-group">
+                                    <label for="comment">Bình luận</label>
+                                    <textarea name="comment" id="comment" class="form-control" rows="4" required></textarea>
+                                </div>
+                                <div class="form-group mb-0">
+                                    <button type="submit" class="theme-btn bgc-secondary style-two">
+                                        <span data-hover="Gửi bình luận">Gửi bình luận</span>
+                                        <i class="fal fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </form>
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function () {
+                                    var stars = document.querySelectorAll('#star-rating i');
+                                    var ratingInput = document.getElementById('rating');
+                                    var form = document.getElementById('comment-form');
+                                    var selected = 0;
+                                    stars.forEach(function (star, idx) {
+                                        star.addEventListener('click', function () {
+                                            var rating = idx + 1;
+                                            selected = rating;
+                                            ratingInput.value = rating;
+                                            stars.forEach(function (s, i) {
+                                                if (i < rating) {
+                                                    s.classList.remove('far');
+                                                    s.classList.add('fas');
+                                                } else {
+                                                    s.classList.remove('fas');
+                                                    s.classList.add('far');
+                                                }
+                                            });
                                         });
                                     });
-                                });
-                                form.addEventListener('submit', function (e) {
-                                    e.preventDefault();
-                                    if (!ratingInput.value || selected === 0) {
-                                        alert('Vui lòng chọn số sao đánh giá!');
-                                        return;
-                                    }
-                                    var formData = new FormData(form);
-                                    fetch('/review/post', {
-                                        method: 'POST',
-                                        body: formData,
-                                        headers: {
-                                            'X-Requested-With': 'XMLHttpRequest'
+                                    form.addEventListener('submit', function (e) {
+                                        e.preventDefault();
+                                        if (!ratingInput.value || selected === 0) {
+                                            alert('Vui lòng chọn số sao đánh giá!');
+                                            return;
                                         }
-                                    })
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        if (data.success) {
-                                            // Thêm bình luận mới vào đầu danh sách
-                                            var commentsDiv = document.querySelector('.comments.mt-30.mb-60');
-                                            var html = `
-                                            <div class="comment-body" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                                                <div class="author-thumb">
-                                                    <img src="/assets/images/blog/comment-author1.jpg" alt="Author">
-                                                </div>
-                                                <div class="content">
-                                                    <h6>${data.review.fullName}</h6>
-                                                    <div class="ratting">
-                                                        ${[1,2,3,4,5].map(i => i <= data.review.rating ? '<i class="fas fa-star"></i>' : '<i class="far fa-star"></i>').join('')}
+                                        var formData = new FormData(form);
+                                        fetch('/review/post', {
+                                            method: 'POST',
+                                            body: formData,
+                                            headers: {
+                                                'X-Requested-With': 'XMLHttpRequest'
+                                            }
+                                        })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.success) {
+                                                // Thêm bình luận mới vào đầu danh sách
+                                                var commentsDiv = document.querySelector('.comments.mt-30.mb-60');
+                                                var html = `
+                                                <div class="comment-body" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                                                    <div class="author-thumb">
+                                                        <img src="/assets/images/blog/comment-author1.jpg" alt="Author">
                                                     </div>
-                                                    <span class="time">${data.review.createdDate}</span>
-                                                    <p>${data.review.comment}</p>
-                                                </div>
-                                            </div>`;
-                                            commentsDiv.insertAdjacentHTML('afterbegin', html);
-                                            form.reset();
-                                            // Reset sao
-                                            stars.forEach(function (s) {
-                                                s.classList.remove('fas');
-                                                s.classList.add('far');
-                                            });
-                                            selected = 0;
-                                            ratingInput.value = '';
-                                        } else {
-                                            alert(data.error || 'Có lỗi xảy ra!');
-                                        }
-                                    })
-                                    .catch(() => alert('Có lỗi xảy ra!'));
+                                                    <div class="content">
+                                                        <h6>${data.review.fullName}</h6>
+                                                        <div class="ratting">
+                                                            ${[1,2,3,4,5].map(i => i <= data.review.rating ? '<i class="fas fa-star"></i>' : '<i class="far fa-star"></i>').join('')}
+                                                        </div>
+                                                        <span class="time">${data.review.createdDate}</span>
+                                                        <p>${data.review.comment}</p>
+                                                    </div>
+                                                </div>`;
+                                                commentsDiv.insertAdjacentHTML('afterbegin', html);
+                                                form.reset();
+                                                // Reset sao
+                                                stars.forEach(function (s) {
+                                                    s.classList.remove('fas');
+                                                    s.classList.add('far');
+                                                });
+                                                selected = 0;
+                                                ratingInput.value = '';
+                                            } else {
+                                                alert(data.error || 'Có lỗi xảy ra!');
+                                            }
+                                        })
+                                        .catch(() => alert('Có lỗi xảy ra!'));
+                                    });
                                 });
-                            });
-                        </script>
+                            </script>
                         }
                         else
                         {
@@ -575,11 +579,11 @@
                                 Bạn cần đặt và thanh toán tour này để có thể bình luận.
                             </div>
                         }
-                        
+
                     </div>
                     <div class="col-lg-4 col-md-8 col-sm-10 rmt-75">
                         <div class="blog-sidebar tour-sidebar">
-                           
+
                             <div class="widget widget-booking" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
                                 <h5 class="widget-title">Tour Booking</h5>
                                 <form id="booking-form" method="post" action="/booking/create">
@@ -606,6 +610,14 @@
                                         </ul>
                                     </div>
                                     <hr class="mb-25">
+                                    <h6>Mã giảm giá:</h6>
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" name="discountCode" id="discountCode" placeholder="Nhập mã giảm giá" autocomplete="off">
+                                        <button class="btn btn-outline-secondary" type="button" id="checkDiscountBtn">Áp dụng</button>
+                                    </div>
+                                    <div id="discountMessage" style="color: #28a745; font-size: 0.95em; min-height: 22px;"></div>
+                                    <input type="hidden" name="discountId" id="discountId" value="" />
+                                    <input type="hidden" name="discountAmount" id="discountAmount" value="0" />
                                     <h6>Tickets:</h6>
                                     <ul class="tickets clearfix">
                                         <li>
@@ -620,30 +632,14 @@
                                         <li>
                                             Children (<18 years) <span class="price">@(((decimal)Model.ChildPrice).ToString("N0")) đ</span>
                                             <select name="childQty" id="childQty">
-                                                @for (int i = 0; i <= 10; i++)
-                                                {
-                                                    <option value="@i" @(i == 0 ? "selected" : "")>@i.ToString("D2")</option>
-                                                }
+                                                    @for (int i = 0; i <= 10; i++)
+                                                    {
+                                                        <option value="@i" @(i == 0 ? "selected" : "")>@i.ToString("D2")</option>
+                                                    }
                                             </select>
                                         </li>
                                     </ul>
                                     <hr class="mb-25">
-                                    <h6>Add Extra:</h6>
-                                    <ul class="radio-filter pt-5">
-                                        <li>
-                                            <input class="form-check-input" checked type="radio" name="AddExtra" id="add-extra1" value="50">
-                                            <label for="add-extra1">Add service per booking <span>50</span></label>
-                                        </li>
-                                        <li>
-                                            <input class="form-check-input" type="radio" name="AddExtra" id="add-extra2" value="24">
-                                            <label for="add-extra2">Add service per personal <span>24</span></label>
-                                        </li>
-                                        <li>
-                                            <input class="form-check-input" type="radio" name="AddExtra" id="add-extra0" value="0">
-                                            <label for="add-extra0">No extra</label>
-                                        </li>
-                                    </ul>
-                                    <hr>
                                     <h6>Total: <span class="price" id="totalPrice">0</span> đ</h6>
                                     <button type="button" id="calculateBtn" class="theme-btn style-two w-100 mt-15 mb-5">
                                         <span data-hover="Calculate Total">Calculate Total</span>
@@ -690,7 +686,7 @@
                                     });
                                 });
                             </script>
-                            
+
                             <div class="widget widget-contact" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
                                 <h5 class="widget-title">Need Help?</h5>
                                 <ul class="list-style-one">
@@ -698,7 +694,7 @@
                                     <li><i class="far fa-phone-volume"></i> <a href="callto:+000(123)45688">+000 (123) 456 88</a></li>
                                 </ul>
                             </div>
-                            
+
                             <div class="widget widget-cta" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
                                 <div class="content text-white">
                                     <span class="h6">Explore The World</span>
@@ -713,7 +709,7 @@
                                 </div>
                                 <div class="cta-shape"><img src="@Url.Content("~/assets/images/widgets/cta-shape3.png")" alt="Shape"></div>
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -750,7 +746,6 @@
             </div>
         </section>
         <!-- Newsletter Area end -->
-
         @Html.Partial("~/Views/client/share/footer-area.cshtml")
     </div>
     <script src="/assets/js/jquery-3.6.0.min.js"></script>
@@ -822,12 +817,12 @@
                 var adultPrice = @(((decimal)Model.AdultPrice).ToString(System.Globalization.CultureInfo.InvariantCulture));
                 var childPrice = @(((decimal)Model.ChildPrice).ToString(System.Globalization.CultureInfo.InvariantCulture));
                 var total = (adult * adultPrice) + (child * childPrice);
-                
+
                 customTotal.innerText = total.toLocaleString();
                 customTotalPrice.value = total;
                 customAdultGuests.value = adult;
                 customChildGuests.value = child;
-                
+
                 // Cập nhật ngày khởi hành
                 var startDate = document.getElementById('customStartDate').value;
                 document.getElementById('customStartDateHidden').value = startDate;
@@ -846,7 +841,7 @@
             if (customChild) {
                 customChild.addEventListener('change', updateCustomBookingInputs);
             }
-            
+
             // Tự động cập nhật khi thay đổi ngày khởi hành
             var customStartDateInput = document.getElementById('customStartDate');
             if (customStartDateInput) {
@@ -857,40 +852,118 @@
             if (customBookingForm) {
                 customBookingForm.addEventListener('submit', function(e) {
                     updateCustomBookingInputs();
-                    
+
                     var adult = parseInt(customAdult.value) || 0;
                     var child = parseInt(customChild.value) || 0;
                     var startDate = document.getElementById('customStartDate').value;
-                    
+
                     if (adult === 0 && child === 0) {
                         e.preventDefault();
                         alert('Vui lòng chọn ít nhất 1 vé người lớn hoặc trẻ em!');
                         return false;
                     }
-                    
+
                     if (!startDate) {
                         e.preventDefault();
                         alert('Vui lòng chọn ngày khởi hành!');
                         return false;
                     }
-                    
+
                     // Kiểm tra ngày khởi hành không được trong quá khứ
                     var selectedDate = new Date(startDate);
                     var today = new Date();
                     today.setHours(0, 0, 0, 0);
-                    
+
                     if (selectedDate < today) {
                         e.preventDefault();
                         alert('Ngày khởi hành không được trong quá khứ!');
                         return false;
                     }
-                    
+
                     // Hiển thị thông báo đang xử lý
                     var submitBtn = customBookingForm.querySelector('button[type="submit"]');
                     submitBtn.innerHTML = '<span>Đang xử lý...</span>';
                     submitBtn.disabled = true;
                 });
             }
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var checkDiscountBtn = document.getElementById('checkDiscountBtn');
+            var discountCodeInput = document.getElementById('discountCode');
+            var discountMessage = document.getElementById('discountMessage');
+            var discountIdInput = document.getElementById('discountId');
+            var discountAmountInput = document.getElementById('discountAmount');
+            var totalPriceSpan = document.getElementById('totalPrice');
+            var totalPriceInput = document.getElementById('totalPriceInput');
+            var adultQty = document.getElementById('adultQty');
+            var childQty = document.getElementById('childQty');
+
+            function getBaseTotal() {
+                var adult = parseInt(adultQty.value) || 0;
+                var child = parseInt(childQty.value) || 0;
+                var adultPrice = @(((decimal)Model.AdultPrice).ToString(System.Globalization.CultureInfo.InvariantCulture));
+                var childPrice = @(((decimal)Model.ChildPrice).ToString(System.Globalization.CultureInfo.InvariantCulture));
+                return (adult * adultPrice) + (child * childPrice);
+            }
+
+            function updateTotalWithDiscount(discountAmount, discountText) {
+                var baseTotal = getBaseTotal();
+                var finalTotal = Math.max(0, baseTotal - discountAmount);
+                totalPriceSpan.innerText = finalTotal.toLocaleString();
+                totalPriceInput.value = finalTotal;
+                discountAmountInput.value = discountAmount;
+                if (discountText) {
+                    discountMessage.innerText = discountText;
+                }
+            }
+
+            if (checkDiscountBtn) {
+                checkDiscountBtn.addEventListener('click', function() {
+                    var code = discountCodeInput.value.trim();
+                    var baseTotal = getBaseTotal();
+                    if (!code) {
+                        discountMessage.innerText = 'Vui lòng nhập mã giảm giá.';
+                        discountIdInput.value = '';
+                        updateTotalWithDiscount(0, '');
+                        return;
+                    }
+                    discountMessage.innerText = 'Đang kiểm tra...';
+                    fetch('/booking/check-discount?code=' + encodeURIComponent(code) + '&total=' + baseTotal)
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                let percent = data.percentage ? `Được giảm ${data.percentage}%` : '';
+                                let max = data.maxAmount ? ` (tối đa ${parseInt(data.maxAmount).toLocaleString()} đ)` : '';
+                                let text = percent + max;
+                                discountIdInput.value = data.discountId;
+                                updateTotalWithDiscount(data.discountAmount, text);
+                            } else {
+                                discountMessage.innerText = data.message || 'Mã không hợp lệ.';
+                                discountIdInput.value = '';
+                                updateTotalWithDiscount(0, '');
+                            }
+                        })
+                        .catch(() => {
+                            discountMessage.innerText = 'Lỗi kiểm tra mã.';
+                            discountIdInput.value = '';
+                            updateTotalWithDiscount(0, '');
+                        });
+                });
+            }
+
+            // Khi thay đổi số lượng vé, reset discount
+            [adultQty, childQty].forEach(function(el) {
+                if (el) {
+                    el.addEventListener('change', function() {
+                        discountIdInput.value = '';
+                        discountCodeInput.value = '';
+                        discountMessage.innerText = '';
+                        updateTotalWithDiscount(0, '');
+                    });
+                }
+            });
         });
     </script>
 </body>
