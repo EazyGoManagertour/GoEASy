@@ -1,0 +1,82 @@
+@model IEnumerable<GoEASy.Models.Booking>
+@{
+    ViewBag.Title = "Lịch sử đặt tour";
+    Layout = null;
+    var openId = Context.Request.Query["open"].ToString();
+}
+@Html.Partial("~/Views/client/share/head.cshtml")
+@Html.Partial("~/Views/client/share/header.cshtml")
+<div class="container" style="max-width: 800px; margin-top: 48px; margin-bottom: 48px;">
+    <h2 class="mb-4" style="font-weight: 700; color: #1a2a36;">Lịch sử đặt tour của bạn</h2>
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info" style="border-radius: 12px;">Bạn chưa có booking nào.</div>
+    }
+    else
+    {
+        <div class="accordion" id="bookingAccordion">
+            @foreach (var b in Model.Select((val, idx) => new { val, idx }))
+            {
+                var booking = b.val;
+                var idx = b.idx;
+                var collapseId = $"collapseBooking{booking.BookingId}";
+                var isOpen = openId == booking.BookingId.ToString();
+                <div class="accordion-item mb-3" style="border-radius: 12px; overflow: hidden;">
+                    <h2 class="accordion-header" id="heading@booking.BookingId">
+                        <button class="accordion-button @(isOpen ? "" : "collapsed")" type="button" data-bs-toggle="collapse" data-bs-target="#@collapseId" aria-expanded="@(isOpen ? "true" : "false")" aria-controls="@collapseId" style="font-weight: 600; font-size: 1.1rem;">
+                            <span style="min-width: 90px; display: inline-block;">#@booking.BookingId</span>
+                            <span style="flex:1;">@booking.Tour?.TourName</span>
+                            <span style="margin-left: 12px;">
+                                @if (booking.Status == true)
+                                {
+                                    <span class="badge" style="background: #e6f4ea; color: #1a8917; border-radius: 8px;">Đã xác nhận</span>
+                                }
+                                else
+                                {
+                                    <span class="badge" style="background: #fffbe6; color: #bfa100; border-radius: 8px;">Chờ duyệt</span>
+                                }
+                            </span>
+                        </button>
+                    </h2>
+                    <div id="@collapseId" class="accordion-collapse collapse @(isOpen ? "show" : "")" aria-labelledby="heading@booking.BookingId" data-bs-parent="#bookingAccordion">
+                        <div class="accordion-body" style="background: #f9fafb;">
+                            <div class="row mb-2">
+                                <div class="col-6"><b>Ngày đặt:</b> @(booking.BookingDate?.ToString("dd/MM/yyyy HH:mm") ?? "")</div>
+                                <div class="col-6"><b>Ngày khởi hành:</b> @(booking.Tour?.StartDate?.ToString("dd/MM/yyyy") ?? "")</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-6"><b>Tổng tiền:</b> <span style="color: #1a8917; font-weight: 600;">@((booking.TotalPrice ?? 0).ToString("N0")) đ</span></div>
+                                <div class="col-6"><b>Mã giảm giá:</b> <span>@(booking.Discount?.Code ?? "-")</span></div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-6"><b>Thanh toán:</b>
+                                    @if (booking.PaymentStatus == "Paid")
+                                    {
+                                        <span class="badge" style="background: #e0f7fa; color: #00796b; border-radius: 8px;">Đã thanh toán</span>
+                                    }
+                                    else if (booking.PaymentStatus == "Failed")
+                                    {
+                                        <span class="badge" style="background: #ffebee; color: #c62828; border-radius: 8px;">Thất bại</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge" style="background: #f1f1f1; color: #888; border-radius: 8px;">Chưa thanh toán</span>
+                                    }
+                                </div>
+                                <div class="col-6"><b>Số vé:</b> Người lớn: @booking.AdultGuests, Trẻ em: @booking.ChildGuests</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-12"><b>Tên tour:</b> @booking.Tour?.TourName</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-12"><b>Địa điểm:</b> @booking.Tour?.Destination?.DestinationName</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+@Html.Partial("~/Views/client/share/footer-area.cshtml")
+@Html.Partial("~/Views/client/share/script.cshtml") 

@@ -20,7 +20,7 @@ namespace GoEASy.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Index(int id)
+        public async Task<IActionResult> Index(int id, int page = 1)
         {
             var tour = await _tourService.GetTourByIdAsync(id);
             if (tour == null)
@@ -37,7 +37,13 @@ namespace GoEASy.Controllers
                 .Where(r => r.TourId == id && !string.IsNullOrEmpty(r.Comment))
                 .OrderByDescending(r => r.CreatedDate)
                 .ToListAsync();
-            ViewBag.ClientFeedbacks = feedbacks;
+            int pageSize = 5;
+            int totalFeedbacks = feedbacks.Count;
+            int totalPages = (int)Math.Ceiling((double)totalFeedbacks / pageSize);
+            var pagedFeedbacks = feedbacks.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            ViewBag.ClientFeedbacks = pagedFeedbacks;
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
 
             // Kiểm tra user đã booking và thanh toán tour này chưa
             int? userId = HttpContext.Session.GetInt32("UserId");

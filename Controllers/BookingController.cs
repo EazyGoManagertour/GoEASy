@@ -113,6 +113,37 @@ namespace GoEASy.Controllers
             {
                 booking.PaymentStatus = "Paid";
                 await _context.SaveChangesAsync();
+                // Thêm thông báo cho user
+                if (booking.UserId != null)
+                {
+                    // Lấy thông tin tour
+                    var tour = await _context.Tours.FirstOrDefaultAsync(t => t.TourId == booking.TourId);
+                    string tourName = tour?.TourName ?? "[Tour]";
+                    string startDate = tour?.StartDate?.ToString("dd/MM/yyyy") ?? "?";
+                    string title, message;
+                    if (booking.Status == false) // custom booking, chờ duyệt
+                    {
+                        title = "Thanh toán thành công & chờ duyệt";
+                        message = $"Bạn đã thanh toán thành công tour '{tourName}' khởi hành ngày {startDate}. Booking của bạn đang chờ duyệt. Mã booking: #{booking.BookingId}";
+                    }
+                    else // booking thường
+                    {
+                        title = "Thanh toán thành công";
+                        message = $"Bạn đã thanh toán thành công tour '{tourName}' khởi hành ngày {startDate}. Mã booking: #{booking.BookingId}";
+                    }
+                    var notification = new Notification
+                    {
+                        UserId = booking.UserId.Value,
+                        Title = title,
+                        Message = message,
+                        Type = "PaymentSuccess",
+                        RelatedId = booking.BookingId,
+                        CreatedAt = DateTime.Now,
+                        IsRead = false
+                    };
+                    _context.Notifications.Add(notification);
+                    await _context.SaveChangesAsync();
+                }
                 TempData["Success"] = "Thanh toán thành công!";
             }
             else
@@ -122,6 +153,63 @@ namespace GoEASy.Controllers
                 TempData["Error"] = "Thanh toán thất bại hoặc bị hủy.";
             }
             return RedirectToAction("Index", "Home");
+        }
+
+        // GET: /booking/history
+        [HttpGet("history")]
+        public async Task<IActionResult> BookingHistory()
+        {
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                TempData["Error"] = "Bạn cần đăng nhập để xem lịch sử đặt tour.";
+                return RedirectToAction("Index", "Login");
+            }
+            var bookings = await _context.Bookings
+                .Include(b => b.Tour)
+                .Include(b => b.Discount)
+                .Where(b => b.UserId == userId)
+                .OrderByDescending(b => b.BookingDate)
+                .ToListAsync();
+            return View("~/Views/client/BookingHistory.cshtml", bookings);
+        }
+
+        // GET: /booking/check-discount
+        [HttpGet("check-discount")]
+        public async Task<IActionResult> CheckDiscount(string code, decimal total)
+        {
+            if (string.IsNullOrWhiteSpace(code))
+                return Json(new { success = false, message = "Vui lòng nhập mã giảm giá." });
+
+            var now = DateTime.Now;
+            var discount = await _context.Discounts.FirstOrDefaultAsync(d => d.Code == code && (d.Status ?? true));
+            if (discount == null)
+                return Json(new { success = false, message = "Mã giảm giá không tồn tại hoặc đã bị khóa." });
+            if (discount.StartDate.HasValue && discount.StartDate > now)
+                return Json(new { success = false, message = "Mã giảm giá chưa bắt đầu hiệu lực." });
+            if (discount.EndDate.HasValue && discount.EndDate < now)
+                return Json(new { success = false, message = "Mã giảm giá đã hết hạn." });
+            if (discount.MinTotalPrice.HasValue && total < discount.MinTotalPrice.Value)
+                return Json(new { success = false, message = $"Đơn tối thiểu {discount.MinTotalPrice.Value:N0} đ mới dùng được mã này." });
+            if (discount.Percentage == null || discount.Percentage <= 0)
+                return Json(new { success = false, message = "Mã giảm giá không hợp lệ." });
+
+            decimal discountAmount = total * (discount.Percentage.Value / 100m);
+            if (discount.MaxAmount.HasValue && discountAmount > discount.MaxAmount.Value)
+                discountAmount = discount.MaxAmount.Value;
+            if (discountAmount <= 0)
+                return Json(new { success = false, message = "Mã giảm giá không áp dụng cho đơn này." });
+
+            return Json(new
+            {
+                success = true,
+                discountId = discount.DiscountId,
+                discountAmount = discountAmount,
+                description = discount.Description,
+                percentage = discount.Percentage,
+                maxAmount = discount.MaxAmount,
+                minTotalPrice = discount.MinTotalPrice
+            });
         }
     }
 } 

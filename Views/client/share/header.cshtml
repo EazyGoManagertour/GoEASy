@@ -100,8 +100,48 @@
             </div>
 
             <!-- Menu Button -->
-            <div class="menu-btns py-10">
-                <a href="contact.html" class="theme-btn style-two bgc-secondary">
+            @{
+                var isLoggedIn = Context.Session.GetInt32("UserId") != null;
+                var userName = Context.Session.GetString("UserName") ?? "User";
+                var userAvatar = "/assets/images/blog/comment-author1.jpg"; // Dùng avatar mẫu feedback
+            }
+            <div class="menu-btns py-10 d-flex align-items-center" style="gap:12px;">
+                @if (!isLoggedIn)
+                {
+                    <a href="/login" class="theme-btn style-two" id="loginBtn" style="display: inline-flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-sign-in-alt"></i> Đăng nhập
+                    </a>
+                }
+                else
+                {
+                    <!-- Đưa chuông thông báo lên trước avatar -->
+                    <div class="dropdown d-inline-block me-2" id="notificationDropdown">
+                        <a href="#" class="btn btn-light position-relative" id="notifBtn" data-bs-toggle="dropdown" aria-expanded="false" style="padding: 8px 16px;">
+                            <i class="fas fa-bell"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notifCount" style="display:none;">0</span>
+                        </a>
+                        <ul class="dropdown-menu notification-dropdown-menu dropdown-menu-end w-100" aria-labelledby="notifBtn" id="notifList" style="max-height: 350px; overflow-y: auto;">
+                            <li class="dropdown-item text-muted">Không có thông báo mới</li>
+                        </ul>
+                    </div>
+                    <div class="dropdown d-inline-block">
+                        <a href="#" class="d-inline-flex align-items-center dropdown-toggle btn btn-light" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="gap:8px; padding: 8px 20px; border-radius: 8px; background: #fff; color: #1a2a36; font-weight: 600; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: none;">
+                            <img src="@userAvatar" alt="Avatar" style="width:32px;height:32px;border-radius:50%;object-fit:cover;">
+                            <span>@userName</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end w-100" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="/profile"><i class="fas fa-user"></i> Hồ sơ cá nhân</a></li>
+                            <li><a class="dropdown-item" href="/booking/history"><i class="fas fa-history"></i> Lịch sử giao dịch</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form method="post" action="/login/logout" style="margin:0;">
+                                    <button class="dropdown-item" type="submit"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                }
+                <a href="contact.html" class="theme-btn style-two bgc-secondary ms-2">
                     <span data-hover="Book Now">Book Now</span>
                     <i class="fal fa-arrow-right"></i>
                 </a>
@@ -117,3 +157,63 @@
         </div>
     </div>
 </div>
+<style>
+/* Đảm bảo dropdown-menu user rộng bằng toggle */
+#userDropdown + .dropdown-menu {
+    min-width: unset;
+    width: 100%;
+    box-sizing: border-box;
+}
+/* Phóng to dropdown thông báo, cho phép xuống dòng, ẩn cuộn ngang */
+.notification-dropdown-menu {
+    min-width: 340px !important;
+    max-width: 420px;
+    white-space: normal;
+    overflow-x: hidden;
+}
+.notification-item {
+    white-space: normal;
+    word-break: break-word;
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var notifList = document.getElementById('notifList');
+    var notifCount = document.getElementById('notifCount');
+    var notifBtn = document.getElementById('notifBtn');
+    var notifUnread = 0;
+    var notifHasBeenOpened = false;
+    if (!!window.EventSource) {
+        var source = new EventSource('/notification/stream');
+        source.onmessage = function(event) {
+            var n = JSON.parse(event.data);
+            notifUnread++;
+            notifCount.innerText = notifUnread;
+            notifCount.style.display = '';
+            notifHasBeenOpened = false; // Có event mới, cho phép hiện badge lại
+            // Thêm thông báo mới lên đầu, hiển thị chi tiết
+            var li = document.createElement('li');
+            li.className = 'dropdown-item notification-item';
+            li.setAttribute('data-booking-id', n.RelatedId || '');
+            li.style.cursor = 'pointer';
+            li.innerHTML = `<b>${n.Title}</b><br><span>${n.Message}</span><br><small class="text-muted">${new Date(n.CreatedAt).toLocaleString()}</small>`;
+            li.addEventListener('click', function() {
+                if (n.RelatedId) {
+                    window.location.href = '/booking/history?open=' + n.RelatedId;
+                } else {
+                    window.location.href = '/booking/history';
+                }
+            });
+            notifList.prepend(li);
+            // Xóa dòng 'Không có thông báo mới' nếu có
+            var empty = notifList.querySelector('.text-muted');
+            if (empty && notifList.children.length > 1) empty.remove();
+        };
+    }
+    notifBtn.addEventListener('click', function() {
+        notifUnread = 0;
+        notifCount.style.display = 'none';
+        notifHasBeenOpened = true;
+    });
+});
+</script>
