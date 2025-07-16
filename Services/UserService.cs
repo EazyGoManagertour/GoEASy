@@ -41,7 +41,8 @@ namespace GoEASy.Services
                 user.Vippoints = 0;
             if (user.IsVip == null)
                 user.IsVip = false;
-
+            if (string.IsNullOrEmpty(user.Sex))
+                user.Sex = "Male";
             await _userRepo.AddAsync(user);
             await _userRepo.SaveAsync();
         }
@@ -87,6 +88,12 @@ namespace GoEASy.Services
             return _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
+        public Task<IEnumerable<User>> GetUsersBySexAsync(string sex)
+        {
+            return Task.FromResult(_context.Users
+                .Where(u => u.Sex != null && u.Sex.ToLower() == sex.ToLower())
+                .AsEnumerable());
+        }
         public async Task ToggleStatusAsync(int id)
         {
             var user = await _userRepo.GetByIdAsync(id);
