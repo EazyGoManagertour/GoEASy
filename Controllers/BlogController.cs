@@ -39,6 +39,7 @@ namespace GoEASy.Controllers
         {
             var blogs = await _blogService.GetAllAsync();
             ViewBag.Categories = await _categoryService.GetAllCategoriesAsync();
+
             return View("~/Views/admin/blog/Blog.cshtml", blogs);
         }
 
@@ -55,6 +56,18 @@ namespace GoEASy.Controllers
                     {
                         blog.BlogImages.Add(image);
                     }
+                }
+
+                var adminId = HttpContext.Session.GetInt32("AdminID");
+
+                if (adminId.HasValue)
+                {
+                    blog.AuthorAdminId = adminId.Value;
+                }
+                else
+                {
+                    TempData["Error"] = "You Need Login.";
+                    return RedirectToAction("Index");
                 }
 
                 blog.CreatedAt = DateTime.Now;
