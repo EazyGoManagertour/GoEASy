@@ -1,1 +1,77 @@
-﻿
+﻿﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập Quản Trị - EasyGo Admin</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500&display=swap" rel="stylesheet" />
+    <link href="~/css/style-login.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="login-container">
+        <div class="image-section">
+            <div class="image-overlay">
+                <h1>EasyGo</h1>
+                <p>Manage For Travel</p>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <!-- Biểu tượng trang trí -->
+            <div class="floating-element">✈️</div>
+            <div class="floating-element">🗺️</div>
+            <div class="floating-element">🏖️</div>
+
+            <div class="login-form">
+                <div class="logo">
+                    <img src="~/image/logo_goez.png" alt="Logo" title="Logo">
+                    <h2>EasyGo</h2>
+                    <p>Admin Dashboard</p>
+                </div>
+
+                <!-- Thông báo lỗi/thành công -->
+                @if (TempData["Error"] != null)
+                {
+                    <div style="background: #fee; color: #c33; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center;">
+                        @TempData["Error"]
+                    </div>
+                }
+
+                @if (TempData["Success"] != null)
+                {
+                    <div style="background: #efe; color: #363; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center;">
+                        @TempData["Success"]
+                    </div>
+                }
+
+                <!-- Form đăng nhập Admin -->
+                <form id="loginForm" method="POST" action="/admin/login">
+                    <div class="form-group">
+                        <label for="username">Tên đăng nhập</label>
+                        <input type="text" id="username" name="username" placeholder="Nhập tên đăng nhập" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Mật khẩu</label>
+                        <input type="password" id="password" name="password" placeholder="Nhập mật khẩu" required>
+                    </div>
+
+                    <div class="remember-forgot">
+                        <div class="remember">
+                            <input type="checkbox" id="remember" name="remember">
+                            <label for="remember">Ghi nhớ đăng nhập</label>
+                        </div>
+                        <a href="#" class="forgot-link">Quên mật khẩu?</a>
+                    </div>
+
+                    <button type="submit" class="login-btn">Đăng nhập</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
