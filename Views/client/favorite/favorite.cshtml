@@ -183,7 +183,7 @@
                                     data-aos-duration="1500" data-aos-offset="50">
                                     <div class="image">
                                         <span class="badge bgc-pink">Featured</span>
-                                        <a href="#" class="heart"><i class="fas fa-heart"></i></a>
+                                        <a href="#" class="heart remove-favorite" data-tour-id="@fav.TourId"><i class="fas fa-heart"></i></a>
                                         <img src="assets/images/destinations/tour-list1.jpg" alt="Tour List">
                                     </div>
                                     <div class="content">
@@ -316,6 +316,31 @@
     <script src="assets/js/aos.js"></script>
     <!-- Custom script -->
     <script src="assets/js/script.js"></script>
+
+    <script>
+$(document).ready(function() {
+    $(document).on('click', '.remove-favorite', function(e) {
+        e.preventDefault();
+        var $btn = $(this);
+        var tourId = $btn.data('tour-id');
+        $.ajax({
+            url: '/favorite/remove',
+            type: 'POST',
+            data: { tourId: tourId },
+            success: function(response) {
+                if (response.success) {
+                    $btn.closest('.col-xl-4').remove();
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function() {
+                alert('Có lỗi xảy ra, vui lòng thử lại!');
+            }
+        });
+    });
+});
+</script>
 
 </body>
 

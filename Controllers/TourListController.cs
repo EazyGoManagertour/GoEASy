@@ -10,10 +10,12 @@ namespace GoEASy.Controllers
     public class TourListController : Controller
     {
         private readonly TourService _tourService;
+        private readonly IFavoriteService _favoriteService;
 
-        public TourListController(TourService tourService)
+        public TourListController(TourService tourService, IFavoriteService favoriteService)
         {
             _tourService = tourService;
+            _favoriteService = favoriteService;
         }
 
         [Route("")]
@@ -47,6 +49,17 @@ namespace GoEASy.Controllers
                 // Lấy danh sách destinations và categories cho filter dropdowns
                 var destinations = await _tourService.GetAllDestinationsAsync();
                 var categories = await _tourService.GetAllCategoriesAsync();
+
+                // Lấy danh sách favorite tour id của user
+                var userId = HttpContext.Session.GetInt32("UserId");
+                List<int> favoriteTourIds = new List<int>();
+                if (userId != null)
+                {
+                    favoriteTourIds = (await _favoriteService.GetFavoritesByUserIdAsync(userId.Value))
+                        .Select(f => f.TourId)
+                        .ToList();
+                }
+                ViewBag.FavoriteTourIds = favoriteTourIds;
 
                 ViewBag.Destinations = destinations;
                 ViewBag.Categories = categories;
