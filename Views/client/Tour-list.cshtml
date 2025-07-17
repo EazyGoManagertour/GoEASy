@@ -318,7 +318,12 @@
                                         {
                                             <span class="badge bgc-primary">Popular</span>
                                         }
-                                        <a href="javascript:void(0);" class="heart"><i class="fas fa-heart"></i></a>
+                                        @{
+                                            var isFavorite = ViewBag.FavoriteTourIds != null && ((List<int>)ViewBag.FavoriteTourIds).Contains(tour.TourId);
+                                        }
+                                        <a href="javascript:void(0);" class="heart@(isFavorite ? " active" : "")" data-tour-id="@tour.TourId">
+                                            <i class="fas fa-heart"></i>
+                                        </a>
                                         <img src="@coverImage" alt="@tour.TourName" class="tour-img-fixed">
                                     </div>
                                     <div class="content">
@@ -550,10 +555,28 @@
             });
 
             // Handle heart button (favorite)
-            $('.heart').on('click', function(e) {
-                $(this).toggleClass('active');
-                var tourId = $(this).closest('.destination-item').data('tour-id');
-                console.log('Toggle favorite for tour:', tourId);
+            $(document).on('click', '.heart', function(e) {
+                e.preventDefault();
+                var $btn = $(this);
+                var tourId = $btn.data('tour-id');
+                var isActive = $btn.hasClass('active');
+                var url = isActive ? '/favorite/remove' : '/favorite/add';
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: { tourId: tourId },
+                    success: function(response) {
+                        if (response.success) {
+                            $btn.toggleClass('active');
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function() {
+                        alert('Có lỗi xảy ra, vui lòng thử lại!');
+                    }
+                });
             });
 
             // Clear all filters
