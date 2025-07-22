@@ -1,0 +1,95 @@
+﻿.access-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 20px;
+    position: relative;
+}
+/* Hộp thông báo */
+.access-box {
+    background: #ffffff;
+    padding: 40px 30px;
+    max-width: 400px;
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    position: relative;
+}
+
+    .access-box h1 {
+        font-size: 1.5rem;
+        color: #333333;
+        margin-bottom: 12px;
+    }
+
+    .access-box p {
+        font-size: 1rem;
+        color: #666666;
+    }
+
+/* Mũ bảo trì */
+.maintenance-hat {
+    position: absolute;
+    top: -30px;
+    right: -20px;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(145deg, #ffa500, #ff8c00);
+    border-radius: 50% 50% 0 0;
+    transform: rotate(25deg);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+    .maintenance-hat::before {
+        content: '';
+        position: absolute;
+        top: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 8px;
+        height: 12px;
+        background: #333;
+        border-radius: 2px;
+    }
+
+    .maintenance-hat::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: -10px;
+        width: 80px;
+        height: 8px;
+        background: #ff8c00;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+/* Responsive */
+@media (max-width: 480px) {
+    .access-box {
+        padding: 30px 20px;
+    }
+
+        .access-box h1 {
+            font-size: 1.3rem;
+        }
+
+        .access-box p {
+            font-size: 0.9rem;
+        }
+
+    .maintenance-hat {
+        width: 50px;
+        height: 50px;
+        top: -25px;
+        right: -15px;
+    }
+
+        .maintenance-hat::after {
+            left: -8px;
+            width: 66px;
+        }
+}

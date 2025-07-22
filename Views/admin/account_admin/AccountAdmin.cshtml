@@ -286,25 +286,29 @@
             fetch(`/admin/account-admin/toggle-status?id=${adminId}`, {
                 method: 'POST'
             })
-            .then(response => {
+                .then(response => {
                 if (response.ok) {
-                    // Cập nhật UI
+                    // Thành công, cập nhật giao diện
                     const newStatus = !(currentStatus === true || currentStatus === "true");
                     button.textContent = newStatus ? "Active" : "Disable";
                     button.style.backgroundColor = newStatus ? "" : "#dc3545";
                     button.setAttribute("onclick", `toggleStatus(this, '${adminId}', ${newStatus})`);
 
-                    // Show success toast
                     const msg = "Status updated successfully!";
                     document.getElementById("toast-success-msg").value = msg;
                     document.querySelector("#successToast .toast-body").innerText = msg;
-                    new bootstrap.Toast(document.getElementById("successToast"), { delay: 5000 }).show();
+                    new bootstrap.Toast(document.getElementById("successToast")).show();
+                } else if (response.status === 403) {
+                    // Không đủ quyền
+                    const msg = "Bạn không có quyền thay đổi trạng thái admin này.";
+                    document.getElementById("toast-error-msg").value = msg;
+                    document.querySelector("#errorToast .toast-body").innerText = msg;
+                    new bootstrap.Toast(document.getElementById("errorToast")).show();
                 } else {
-                    // Show error toast
                     const msg = "Failed to update status.";
                     document.getElementById("toast-error-msg").value = msg;
                     document.querySelector("#errorToast .toast-body").innerText = msg;
-                    new bootstrap.Toast(document.getElementById("errorToast"), { delay: 5000 }).show();
+                    new bootstrap.Toast(document.getElementById("errorToast")).show();
                 }
             })
             .catch(error => {

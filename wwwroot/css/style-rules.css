@@ -1,0 +1,521 @@
+﻿.role-management-container {
+    padding: 0;
+}
+
+.content-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+    .content-title i {
+        color: #667eea;
+        font-size: 28px;
+    }
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.btn-primary {
+    background: #667eea;
+    color: white;
+}
+
+    .btn-primary:hover {
+        background: #5a6fd8;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+.btn-success {
+    background: #2ed573;
+    color: white;
+}
+
+    .btn-success:hover {
+        background: #26c063;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(46, 213, 115, 0.3);
+    }
+
+/* Grid Layout */
+.role-management-grid {
+    display: grid;
+    grid-template-columns: 4fr 6fr;
+    gap: 24px;
+    min-height: 600px;
+}
+
+/* Panel Cards */
+.panel-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    height: fit-content;
+}
+
+.panel-header {
+    padding: 24px 28px 20px;
+    border-bottom: 1px solid #f1f2f6;
+    background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.panel-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+    .panel-title i {
+        color: #667eea;
+        font-size: 20px;
+    }
+
+.panel-body {
+    padding: 28px;
+}
+
+/* Admin Selection Panel */
+.admin-selection-panel {
+    position: sticky;
+    top: 20px;
+}
+
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+    .form-label i {
+        color: #667eea;
+        width: 16px;
+    }
+
+.form-select {
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background-color: #f8f9fa;
+}
+
+    .form-select:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        background-color: white;
+    }
+
+
+/* Permissions Panel */
+.permission-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+.btn-outline-success {
+    border: 2px solid #2ed573;
+    color: #2ed573;
+    background: transparent;
+}
+
+    .btn-outline-success:hover {
+        background: #2ed573;
+        color: white;
+    }
+
+.btn-outline-danger {
+    border: 2px solid #ef5350;
+    color: #ef5350;
+    background: transparent;
+}
+
+.permissions-search {
+    margin-bottom: 20px;
+}
+
+.search-box {
+    position: relative;
+}
+
+    .search-box i {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #999;
+        font-size: 14px;
+    }
+
+    .search-box .form-control {
+        padding-left: 40px;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+
+        .search-box .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+
+/* Permissions Table */
+.permissions-table-container {
+    max-height: 500px;
+    overflow-y: auto;
+    border: 1px solid #f1f2f6;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.permissions-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+}
+
+    .permissions-table th {
+        background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+        padding: 16px;
+        text-align: left;
+        font-weight: 600;
+        color: #555;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 2px solid #f1f2f6;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .permissions-table td {
+        padding: 16px;
+        border-bottom: 1px solid #f8f9fa;
+        vertical-align: middle;
+    }
+
+.permission-row {
+    transition: all 0.3s ease;
+}
+
+    .permission-row:hover {
+        background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+        transform: translateX(2px);
+    }
+
+/* Custom Checkbox */
+.custom-checkbox {
+    position: relative;
+    display: inline-block;
+}
+
+    .custom-checkbox input[type="checkbox"] {
+        opacity: 0;
+        position: absolute;
+        width: 0;
+        height: 0;
+    }
+
+    .custom-checkbox label {
+        position: relative;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #ddd;
+        border-radius: 6px;
+        background: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 0;
+    }
+
+    .custom-checkbox input[type="checkbox"]:checked + label {
+        background: #667eea;
+        border-color: #667eea;
+    }
+
+        .custom-checkbox input[type="checkbox"]:checked + label::after {
+            content: "\f00c";
+            font-family: "Font Awesome 6 Pro";
+            font-weight: 900;
+            color: white;
+            font-size: 12px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+    .custom-checkbox label:hover {
+        border-color: #667eea;
+        transform: scale(1.1);
+    }
+
+/* Permission Names and Descriptions */
+.permission-name {
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+}
+
+.permission-desc {
+    color: #666;
+    font-size: 13px;
+    line-height: 1.4;
+}
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .role-management-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .admin-selection-panel {
+        position: relative;
+        top: 0;
+    }
+
+    .permissions-table-container {
+        max-height: 400px;
+    }
+}
+
+@media (max-width: 768px) {
+    .content-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+
+    .action-buttons {
+        width: 100%;
+        justify-content: stretch;
+    }
+
+        .action-buttons .btn {
+            flex: 1;
+            justify-content: center;
+        }
+
+    .panel-body {
+        padding: 20px;
+    }
+
+    .panel-header {
+        padding: 20px;
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+
+    .permission-controls {
+        width: 100%;
+        justify-content: stretch;
+    }
+
+        .permission-controls .btn {
+            flex: 1;
+        }
+
+    .admin-info-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+
+    .permissions-table-container {
+        font-size: 14px;
+    }
+
+    .permissions-table th,
+    .permissions-table td {
+        padding: 12px 8px;
+    }
+
+    .summary-stats {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .content-title {
+        font-size: 20px;
+    }
+
+    .panel-title {
+        font-size: 16px;
+    }
+
+    .permissions-table {
+        font-size: 12px;
+    }
+
+    .permission-desc {
+        display: none;
+    }
+
+    .permissions-table th:last-child,
+    .permissions-table td:last-child {
+        display: none;
+    }
+}
+
+/* Animation Classes */
+.fade-in {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.permission-row.changed {
+    background: rgba(255, 193, 7, 0.1);
+    border-left: 3px solid #ffc107;
+}
+
+    .permission-row.changed:hover {
+        background: rgba(255, 193, 7, 0.15);
+    }
+
+/* Loading States */
+.loading {
+    position: relative;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+    .loading::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 20px;
+        height: 20px;
+        margin: -10px 0 0 -10px;
+        border: 2px solid #f3f3f3;
+        border-top: 2px solid #667eea;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Scrollbar Styling */
+.permissions-table-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.permissions-table-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.permissions-table-container::-webkit-scrollbar-thumb {
+    background: #667eea;
+    border-radius: 10px;
+}
+
+    .permissions-table-container::-webkit-scrollbar-thumb:hover {
+        background: #5a6fd8;
+    }
+
+/* Focus States */
+.form-select:focus,
+.form-control:focus {
+    outline: none;
+}
+
+.btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+/* Hover Animations */
+.panel-card {
+    transition: all 0.3s ease;
+}
+
+    .panel-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+
+/* Success/Error States */
+.success-message {
+    background: rgba(46, 213, 115, 0.1);
+    color: #2ed573;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(46, 213, 115, 0.3);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.error-message {
+    background: rgba(244, 67, 54, 0.1);
+    color: #f44336;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(244, 67, 54, 0.3);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
