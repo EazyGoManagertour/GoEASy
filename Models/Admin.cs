@@ -28,4 +28,8 @@ public partial class Admin
     public DateTime? UpdatedAt { get; set; }
 
     public virtual ICollection<Blog> Blogs { get; set; } = new List<Blog>();
+
+    public int? RuleId { get; set; }
+
+    public virtual Rule? Rule { get; set; }
 }
