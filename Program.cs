@@ -46,6 +46,13 @@ builder.Services.AddScoped<IBlogDetailService, BlogDetailService>();
 
 builder.Services.AddScoped<IDiscountService, DiscountService>();
 
+// Đăng ký RuleService
+builder.Services.AddScoped<IRuleService, RuleService>();
+
+builder.Services.AddScoped<IActionService, ActionService>();
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

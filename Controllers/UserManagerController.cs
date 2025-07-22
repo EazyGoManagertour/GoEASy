@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GoEASy.Controllers
 {
-    [AdminAuthorize]
+    //[AdminAuthorize]
     [Route("admin/user-manager")]
     public class UserManagerController : Controller
     {
