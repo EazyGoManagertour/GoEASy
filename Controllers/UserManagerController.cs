@@ -88,13 +88,13 @@ namespace GoEASy.Controllers
         {
             try
             {
-                if (user.UserId == 0)
+                if (user.UserID == 0)
                 {
                     TempData["Error"] = "Dữ liệu cập nhật không hợp lệ!";
                     return RedirectToAction("Index");
                 }
 
-                var existingUser = await _userService.GetUserByIdAsync(user.UserId);
+                var existingUser = await _userService.GetUserByIdAsync(user.UserID);
                 if (existingUser == null)
                 {
                     TempData["Error"] = "Không tìm thấy user!";
@@ -114,13 +114,13 @@ namespace GoEASy.Controllers
                 }
 
                 // Validate unique username and email (excluding current user)
-                if (await _userService.UsernameExistsAsync(user.Username, user.UserId))
+                if (await _userService.UsernameExistsAsync(user.Username, user.UserID))
                 {
                     TempData["Error"] = "Username đã tồn tại.";
                     return RedirectToAction("Index");
                 }
 
-                if (!string.IsNullOrEmpty(user.Email) && await _userService.EmailExistsAsync(user.Email, user.UserId))
+                if (!string.IsNullOrEmpty(user.Email) && await _userService.EmailExistsAsync(user.Email, user.UserID))
                 {
                     TempData["Error"] = "Email đã tồn tại.";
                     return RedirectToAction("Index");
@@ -137,9 +137,9 @@ namespace GoEASy.Controllers
                 existingUser.Phone = user.Phone;
                 existingUser.Address = user.Address;
                 existingUser.Sex = user.Sex;
-                existingUser.RoleId = user.RoleId;
-                existingUser.IsVip = user.IsVip;
-                existingUser.Vippoints = user.Vippoints;
+                existingUser.RoleID = user.RoleID;
+                existingUser.IsVIP = user.IsVIP;
+                existingUser.VIPPoints  = user.VIPPoints ;
                 existingUser.Status = user.Status;
                 existingUser.UpdatedAt = DateTime.Now;
 

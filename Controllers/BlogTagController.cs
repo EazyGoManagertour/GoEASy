@@ -47,7 +47,7 @@ namespace GoEASy.Controllers
         {
             try
             {
-                var existing = await _blogTagService.GetByIdAsync(tag.TagId);
+                var existing = await _blogTagService.GetByIdAsync(tag.TagID);
                 if (existing == null)
                 {
                     TempData["Error"] = "Blog tag not found!";

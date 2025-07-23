@@ -5,9 +5,9 @@ namespace GoEASy.Models;
 
 public partial class Schedule
 {
-    public int ScheduleId { get; set; }
+    public int ScheduleID { get; set; }
 
-    public int? TourId { get; set; }
+    public int? TourID { get; set; }
 
     public int DayNumber { get; set; }
 

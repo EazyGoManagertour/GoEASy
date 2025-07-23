@@ -2,8 +2,8 @@
 <html lang="zxx">
 
      @Html.Partial("~/Views/client/share/head.cshtml")
-    <!-- Swiper CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
 <body>
     <div class="page-wrapper">
@@ -126,9 +126,9 @@
                         {
                             foreach (var tour in (IEnumerable<GoEASy.Models.Tour>)ViewBag.Tours)
                             {
-                                var coverImg = tour.TourImages?.FirstOrDefault(img => img.IsCover == true)?.ImageUrl
-                                    ?? tour.TourImages?.FirstOrDefault()?.ImageUrl
-                                    ?? "/assets/images/destinations/destination1.jpg";
+                                var coverImg = tour.TourImages?.FirstOrDefault(img => img.IsCover == true)?.ImageURL
+                                ?? tour.TourImages?.FirstOrDefault()?.ImageURL
+                                ?? "/assets/images/destinations/destination1.jpg";
                                 <div class="swiper-slide">
                                     <div class="destination-item style-two" data-aos="flip-up" data-aos-duration="1500" data-aos-offset="50" style="background: #181c1f; color: #fff; border-radius: 16px;">
                                         <div class="image">
@@ -136,9 +136,9 @@
                                             <img src="@coverImg" alt="@tour.TourName" style="width:100%;height:220px;object-fit:cover;">
                                         </div>
                                         <div class="content" style="color: #fff;">
-                                            <h6><a href="/tour-details/@tour.TourId" style="color: #fff;">@tour.TourName</a></h6>
+                                            <h6><a href="/tour-details/@tour.TourID" style="color: #fff;">@tour.TourName</a></h6>
                                             <span class="time" style="color: #fff;">@tour.AdultPrice.ToString("N0") VNĐ/người</span>
-                                            <a href="/tour-details/@tour.TourId" class="more"><i class="fas fa-chevron-right"></i></a>
+                                            <a href="/tour-details/@tour.TourID" class="more"><i class="fas fa-chevron-right"></i></a>
                                         </div>
                                     </div>
                                 </div>
@@ -229,7 +229,7 @@
                                                 break;
                                             }
                                         }
-                                        var imageUrl = coverImage != null ? coverImage.ImageUrl : "/assets/images/destinations/destination1.jpg";
+                                        var imageUrl = coverImage != null ? coverImage.ImageURL : "/assets/images/destinations/destination1.jpg";
                                         <div class="swiper-slide">
                                             <div class="destination-item style-two" data-aos="flip-up" data-aos-duration="1500" data-aos-offset="50">
                                                 <div class="image">
@@ -237,12 +237,12 @@
                                                     <img src="@imageUrl" alt="@dest.DestinationName">
                                                 </div>
                                                 <div class="content">
-                                                    <h6><a href="/destination/details/@dest.DestinationId">@dest.DestinationName</a></h6>
+                                                    <h6><a href="/destination/details/@dest.DestinationID">@dest.DestinationName</a></h6>
                                                     @{
                                                         var tourCount = dest.Tours?.Count ?? 0;
                                                     }
                                                     <span class="time">@tourCount tour khả dụng</span>
-                                                    <a href="/destination/details/@dest.DestinationId" class="more"><i class="fas fa-chevron-right"></i></a>
+                                                    <a href="/destination/details/@dest.DestinationID" class="more"><i class="fas fa-chevron-right"></i></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -657,13 +657,11 @@
             </div>
         </section>
         <!-- Blog Area end -->
-
         <!-- footer area start -->
         @Html.Partial("~/Views/client/share/footer.cshtml")
         <!-- footer area end -->
     </div>
     <!--End pagewrapper-->
-
     @Html.Partial("~/Views/client/share/script.cshtml")
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
@@ -672,7 +670,7 @@
             console.log('DOM loaded, initializing Swiper...');
             var swiperElement = document.querySelector('.destinations-swiper');
             console.log('Swiper element:', swiperElement);
-            
+
             if (swiperElement) {
                 var swiper = new Swiper('.destinations-swiper', {
                 slidesPerView: 4,
@@ -699,20 +697,21 @@
         });
     </script>
     <style>
-.destination-item .image img {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-    border-radius: 16px;
-    display: block;
-}
-.destination-item {
-    min-height: 370px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-}
-</style>
+        .destination-item .image img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 16px;
+            display: block;
+        }
+
+        .destination-item {
+            min-height: 370px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+    </style>
 
 </body>
 

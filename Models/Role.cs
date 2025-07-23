@@ -5,7 +5,7 @@ namespace GoEASy.Models;
 
 public partial class Role
 {
-    public int RoleId { get; set; }
+    public int RoleID { get; set; }
 
     public string RoleName { get; set; } = null!;
 

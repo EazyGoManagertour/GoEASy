@@ -5,9 +5,9 @@ namespace GoEASy.Models;
 
 public partial class Payment
 {
-    public int PaymentId { get; set; }
+    public int PaymentID { get; set; }
 
-    public int? BookingId { get; set; }
+    public int? BookingID { get; set; }
 
     public decimal Amount { get; set; }
 

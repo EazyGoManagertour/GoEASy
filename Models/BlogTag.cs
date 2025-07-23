@@ -5,7 +5,7 @@ namespace GoEASy.Models;
 
 public partial class BlogTag
 {
-    public int TagId { get; set; }
+    public int TagID { get; set; }
 
     public string? Name { get; set; }
 

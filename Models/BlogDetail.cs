@@ -5,9 +5,9 @@ namespace GoEASy.Models;
 
 public partial class BlogDetail
 {
-    public int BlogDetailId { get; set; }
+    public int BlogDetailID { get; set; }
 
-    public int BlogId { get; set; }
+    public int BlogID { get; set; }
 
     public string? Introduction { get; set; }
 

@@ -36,8 +36,8 @@ namespace GoEASy.Controllers
 
                 // Lấy tất cả tour phù hợp filter
                 var allTours = await _tourService.SearchToursAsync(
-                    destinationId: destinationId,
-                    categoryId: categoryId,
+                    DestinationID: destinationId,
+                    CategoryID: categoryId,
                     startDate: startDate,
                     sortBy: sortBy,
                     sortOrder: sortOrder
@@ -56,7 +56,7 @@ namespace GoEASy.Controllers
                 if (userId != null)
                 {
                     favoriteTourIds = (await _favoriteService.GetFavoritesByUserIdAsync(userId.Value))
-                        .Select(f => f.TourId)
+                        .Select(f => f.TourID)
                         .ToList();
                 }
                 ViewBag.FavoriteTourIds = favoriteTourIds;
@@ -101,8 +101,8 @@ namespace GoEASy.Controllers
             try
             {
                 var tours = await _tourService.SearchToursAsync(
-                    destinationId: destinationId,
-                    categoryId: categoryId,
+                    DestinationID: destinationId,
+                    CategoryID: categoryId,
                     startDate: startDate,
                     sortBy: sortBy,
                     sortOrder: sortOrder
@@ -134,10 +134,10 @@ namespace GoEASy.Controllers
                     totalDestinations = destinations.Count(),
                     totalCategories = categories.Count(),
                     tours = allTours.Select(t => new {
-                        id = t.TourId,
+                        id = t.TourID,
                         name = t.TourName,
-                        destinationId = t.DestinationId,
-                        categoryId = t.CategoryId,
+                        destinationId = t.DestinationID,
+                        categoryId = t.CategoryID,
                         startDate = t.StartDate,
                         adultPrice = t.AdultPrice
                     }).ToList()
@@ -201,8 +201,8 @@ namespace GoEASy.Controllers
                         EndDate = DateTime.Now.AddDays(33),
                         MaxSeats = 20,
                         AvailableSeats = 20,
-                        DestinationId = destinations[0].DestinationId,
-                        CategoryId = categories[0].CategoryId
+                        DestinationID = destinations[0].DestinationID,
+                        CategoryID = categories[0].CategoryID
                     },
                     new Tour
                     {
@@ -214,8 +214,8 @@ namespace GoEASy.Controllers
                         EndDate = DateTime.Now.AddDays(17),
                         MaxSeats = 15,
                         AvailableSeats = 15,
-                        DestinationId = destinations[1].DestinationId,
-                        CategoryId = categories[0].CategoryId
+                        DestinationID = destinations[1].DestinationID,
+                        CategoryID = categories[0].CategoryID
                     },
                     new Tour
                     {
@@ -227,8 +227,8 @@ namespace GoEASy.Controllers
                         EndDate = DateTime.Now.AddDays(49),
                         MaxSeats = 12,
                         AvailableSeats = 12,
-                        DestinationId = destinations[2].DestinationId,
-                        CategoryId = categories[1].CategoryId
+                        DestinationID = destinations[2].DestinationID,
+                        CategoryID = categories[1].CategoryID
                     },
                     new Tour
                     {
@@ -240,8 +240,8 @@ namespace GoEASy.Controllers
                         EndDate = DateTime.Now.AddDays(23),
                         MaxSeats = 18,
                         AvailableSeats = 18,
-                        DestinationId = destinations[3].DestinationId,
-                        CategoryId = categories[2].CategoryId
+                        DestinationID = destinations[3].DestinationID,
+                        CategoryID = categories[2].CategoryID
                     },
                     new Tour
                     {
@@ -253,8 +253,8 @@ namespace GoEASy.Controllers
                         EndDate = DateTime.Now.AddDays(27),
                         MaxSeats = 16,
                         AvailableSeats = 16,
-                        DestinationId = destinations[4].DestinationId,
-                        CategoryId = categories[0].CategoryId
+                        DestinationID = destinations[4].DestinationID,
+                        CategoryID = categories[0].CategoryID
                     }
                 };
 

@@ -54,13 +54,13 @@ namespace GoEASy.Controllers
             {
                 var (isValid, errors) = ValidateDiscount(discount, isUpdate: true);
 
-                if (!isValid || discount.DiscountId == 0)
+                if (!isValid || discount.DiscountID == 0)
                 {
                     TempData["Error"] = string.Join("<br/>", errors);
                     return RedirectToAction("Index");
                 }
 
-                var existingDiscount = await _discountService.GetDiscountByIdAsync(discount.DiscountId);
+                var existingDiscount = await _discountService.GetDiscountByIdAsync(discount.DiscountID);
                 if (existingDiscount == null)
                 {
                     TempData["Error"] = "Coupon not found!";

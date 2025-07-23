@@ -109,7 +109,7 @@
                                 <td><input type="checkbox" /></td>
 
                                 <td>
-                                    <img src="@(mainImg?.ImageUrl ?? "/image/default.jpg")"
+                                    <img src="@(mainImg?.ImageURL ?? "/image/default.jpg")"
                                          width="60" height="45"
                                          style="object-fit:cover; border-radius:4px"
                                          onerror="this.src='/image/default.jpg'" />
@@ -124,7 +124,7 @@
                                                 @for (int i = 0; i < gallery.Count; i++)
                                                 {
                                                     <div class="carousel-item @(i == 0 ? "active" : "")">
-                                                        <img src="@gallery[i].ImageUrl"
+                                                        <img src="@gallery[i].ImageURL"
                                                              class="d-block w-100"
                                                              style="height:60px; object-fit:cover; border-radius:4px"
                                                              onerror="this.src='/image/default.jpg'" />
@@ -196,7 +196,7 @@
                                 <td>
                                     <button class="status admit"
                                             style="border: none; outline: none; background-color:@(detail.Status == true ? "" : "#dc3545")"
-                                            onclick="toggleStatus(this, '@detail.BlogId', @(detail.Status.ToString().ToLower()))">
+                                            onclick="toggleStatus(this, '@detail.BlogID', @(detail.Status.ToString().ToLower()))">
                                         @(detail.Status == true ? "Active" : "Disabled")
                                     </button>
                                 </td>
@@ -217,7 +217,7 @@
                                                 data-quote="@detail.Quote"
                                                 data-quoteauthor="@detail.QuoteAuthor"
                                            
-                                                data-tags="@string.Join(",", ((IEnumerable<GoEASy.Models.BlogTagMapping>)detail.Blog?.BlogTagMappings)?.Select(m => m.TagId) ?? new List<int>())">
+                                                data-tags="@string.Join(",", ((IEnumerable<GoEASy.Models.BlogTagMapping>)detail.Blog?.BlogTagMappings)?.Select(m => m.TagID) ?? new List<int>())">
                                             <i class="fas fa-edit"></i>
                                         </button>
 
@@ -254,11 +254,11 @@
                     <div class="modal-body row g-3">
                         <div class="col-md-12">
                             <label>Blog</label>
-                            <select name="BlogId" class="form-select" required>
+                            <select name="BlogID" class="form-select" required>
                                 <option value="">-- Select Blog --</option>
                                 @foreach (var blog in ViewBag.Blogs as List<GoEASy.Models.Blog>)
                                 {
-                                    <option value="@blog.BlogId">@blog.Title</option>
+                                    <option value="@blog.BlogID">@blog.Title</option>
                                 }
                             </select>
                         </div>
@@ -309,7 +309,7 @@
                             @foreach (var tag in ViewBag.Tags as List<GoEASy.Models.BlogTag>)
                             {
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="selectedTags" value="@tag.TagId" />
+                                    <input class="form-check-input" type="checkbox" name="selectedTags" value="@tag.TagID" />
                                     <label class="form-check-label">@tag.Name</label>
                                 </div>
                             }
@@ -386,7 +386,7 @@
                             @foreach (var tag in ViewBag.Tags as List<GoEASy.Models.BlogTag>)
                             {
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="selectedTags" value="@tag.TagId" />
+                                    <input class="form-check-input" type="checkbox" name="selectedTags" value="@tag.TagID" />
                                     <label class="form-check-label">@tag.Name</label>
                                 </div>
                             }

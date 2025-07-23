@@ -34,7 +34,7 @@ namespace GoEASy.Controllers
             // Lấy feedback (review) cho tour này, order mới nhất trước
             var feedbacks = await _context.Reviews
                 .Include(r => r.User)
-                .Where(r => r.TourId == id && !string.IsNullOrEmpty(r.Comment))
+                .Where(r => r.TourID == id && !string.IsNullOrEmpty(r.Comment))
                 .OrderByDescending(r => r.CreatedDate)
                 .ToListAsync();
             int pageSize = 5;
@@ -50,7 +50,7 @@ namespace GoEASy.Controllers
             bool canComment = false;
             if (userId != null)
             {
-                canComment = await _context.Bookings.AnyAsync(b => b.UserId == userId && b.TourId == id && b.Status == true && b.PaymentStatus == "Paid");
+                canComment = await _context.Bookings.AnyAsync(b => b.UserID == userId && b.TourID == id && b.Status == true && b.PaymentStatus == "Paid");
             }
             ViewBag.CanComment = canComment;
 
