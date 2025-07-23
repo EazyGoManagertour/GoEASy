@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GoEASy.Controllers
 {
-    [AdminAuthorize]
+    //[AdminAuthorize]
     [Route("admin/destination-admin")]
     public class AdminDestinationController : Controller
     {
