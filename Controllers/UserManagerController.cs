@@ -64,7 +64,11 @@ namespace GoEASy.Controllers
                 {
                     user.Sex = "Male";
                 }
-
+                if (!string.IsNullOrEmpty(user.Password))
+                {
+                    user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+                }
+                
                 user.CreatedAt = DateTime.Now;
                 await _userService.CreateUserAsync(user);
 
@@ -127,7 +131,9 @@ namespace GoEASy.Controllers
                 existingUser.FullName = user.FullName;
                 existingUser.Email = user.Email;
                 if (!string.IsNullOrEmpty(user.Password))
-                    existingUser.Password = user.Password;
+                {
+                    existingUser.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+                }
                 existingUser.Phone = user.Phone;
                 existingUser.Address = user.Address;
                 existingUser.Sex = user.Sex;

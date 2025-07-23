@@ -44,7 +44,7 @@ namespace GoEASy.Controllers
                 {
                     Username = "testuser",
                     Email = "test@example.com",
-                    Password = HashPassword("123456"), // Hash password
+                    Password = BCrypt.Net.BCrypt.HashPassword("123456"), // Hash password bằng BCrypt
                     FullName = "Test User",
                     Phone = "0123456789",
                     Status = true,
@@ -84,8 +84,8 @@ namespace GoEASy.Controllers
                     return Content($"Không tìm thấy user với email: {email}");
                 }
 
-                // Hash password mới
-                user.Password = HashPassword(newPassword);
+                // Hash password mới bằng BCrypt
+                user.Password = BCrypt.Net.BCrypt.HashPassword(newPassword);
                 user.UpdatedAt = DateTime.Now;
                 
                 await _context.SaveChangesAsync();
@@ -115,13 +115,5 @@ namespace GoEASy.Controllers
         }
 
         // Helper method để hash password
-        private static string HashPassword(string password)
-        {
-            using (var sha256 = SHA256.Create())
-            {
-                var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                return Convert.ToBase64String(hashedBytes);
-            }
-        }
     }
 }
