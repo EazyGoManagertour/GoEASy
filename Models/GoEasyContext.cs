@@ -34,6 +34,8 @@ public partial class GoEasyContext : DbContext
     public virtual DbSet<Booking> Bookings { get; set; }
 
     public virtual DbSet<Companion> Companions { get; set; }
+    
+    public virtual DbSet<Contact> Contacts { get; set; }
 
     public virtual DbSet<Destination> Destinations { get; set; }
 
@@ -290,6 +292,26 @@ public partial class GoEasyContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.Companions)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK__Companion__UserI__1BC821DD");
+        });
+
+                modelBuilder.Entity<Contact>(entity =>
+        {
+            entity.HasKey(e => e.ContactId).HasName("PK__Contacts__5C6625BBB0D17CC4");
+
+            entity.Property(e => e.ContactId).HasColumnName("ContactID");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetime())");
+            entity.Property(e => e.Email).HasMaxLength(100);
+            entity.Property(e => e.FullName).HasMaxLength(100);
+            entity.Property(e => e.Phone).HasMaxLength(20);
+            entity.Property(e => e.Status)
+                .HasMaxLength(20)
+                .HasDefaultValue("New");
+            entity.Property(e => e.UserId).HasColumnName("UserID");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Contacts)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.SetNull)
+                .HasConstraintName("FK__Contacts__UserID__5C37ACAD");
         });
 
         modelBuilder.Entity<Destination>(entity =>

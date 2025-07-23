@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+@Html.Partial("~/Views/client/share/head.cshtml")
+
+<body>
+    <div class="page-wrapper">
+
+        <!-- Preloader -->
+        <div class="preloader"><div class="custom-loader"></div></div>
+
+        <!-- main header -->
+        <header class="main-header header-one">
+            <!--Header-Upper-->
+            @Html.Partial("~/Views/client/share/header2.cshtml")
+            <!--End Header Upper-->
+        </header>
+       
+
+        <!--Form Back Drop-->
+        <div class="form-back-drop"></div>
+        
+        <!-- Hidden Sidebar -->
+        <section class="hidden-bar">
+            <div class="inner-box text-center">
+                <div class="cross-icon"><span class="fa fa-times"></span></div>
+                <div class="title">
+                    <h4>Get Appointment</h4>
+                </div>
+                <!--Appointment Form-->
+                <!-- ĐÃ LOẠI BỎ FORM HTML CŨ Ở ĐÂY ĐỂ TRÁNH NHẦM LẪN -->
+                <!--Social Icons-->
+                <div class="social-style-one">
+                    <a href="contact.html"><i class="fab fa-twitter"></i></a>
+                    <a href="contact.html"><i class="fab fa-facebook-f"></i></a>
+                    <a href="contact.html"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                </div>
+            </div>
+        </section>
+        <!--End Hidden Sidebar -->
+       
+        
+        <!-- Page Banner Start -->
+        <section class="page-banner-area pt-50 pb-35 rel z-1 bgs-cover" style="background-image: url(assets/images/banner/banner.jpg);">
+            <div class="container">
+                <div class="banner-inner text-white">
+                    <h2 class="page-title mb-10" data-aos="fade-left" data-aos-duration="1500" data-aos-offset="50">Contact Us</h2>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center mb-20" data-aos="fade-right" data-aos-delay="200" data-aos-duration="1500" data-aos-offset="50">
+                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item active">Contact Us</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </section>
+        <!-- Page Banner End -->
+        
+        
+        <!-- Contact Info Area start -->
+        <section class="contact-info-area pt-100 rel z-1">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-4">
+                        <div class="contact-info-content mb-30 rmb-55" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                            <div class="section-title mb-30">
+                                <h2>Trò chuyện cùng Chuyên gia Du lịch</h2>
+                            </div>
+                            <p>Đội ngũ hỗ trợ tận tâm của chúng tôi luôn sẵn sàng đồng hành và giải đáp mọi thắc mắc của bạn, mang đến những giải pháp nhanh chóng và phù hợp nhất với nhu cầu của bạn.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="contact-info-item" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50" data-aos-delay="50">
+                                    <div class="icon"><i class="fas fa-envelope"></i></div>
+                                    <div class="content">
+                                        <h5>Cần hỗ trợ & giúp đỡ</h5>
+                                        <div class="text"><i class="far fa-envelope"></i> <a href="mailto:kietdtde180727@fpt.edu.vn">kietdtde180727@fpt.edu.vn</a></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="contact-info-item" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50" data-aos-delay="100">
+                                    <div class="icon"><i class="fas fa-phone"></i></div>
+                                    <div class="content">
+                                        <h5>Cần hỗ trợ khẩn cấp</h5>
+                                        <div class="text"><i class="far fa-phone"></i> <a href="tel:+84859104007">0859 104 007</a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Contact Info Area end -->
+        
+        
+        <!-- Contact Form Area start -->
+        <section class="contact-form-area py-70 rel z-1">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-7">
+                        <div class="comment-form bgc-lighter z-1 rel mb-30 rmb-55">
+                            <form id="contactForm" class="contactForm" name="contactForm" action="/contact" method="post" data-aos="fade-left" data-aos-duration="1500" data-aos-offset="50">
+                                <div class="section-title">
+                                    <h2>Liên hệ với chúng tôi</h2>
+                                </div>
+                                <p>YĐịa chỉ email của bạn sẽ không được công khai.</p>
+                                <div class="row mt-35">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="name">Họ và tên</label>
+                                            <input type="text" id="name" name="fullName" class="form-control" placeholder="Dương Kiệt" value="@ViewBag.UserFullName" required data-error="Please enter your Name">
+                                            <div class="help-block with-errors"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="phone_number">Số điện thoại</label>
+                                            <input type="text" id="phone_number" name="phone" class="form-control" placeholder="Số điện thoại" value="@ViewBag.UserPhone" required data-error="Please enter your Phone">
+                                            <div class="help-block with-errors"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="email">Email</label>
+                                            <input type="email" id="email" name="email" class="form-control" placeholder="Nhập email" value="@ViewBag.UserEmail" required data-error="Please enter your Email">
+                                            <div class="help-block with-errors"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="message">Nội dung liên hệ</label>
+                                            <textarea name="message" id="message" class="form-control" rows="5" placeholder="Tin nhắn" required data-error="Please enter your Message"></textarea>
+                                            <div class="help-block with-errors"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group mb-0">
+                                           <ul class="radio-filter mb-25">
+                                                <li>
+                                                    <input class="form-check-input" type="checkbox" name="termsCondition" id="terms-condition">
+                                                    <label for="terms-condition">Lưu tên, email và trang web của tôi trong trình duyệt này cho lần bình luận tiếp theo</label>
+                                                </li>
+                                            </ul>
+                                            <button type="submit" class="theme-btn style-two">
+                                                <span data-hover="Send Comments">Gửi liên hệ</span>
+                                                <i class="fal fa-arrow-right"></i>
+                                            </button>
+                                            <div id="msgSubmit" class="hidden"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="contact-images-part" data-aos="fade-right" data-aos-duration="1500" data-aos-offset="50">
+                            <div class="row">
+                                <div class="col-12">
+                                    <img src="assets/images/contact/contact1.jpg" alt="Contact">
+                                </div>
+                                <div class="col-6">
+                                    <img src="assets/images/contact/contact2.jpg" alt="Contact">
+                                </div>
+                                <div class="col-6">
+                                    <img src="assets/images/contact/contact3.jpg" alt="Contact">
+                                </div>
+                            </div>
+                            <div class="circle-logo">
+                                <img src="assets/images/contact/icon.png" alt="Logo">
+                                <span class="title h2">GoEasy</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Contact Form Area end -->
+        
+        
+        <!-- Contact Map Start -->
+        <div class="contact-map">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d61349.64700643014!2d108.16550617972635!3d16.047164814852437!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x314219c792252a13%3A0xfc14e3a044436487!2zxJDDoCBO4bq1bmcsIEjhuqNpIENow6J1LCDEkMOgIE7hurVuZywgVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1753305596713!5m2!1svi!2s" 
+                width="100%" 
+                height="450" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+
+        <!-- Contact Map End -->
+        
+
+        <!-- footer area start -->
+        <footer class="main-footer footer-two bgc-black rel z-15">
+            <div class="container">
+                <div class="footer-instagram pt-100">
+                    <div class="row row-cols-xxl-6 row-cols-xl-5 row-cols-lg-4 row-cols-md-3 row-cols-2">
+                        <div class="col" data-aos="zoom-in-up" data-aos-duration="1500" data-aos-offset="50">
+                            <a class="instagram-item" href="assets/images/instagram/instagram1.jpg">
+                                <img src="assets/images/instagram/instagram1.jpg" alt="Instagram">
+                            </a>
+                        </div>
+                        <div class="col" data-aos="zoom-in-down" data-aos-duration="1500" data-aos-offset="50">
+                            <a class="instagram-item" href="assets/images/instagram/instagram2.jpg">
+                                <img src="assets/images/instagram/instagram2.jpg" alt="Instagram">
+                            </a>
+                        </div>
+                        <div class="col" data-aos="zoom-in-up" data-aos-duration="1500" data-aos-offset="50">
+                            <a class="instagram-item" href="assets/images/instagram/instagram3.jpg">
+                                <img src="assets/images/instagram/instagram3.jpg" alt="Instagram">
+                            </a>
+                        </div>
+                        <div class="col" data-aos="zoom-in-down" data-aos-duration="1500" data-aos-offset="50">
+                            <a class="instagram-item" href="assets/images/instagram/instagram4.jpg">
+                                <img src="assets/images/instagram/instagram4.jpg" alt="Instagram">
+                            </a>
+                        </div>
+                        <div class="col" data-aos="zoom-in-up" data-aos-duration="1500" data-aos-offset="50">
+                            <a class="instagram-item" href="assets/images/instagram/instagram5.jpg">
+                                <img src="assets/images/instagram/instagram5.jpg" alt="Instagram">
+                            </a>
+                        </div>
+                        <div class="col" data-aos="zoom-in-down" data-aos-duration="1500" data-aos-offset="50">
+                            <a class="instagram-item" href="assets/images/instagram/instagram6.jpg">
+                                <img src="assets/images/instagram/instagram6.jpg" alt="Instagram">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        @Html.Partial("~/Views/client/share/footer-area.cshtml")
+        <!-- footer area end -->
+
+    </div>
+    <!--End pagewrapper-->
+   
+    
+    <!-- Jquery -->
+    <script src="assets/js/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="assets/js/bootstrap.min.js"></script>
+    <!-- Appear Js -->
+    <script src="assets/js/appear.min.js"></script>
+    <!-- Slick -->
+    <script src="assets/js/slick.min.js"></script>
+    <!-- Magnific Popup -->
+    <script src="assets/js/jquery.magnific-popup.min.js"></script>
+    <!-- Nice Select -->
+    <script src="assets/js/jquery.nice-select.min.js"></script>
+    <!-- Image Loader -->
+    <script src="assets/js/imagesloaded.pkgd.min.js"></script>
+    <!-- Jquery UI -->
+    <script src="assets/js/jquery-ui.min.js"></script>
+    <!-- Isotope -->
+    <script src="assets/js/isotope.pkgd.min.js"></script>
+    <!--  AOS Animation -->
+    <script src="assets/js/aos.js"></script>
+    <!-- Custom script -->
+    <script src="assets/js/script.js"></script>
+
+    <!-- For Contact Form -->
+    <script src="assets/js/jquery.ajaxchimp.min.js"></script>
+    <script src="assets/js/form-validator.min.js"></script>
+    @{
+        var hasSuccess = TempData["Success"] != null;
+        var hasError = TempData["Error"] != null;
+    }
+    @if (hasSuccess)
+    {
+        <div class="toast align-items-center text-white bg-success border-0 position-fixed bottom-0 end-0 m-4" id="successToast" role="alert" aria-live="assertive" aria-atomic="true" style="z-index: 9999;">
+            <div class="d-flex">
+                <div class="toast-body">
+                    @TempData["Success"]
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    }
+    @if (hasError)
+    {
+        <div class="toast align-items-center text-white bg-danger border-0 position-fixed bottom-0 end-0 m-4" id="errorToast" role="alert" aria-live="assertive" aria-atomic="true" style="z-index: 9999;">
+            <div class="d-flex">
+                <div class="toast-body">
+                    @TempData["Error"]
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    }
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            var successToast = document.getElementById('successToast');
+            if (successToast) {
+                var toast = new bootstrap.Toast(successToast, { delay: 5000 });
+                toast.show();
+            }
+            var errorToast = document.getElementById('errorToast');
+            if (errorToast) {
+                var toast = new bootstrap.Toast(errorToast, { delay: 5000 });
+                toast.show();
+            }
+        });
+    </script>
+</body>
+
+<!-- Mirrored from webtendtheme.net/html/2024/ravelo/contact.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 07 Oct 2024 09:28:37 GMT -->
+</html>

@@ -50,4 +50,6 @@ public partial class User
     public virtual ICollection<Tour> Tours { get; set; } = new List<Tour>();
 
     public virtual ICollection<VippointHistory> VippointHistories { get; set; } = new List<VippointHistory>();
+   
+    public virtual ICollection<Contact> Contacts { get; set; } = new List<Contact>();
 }
