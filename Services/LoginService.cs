@@ -41,7 +41,6 @@ namespace GoEASy.Services
                 {
                     return (false, "Mật khẩu không đúng", null);
                 }
-
                 // Cập nhật thời gian đăng nhập cuối
                 user.UpdatedAt = DateTime.Now;
                 await _context.SaveChangesAsync();
@@ -83,31 +82,8 @@ namespace GoEASy.Services
 
         private bool VerifyPassword(string inputPassword, string storedPassword)
         {
-            // Hash input password
-            var hashedInput = HashPassword(inputPassword);
-            
-            // So sánh với password đã hash
-            if (hashedInput == storedPassword)
-            {
-                return true;
-            }
-            
-            // Nếu không khớp, thử so sánh trực tiếp (cho trường hợp password chưa hash)
-            if (inputPassword == storedPassword)
-            {
-                return true;
-            }
-            
-            return false;
-        }
-
-        public static string HashPassword(string password)
-        {
-            using (var sha256 = SHA256.Create())
-            {
-                var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                return Convert.ToBase64String(hashedBytes);
-            }
+            // So sánh bằng BCrypt
+            return BCrypt.Net.BCrypt.Verify(inputPassword, storedPassword);
         }
 
         public async Task<bool> RegisterAsync(User user)
@@ -121,8 +97,8 @@ namespace GoEASy.Services
                     return false;
                 }
 
-                // Hash password
-                user.Password = HashPassword(user.Password);
+                // Hash password bằng BCrypt
+                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
                 
                 // Set default values
                 user.CreatedAt = DateTime.Now;
