@@ -88,7 +88,7 @@
 
                         @foreach (var blog in Model)
                         {
-                            var mainImage = blog.BlogImages?.FirstOrDefault(img => img.IsMain == true)?.ImageUrl ?? "/image/default.jpg";
+                            var mainImage = blog.BlogImages?.FirstOrDefault(img => img.IsMain == true)?.ImageURL ?? "/image/default.jpg";
                             var authorName = blog.AuthorAdmin?.FullName ?? blog.AuthorUser?.FullName ?? "Unknown";
                             var blogDate = blog.CreatedAt?.ToString("dd MMMM yyyy") ?? "N/A";
 
@@ -99,7 +99,7 @@
                                 <div class="content">
                                     <a href="#" class="category">@blog.Category?.CategoryName</a>
                                     <h5>
-                                        <a href="/blog-detail/@blog.BlogId">@blog.Title</a>
+                                        <a href="/blog-detail/@blog.BlogID">@blog.Title</a>
                                     </h5>
                                     <ul class="blog-meta">
                                         <li><i class="far fa-calendar-alt"></i> <a href="#">@blogDate</a></li>
@@ -107,7 +107,7 @@
                                     </ul>
                                     <p>@blog.ShortDescription</p>
                                     <p>Author: @authorName</p>
-                                    <a href="/blog-detail/@blog.BlogId" class="theme-btn style-two style-three">
+                                    <a href="/blog-detail/@blog.BlogID" class="theme-btn style-two style-three">
                                         <span data-hover="Book Now">Read More</span>
                                         <i class="fal fa-arrow-right"></i>
                                     </a>
@@ -168,7 +168,7 @@
                                 <ul>
                                     @foreach (var blog in ViewBag.RecentBlogs as List<GoEASy.Models.Blog>)
                                     {
-                                        var img = blog.BlogImages?.FirstOrDefault(i => i.IsMain == true)?.ImageUrl ?? "/image/default.jpg";
+                                        var img = blog.BlogImages?.FirstOrDefault(i => i.IsMain == true)?.ImageURL ?? "/image/default.jpg";
                                         var date = blog.CreatedAt?.ToString("dd MMM yyyy") ?? "";
                                         <li>
                                             <div class="image">
@@ -176,7 +176,7 @@
                                             </div>
                                             <div class="content">
                                                 <h6>
-                                                    <a href="/blog/detail/@blog.BlogId">@blog.Title</a>
+                                                    <a href="/blog/detail/@blog.BlogID">@blog.Title</a>
                                                 </h6>
                                                 <span class="date"><i class="far fa-calendar-alt"></i> @date</span>
                                             </div>

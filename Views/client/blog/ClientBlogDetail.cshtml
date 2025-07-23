@@ -108,7 +108,7 @@
                             <!-- Main Image -->
                             @{
                                 var blogImages = Model.BlogImages as List<GoEASy.Models.BlogImage> ?? new List<GoEASy.Models.BlogImage>();
-                                var mainImg = blogImages.FirstOrDefault(i => i.Type == "main")?.ImageUrl
+                                var mainImg = blogImages.FirstOrDefault(i => i.Type == "main")?.ImageURL
                                 ?? "/image/default.jpg";
                             }
                             <div class="image mt-30 mb-30" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
@@ -148,7 +148,7 @@
                                                 {
                                                     <div class="carousel-item @(i == 0 ? "active" : "")">
                                                         <div class="image" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                                                            <img src="@Url.Content(gallery[i].ImageUrl)" class="d-block w-100" alt="Gallery Image @(i + 1)">
+                                                            <img src="@Url.Content(gallery[i].ImageURL)" class="d-block w-100" alt="Gallery Image @(i + 1)">
                                                         </div>
                                                     </div>
                                                 }
@@ -297,7 +297,7 @@
                                 <ul>
                                     @foreach (var blog in ViewBag.RecentBlogs as List<GoEASy.Models.Blog>)
                                     {
-                                        var img = blog.BlogImages?.FirstOrDefault(i => i.IsMain == true)?.ImageUrl ?? "/assets/images/widgets/news-default.jpg";
+                                        var img = blog.BlogImages?.FirstOrDefault(i => i.IsMain == true)?.ImageURL ?? "/assets/images/widgets/news-default.jpg";
                                         var date = blog.CreatedAt?.ToString("dd MMM yyyy") ?? "";
                                         <li>
                                             <div class="image">
@@ -305,7 +305,7 @@
                                             </div>
                                             <div class="content">
                                                 <h6>
-                                                    <a href="/blog-detail/@blog.BlogId">@blog.Title</a>
+                                                    <a href="/blog-detail/@blog.BlogID">@blog.Title</a>
                                                 </h6>
                                                 <span class="date"><i class="far fa-calendar-alt"></i> @date</span>
                                             </div>

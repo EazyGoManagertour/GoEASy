@@ -176,14 +176,14 @@
                 <div class="filter-item clearfix">
                     <div class="icon"><i class="fal fa-map-marker-alt"></i></div>
                     <span class="title">Destinations</span>
-                    <select name="destinationId" id="destinationId" class="nice-select">
+                    <select name="DestinationID" id="DestinationID" class="nice-select">
                         <option value="">Tất cả điểm đến</option>
                         @if (ViewBag.Destinations != null)
                         {
                             foreach (dynamic destination in ViewBag.Destinations)
                             {
-                                var selected = ViewBag.SelectedDestinationId != null && ViewBag.SelectedDestinationId.ToString() == destination.DestinationId.ToString() ? "selected" : "";
-                                <option value="@destination.DestinationId" @selected>@destination.DestinationName</option>
+                                var selected = ViewBag.SelectedDestinationID != null && ViewBag.SelectedDestinationID.ToString() == destination.DestinationID.ToString() ? "selected" : "";
+                                <option value="@destination.DestinationID" @selected>@destination.DestinationName</option>
                             }
                         }
                     </select>
@@ -191,14 +191,14 @@
                 <div class="filter-item clearfix">
                     <div class="icon"><i class="fal fa-flag"></i></div>
                     <span class="title">Categories</span>
-                    <select name="categoryId" id="categoryId" class="nice-select">
+                    <select name="CategoryID" id="CategoryID" class="nice-select">
                         <option value="">Tất cả danh mục</option>
                         @if (ViewBag.Categories != null)
                         {
                             foreach (dynamic category in ViewBag.Categories)
                             {
-                                var selected = ViewBag.SelectedCategoryId != null && ViewBag.SelectedCategoryId.ToString() == category.CategoryId.ToString() ? "selected" : "";
-                                <option value="@category.CategoryId" @selected>@category.CategoryName</option>
+                                var selected = ViewBag.SelectedCategoryID != null && ViewBag.SelectedCategoryID.ToString() == category.CategoryID.ToString() ? "selected" : "";
+                                <option value="@category.CategoryID" @selected>@category.CategoryName</option>
                             }
                         }
                     </select>
@@ -235,8 +235,8 @@
                                         foreach (dynamic category in ViewBag.Categories)
                                         {
                                             <li>
-                                                <input class="form-check-input" type="radio" name="ByCategories" id="category-@category.CategoryId" value="@category.CategoryId">
-                                                <label for="category-@category.CategoryId">@category.CategoryName</label>
+                                                <input class="form-check-input" type="radio" name="ByCategories" id="category-@category.CategoryID" value="@category.CategoryID">
+                                                <label for="category-@category.CategoryID">@category.CategoryName</label>
                                             </li>
                                         }
                                     }
@@ -300,11 +300,11 @@
                                         }
                                     }
                                 }
-                                var isFeatured = tour.TourId % 3 == 0; // Logic để xác định tour featured
-                                var hasDiscount = tour.TourId % 4 == 0; // Logic để xác định tour có discount
-                                var isPopular = tour.TourId % 5 == 0; // Logic để xác định tour popular
+                                var isFeatured = tour.TourID % 3 == 0; // Logic để xác định tour featured
+                                var hasDiscount = tour.TourID % 4 == 0; // Logic để xác định tour có discount
+                                var isPopular = tour.TourID % 5 == 0; // Logic để xác định tour popular
 
-                                <div class="destination-item style-three bgc-lighter" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50" data-tour-id="@tour.TourId">
+                                <div class="destination-item style-three bgc-lighter" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50" data-tour-id="@tour.TourID">
                                     <div class="image">
                                         @if (isFeatured)
                                         {
@@ -319,9 +319,9 @@
                                             <span class="badge bgc-primary">Popular</span>
                                         }
                                         @{
-                                            var isFavorite = ViewBag.FavoriteTourIds != null && ((List<int>)ViewBag.FavoriteTourIds).Contains(tour.TourId);
+                                            var isFavorite = ViewBag.FavoriteTourIDs != null && ((List<int>)ViewBag.FavoriteTourIDs).Contains(tour.TourID);
                                         }
-                                        <a href="javascript:void(0);" class="heart@(isFavorite ? " active" : "")" data-tour-id="@tour.TourId">
+                                        <a href="javascript:void(0);" class="heart@(isFavorite ? " active" : "")" data-tour-id="@tour.TourID">
                                             <i class="fas fa-heart"></i>
                                         </a>
                                         <img src="@coverImage" alt="@tour.TourName" class="tour-img-fixed">
@@ -368,7 +368,7 @@
                                                     }
                                                 }
                                             </span>
-                                            <a href="/tour-details/@tour.TourId" class="theme-btn style-two style-three">
+                                            <a href="/tour-details/@tour.TourID" class="theme-btn style-two style-three">
                                                 <span data-hover="Book Now">Book Now</span>
                                                 <i class="fal fa-arrow-right"></i>
                                             </a>
@@ -391,14 +391,14 @@
                             <nav aria-label="Page navigation">
                                 <ul class="pagination pt-15 flex-wrap" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
                                     <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
-                                        <a class="page-link" href="/tour-list?page=@(ViewBag.CurrentPage - 1)@(ViewBag.PageSize != null ? "&pageSize=" + ViewBag.PageSize : "")@(ViewBag.SelectedDestinationId != null ? "&destinationId=" + ViewBag.SelectedDestinationId : "")@(ViewBag.SelectedCategoryId != null ? "&categoryId=" + ViewBag.SelectedCategoryId : "")@(ViewBag.StartDate != null ? "&startDate=" + ViewBag.StartDate : "")@(ViewBag.SortBy != null ? "&sortBy=" + ViewBag.SortBy : "")" tabindex="-1"><i class="far fa-chevron-left"></i></a>
+                                        <a class="page-link" href="/tour-list?page=@(ViewBag.CurrentPage - 1)@(ViewBag.PageSize != null ? "&pageSize=" + ViewBag.PageSize : "")@(ViewBag.SelectedDestinationID != null ? "&DestinationID=" + ViewBag.SelectedDestinationID : "")@(ViewBag.SelectedCategoryID != null ? "&CategoryID=" + ViewBag.SelectedCategoryID : "")@(ViewBag.StartDate != null ? "&startDate=" + ViewBag.StartDate : "")@(ViewBag.SortBy != null ? "&sortBy=" + ViewBag.SortBy : "")" tabindex="-1"><i class="far fa-chevron-left"></i></a>
                                     </li>
                                     @{
                                         int startPage = Math.Max(1, ViewBag.CurrentPage - 1);
                                         int endPage = Math.Min((int)ViewBag.TotalPages, ViewBag.CurrentPage + 1);
                                         if (startPage > 1)
                                         {
-                                            <li class="page-item"><a class="page-link" href="/tour-list?page=1@(ViewBag.PageSize != null ? "&pageSize=" + ViewBag.PageSize : "")@(ViewBag.SelectedDestinationId != null ? "&destinationId=" + ViewBag.SelectedDestinationId : "")@(ViewBag.SelectedCategoryId != null ? "&categoryId=" + ViewBag.SelectedCategoryId : "")@(ViewBag.StartDate != null ? "&startDate=" + ViewBag.StartDate : "")@(ViewBag.SortBy != null ? "&sortBy=" + ViewBag.SortBy : "")">1</a></li>
+                                            <li class="page-item"><a class="page-link" href="/tour-list?page=1@(ViewBag.PageSize != null ? "&pageSize=" + ViewBag.PageSize : "")@(ViewBag.SelectedDestinationID != null ? "&DestinationID=" + ViewBag.SelectedDestinationID : "")@(ViewBag.SelectedCategoryID != null ? "&CategoryID=" + ViewBag.SelectedCategoryID : "")@(ViewBag.StartDate != null ? "&startDate=" + ViewBag.StartDate : "")@(ViewBag.SortBy != null ? "&sortBy=" + ViewBag.SortBy : "")">1</a></li>
                                             if (startPage > 2)
                                             {
                                                 <li class="page-item disabled"><span class="page-link">...</span></li>
@@ -412,7 +412,7 @@
                                             }
                                             else
                                             {
-                                                <li class="page-item"><a class="page-link" href="/tour-list?page=@i@(ViewBag.PageSize != null ? "&pageSize=" + ViewBag.PageSize : "")@(ViewBag.SelectedDestinationId != null ? "&destinationId=" + ViewBag.SelectedDestinationId : "")@(ViewBag.SelectedCategoryId != null ? "&categoryId=" + ViewBag.SelectedCategoryId : "")@(ViewBag.StartDate != null ? "&startDate=" + ViewBag.StartDate : "")@(ViewBag.SortBy != null ? "&sortBy=" + ViewBag.SortBy : "")">@i</a></li>
+                                                <li class="page-item"><a class="page-link" href="/tour-list?page=@i@(ViewBag.PageSize != null ? "&pageSize=" + ViewBag.PageSize : "")@(ViewBag.SelectedDestinationID != null ? "&DestinationID=" + ViewBag.SelectedDestinationID : "")@(ViewBag.SelectedCategoryID != null ? "&CategoryID=" + ViewBag.SelectedCategoryID : "")@(ViewBag.StartDate != null ? "&startDate=" + ViewBag.StartDate : "")@(ViewBag.SortBy != null ? "&sortBy=" + ViewBag.SortBy : "")">@i</a></li>
                                             }
                                         }
                                         if (endPage < (int)ViewBag.TotalPages)
@@ -421,11 +421,11 @@
                                             {
                                                 <li class="page-item disabled"><span class="page-link">...</span></li>
                                             }
-                                            <li class="page-item"><a class="page-link" href="/tour-list?page=@ViewBag.TotalPages@(ViewBag.PageSize != null ? "&pageSize=" + ViewBag.PageSize : "")@(ViewBag.SelectedDestinationId != null ? "&destinationId=" + ViewBag.SelectedDestinationId : "")@(ViewBag.SelectedCategoryId != null ? "&categoryId=" + ViewBag.SelectedCategoryId : "")@(ViewBag.StartDate != null ? "&startDate=" + ViewBag.StartDate : "")@(ViewBag.SortBy != null ? "&sortBy=" + ViewBag.SortBy : "")">@ViewBag.TotalPages</a></li>
+                                            <li class="page-item"><a class="page-link" href="/tour-list?page=@ViewBag.TotalPages@(ViewBag.PageSize != null ? "&pageSize=" + ViewBag.PageSize : "")@(ViewBag.SelectedDestinationID != null ? "&DestinationID=" + ViewBag.SelectedDestinationID : "")@(ViewBag.SelectedCategoryID != null ? "&CategoryID=" + ViewBag.SelectedCategoryID : "")@(ViewBag.StartDate != null ? "&startDate=" + ViewBag.StartDate : "")@(ViewBag.SortBy != null ? "&sortBy=" + ViewBag.SortBy : "")">@ViewBag.TotalPages</a></li>
                                         }
                                     }
                                     <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
-                                        <a class="page-link" href="/tour-list?page=@(ViewBag.CurrentPage + 1)@(ViewBag.PageSize != null ? "&pageSize=" + ViewBag.PageSize : "")@(ViewBag.SelectedDestinationId != null ? "&destinationId=" + ViewBag.SelectedDestinationId : "")@(ViewBag.SelectedCategoryId != null ? "&categoryId=" + ViewBag.SelectedCategoryId : "")@(ViewBag.StartDate != null ? "&startDate=" + ViewBag.StartDate : "")@(ViewBag.SortBy != null ? "&sortBy=" + ViewBag.SortBy : "")"><i class="far fa-chevron-right"></i></a>
+                                        <a class="page-link" href="/tour-list?page=@(ViewBag.CurrentPage + 1)@(ViewBag.PageSize != null ? "&pageSize=" + ViewBag.PageSize : "")@(ViewBag.SelectedDestinationID != null ? "&DestinationID=" + ViewBag.SelectedDestinationID : "")@(ViewBag.SelectedCategoryID != null ? "&CategoryID=" + ViewBag.SelectedCategoryID : "")@(ViewBag.StartDate != null ? "&startDate=" + ViewBag.StartDate : "")@(ViewBag.SortBy != null ? "&sortBy=" + ViewBag.SortBy : "")"><i class="far fa-chevron-right"></i></a>
                                     </li>
                                 </ul>
                             </nav>
@@ -484,11 +484,11 @@
 
             // Set selected values from URL parameters
             const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('destinationId')) {
-                $('#destinationId').val(urlParams.get('destinationId'));
+            if (urlParams.get('DestinationID')) {
+                $('#DestinationID').val(urlParams.get('DestinationID'));
             }
-            if (urlParams.get('categoryId')) {
-                $('#categoryId').val(urlParams.get('categoryId'));
+            if (urlParams.get('CategoryID')) {
+                $('#CategoryID').val(urlParams.get('CategoryID'));
             }
             if (urlParams.get('startDate')) {
                 $('#startDate').val(urlParams.get('startDate'));
@@ -508,17 +508,17 @@
 
             // Function to perform search
             function performSearch() {
-                var destinationId = $('#destinationId').val();
-                var categoryId = $('#categoryId').val();
+                var DestinationID = $('#DestinationID').val();
+                var CategoryID = $('#CategoryID').val();
                 var startDate = $('#startDate').val();
                 var sortBy = $('.sort-select').val();
 
-                console.log('Search params:', { destinationId, categoryId, startDate, sortBy });
+                console.log('Search params:', { DestinationID, CategoryID, startDate, sortBy });
 
                 // Build search parameters
                 var searchParams = new URLSearchParams();
-                if (destinationId) searchParams.append('destinationId', destinationId);
-                if (categoryId) searchParams.append('categoryId', categoryId);
+                if (DestinationID) searchParams.append('DestinationID', DestinationID);
+                if (CategoryID) searchParams.append('CategoryID', CategoryID);
                 if (startDate) searchParams.append('startDate', startDate);
                 if (sortBy && sortBy !== 'default') searchParams.append('sortBy', sortBy);
 
@@ -536,13 +536,13 @@
                 if (filterType === 'ByCategories') {
                     // Update category dropdown in search bar
                     if (filterValue) {
-                        $('#categoryId').val(filterValue);
+                        $('#CategoryID').val(filterValue);
                     } else {
-                        $('#categoryId').val('');
+                        $('#CategoryID').val('');
                     }
                     // Re-initialize nice-select
-                    $('#categoryId').niceSelect('destroy');
-                    $('#categoryId').niceSelect();
+                    $('#CategoryID').niceSelect('destroy');
+                    $('#CategoryID').niceSelect();
 
                     // Perform search immediately
                     performSearch();
@@ -558,14 +558,14 @@
             $(document).on('click', '.heart', function(e) {
                 e.preventDefault();
                 var $btn = $(this);
-                var tourId = $btn.data('tour-id');
+                var TourID = $btn.data('tour-id');
                 var isActive = $btn.hasClass('active');
                 var url = isActive ? '/favorite/remove' : '/favorite/add';
 
                 $.ajax({
                     url: url,
                     type: 'POST',
-                    data: { tourId: tourId },
+                    data: { TourID: TourID },
                     success: function(response) {
                         if (response.success) {
                             $btn.toggleClass('active');
@@ -581,8 +581,8 @@
 
             // Clear all filters
             $('.clear-filters').on('click', function() {
-                $('#destinationId').val('');
-                $('#categoryId').val('');
+                $('#DestinationID').val('');
+                $('#CategoryID').val('');
                 $('#startDate').val('');
                 $('.sort-select').val('default');
 

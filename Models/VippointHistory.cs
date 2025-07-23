@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace GoEASy.Models;
 
-public partial class VippointHistory
+public partial class VIPPointHistory
 {
-    public int HistoryId { get; set; }
+    public int HistoryID { get; set; }
 
-    public int? UserId { get; set; }
+    public int? UserID { get; set; }
 
     public int? ChangeAmount { get; set; }
 

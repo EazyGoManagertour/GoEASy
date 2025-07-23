@@ -104,8 +104,8 @@ namespace GoEASy.Services
                 user.CreatedAt = DateTime.Now;
                 user.UpdatedAt = DateTime.Now;
                 user.Status = true;
-                user.Vippoints = 0;
-                user.IsVip = false;
+                user.VIPPoints = 0;
+                user.IsVIP = false;
 
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();

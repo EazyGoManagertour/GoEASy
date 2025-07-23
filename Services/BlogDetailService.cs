@@ -37,7 +37,7 @@ namespace GoEASy.Services
                     .Include(b => b.BlogImages)
                     .Include(b => b.BlogTagMappings)
                         .ThenInclude(m => m.Tag)
-                    .FirstOrDefaultAsync(b => b.BlogId == d.BlogId);
+                    .FirstOrDefaultAsync(b => b.BlogID == d.BlogID);
             }
 
             return all.Where(d => d.Status == true);
@@ -49,10 +49,10 @@ namespace GoEASy.Services
             return detail?.Status == true ? detail : null;
         }
 
-        public async Task<BlogDetail?> GetByBlogIdAsync(int blogId)
+        public async Task<BlogDetail?> GetByBlogIdAsync(int BlogID)
         {
             var all = await _detailRepo.GetAllAsync();
-            return all.FirstOrDefault(d => d.BlogId == blogId && d.Status == true);
+            return all.FirstOrDefault(d => d.BlogID == BlogID && d.Status == true);
         }
 
         public async Task AddAsync(BlogDetail detail, BlogImage? mainImage, List<BlogImage> galleryImages, List<int> tagIds)
@@ -60,18 +60,18 @@ namespace GoEASy.Services
             await _detailRepo.AddAsync(detail);
             await _detailRepo.SaveAsync();
 
-            int blogId = detail.BlogId;
+            int BlogID = detail.BlogID;
 
             if (mainImage != null)
             {
-                mainImage.BlogId = blogId;
+                mainImage.BlogID = BlogID;
                 mainImage.Type = "main";
                 await _imageRepo.AddAsync(mainImage);
             }
 
             foreach (var img in galleryImages)
             {
-                img.BlogId = blogId;
+                img.BlogID = BlogID;
                 img.Type = "gallery";
                 await _imageRepo.AddAsync(img);
             }
@@ -80,8 +80,8 @@ namespace GoEASy.Services
             {
                 var map = new BlogTagMapping
                 {
-                    BlogId = blogId,
-                    TagId = tagId
+                    BlogID = BlogID,
+                    TagID = tagId
                 };
                 await _tagMapRepo.AddAsync(map);
             }
@@ -96,7 +96,7 @@ namespace GoEASy.Services
     List<BlogImage> newGalleryImages,
     List<int> tagIds)
         {
-            var existing = await _detailRepo.GetByIdAsync(detail.BlogDetailId);
+            var existing = await _detailRepo.GetByIdAsync(detail.BlogDetailID);
             if (existing == null) return;
 
             existing.Introduction = detail.Introduction;
@@ -110,16 +110,16 @@ namespace GoEASy.Services
             _detailRepo.Update(existing);
             await _detailRepo.SaveAsync();
 
-            int blogId = existing.BlogId;
-            int blogDetailId = existing.BlogDetailId;
+            int BlogID = existing.BlogID;
+            int blogDetailId = existing.BlogDetailID;
 
             // MAIN IMAGE
             if (newMainImage != null)
             {
-                var oldMain = await GetMainImageAsync(blogId);
+                var oldMain = await GetMainImageAsync(BlogID);
                 if (oldMain != null) _imageRepo.Delete(oldMain);
 
-                newMainImage.BlogId = blogId;
+                newMainImage.BlogID = BlogID;
                 newMainImage.Type = "main";
                 await _imageRepo.AddAsync(newMainImage);
             }
@@ -127,12 +127,12 @@ namespace GoEASy.Services
             // GALLERY IMAGES
             if (newGalleryImages != null && newGalleryImages.Count > 0)
             {
-                var oldGallery = await GetGalleryImagesAsync(blogId);
+                var oldGallery = await GetGalleryImagesAsync(BlogID);
                 foreach (var img in oldGallery) _imageRepo.Delete(img);
 
                 foreach (var img in newGalleryImages)
                 {
-                    img.BlogId = blogId;
+                    img.BlogID = BlogID;
                     img.Type = "gallery";
                     await _imageRepo.AddAsync(img);
                 }
@@ -140,7 +140,7 @@ namespace GoEASy.Services
 
             // UPDATE TAG MAPPINGS (gắn với BlogDetailId)
             var oldMappings = (await _tagMapRepo.GetAllAsync())
-                     .Where(m => m.BlogId == blogId).ToList();
+                     .Where(m => m.BlogID == BlogID).ToList();
 
             foreach (var m in oldMappings) _tagMapRepo.Delete(m);
 
@@ -148,8 +148,8 @@ namespace GoEASy.Services
             {
                 await _tagMapRepo.AddAsync(new BlogTagMapping
                 {
-                    BlogId = blogId,
-                    TagId = tagId
+                    BlogID = BlogID,
+                    TagID = tagId
                 });
             }
 
@@ -180,23 +180,23 @@ namespace GoEASy.Services
             }
         }
 
-        public async Task<BlogImage?> GetMainImageAsync(int blogId)
+        public async Task<BlogImage?> GetMainImageAsync(int BlogID)
         {
             var images = await _imageRepo.GetAllAsync();
-            return images.FirstOrDefault(i => i.BlogId == blogId && i.Type == "main");
+            return images.FirstOrDefault(i => i.BlogID == BlogID && i.Type == "main");
         }
 
-        public async Task<List<BlogImage>> GetGalleryImagesAsync(int blogId)
+        public async Task<List<BlogImage>> GetGalleryImagesAsync(int BlogID)
         {
             var images = await _imageRepo.GetAllAsync();
-            return images.Where(i => i.BlogId == blogId && i.Type == "gallery")
+            return images.Where(i => i.BlogID == BlogID && i.Type == "gallery")
                          .OrderBy(i => i.Position ?? 0).ToList();
         }
 
-        public async Task<List<BlogTagMapping>> GetTagsAsync(int blogId)
+        public async Task<List<BlogTagMapping>> GetTagsAsync(int BlogID)
         {
             var all = await _tagMapRepo.GetAllAsync();
-            return all.Where(m => m.BlogId == blogId).ToList();
+            return all.Where(m => m.BlogID == BlogID).ToList();
         }
     }
 }

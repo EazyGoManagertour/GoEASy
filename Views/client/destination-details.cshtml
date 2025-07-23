@@ -99,13 +99,13 @@
                         @if (images.Count > 0)
                         {
                             <div class="gallery-item">
-                                <img src="@images[0].ImageUrl" style="width:100%;height:316.05px;object-fit:cover;border-radius:16px;" alt="Destination Image 1" />
+                                <img src="@images[0].ImageURL" style="width:100%;height:316.05px;object-fit:cover;border-radius:16px;" alt="Destination Image 1" />
                             </div>
                         }
                         @if (images.Count > 1)
                         {
                             <div class="gallery-item">
-                                <img src="@images[1].ImageUrl" style="width:100%;height:316.05px;object-fit:cover;border-radius:16px;" alt="Destination Image 2" />
+                                <img src="@images[1].ImageURL" style="width:100%;height:316.05px;object-fit:cover;border-radius:16px;" alt="Destination Image 2" />
                             </div>
                         }
                     </div>
@@ -113,7 +113,7 @@
                         @if (images.Count > 2)
                         {
                             <div class="gallery-item">
-                                <img src="@images[2].ImageUrl" style="width:100%;height:640.01px;object-fit:cover;border-radius:16px;" alt="Destination Image 3" />
+                                <img src="@images[2].ImageURL" style="width:100%;height:640.01px;object-fit:cover;border-radius:16px;" alt="Destination Image 3" />
                             </div>
                         }
                     </div>
@@ -121,13 +121,13 @@
                         @if (images.Count > 3)
                         {
                             <div class="gallery-item">
-                                <img src="@images[3].ImageUrl" style="width:100%;height:316.05px;object-fit:cover;border-radius:16px;" alt="Destination Image 4" />
+                                <img src="@images[3].ImageURL" style="width:100%;height:316.05px;object-fit:cover;border-radius:16px;" alt="Destination Image 4" />
                             </div>
                         }
                         @if (images.Count > 4)
                         {
                             <div class="gallery-item">
-                                <img src="@images[4].ImageUrl" style="width:100%;height:316.05px;object-fit:cover;border-radius:16px;" alt="Destination Image 5" />
+                                <img src="@images[4].ImageURL" style="width:100%;height:316.05px;object-fit:cover;border-radius:16px;" alt="Destination Image 5" />
                             </div>
                         }
                     </div>
@@ -147,7 +147,7 @@
                                 <h2>@Model.DestinationName</h2>
                             </div>
                             <p>@Model.Description</p>
-                            <a href="/tour-list?destinationId=@Model.DestinationId" class="theme-btn mt-25 style-two">
+                            <a href="/tour-list?DestinationID=@Model.DestinationID" class="theme-btn mt-25 style-two">
                                 <span data-hover="Explore Destinations">Explore Destinations</span>
                                 <i class="fal fa-arrow-right"></i>
                             </a>
@@ -177,8 +177,8 @@
                         {
                             foreach (var tour in (IEnumerable<GoEASy.Models.Tour>)ViewBag.Tours)
                             {
-                                var coverImg = tour.TourImages?.FirstOrDefault(img => img.IsCover == true)?.ImageUrl
-                                    ?? tour.TourImages?.FirstOrDefault()?.ImageUrl
+                                var coverImg = tour.TourImages?.FirstOrDefault(img => img.IsCover == true)?.ImageURL
+                                    ?? tour.TourImages?.FirstOrDefault()?.ImageURL
                                     ?? "/assets/images/destinations/destination1.jpg";
                                 <div class="swiper-slide">
                                     <div class="destination-item style-two" data-aos="flip-up" data-aos-duration="1500" data-aos-offset="50">
@@ -187,9 +187,9 @@
                                             <img src="@coverImg" alt="@tour.TourName" style="width:100%;height:220px;object-fit:cover;">
                                         </div>
                                         <div class="content">
-                                            <h6><a href="/tour-details/@tour.TourId">@tour.TourName</a></h6>
+                                            <h6><a href="/tour-details/@tour.TourID">@tour.TourName</a></h6>
                                             <span class="time">@tour.AdultPrice.ToString("N0") VNĐ/người</span>
-                                            <a href="/tour-details/@tour.TourId" class="more"><i class="fas fa-chevron-right"></i></a>
+                                            <a href="/tour-details/@tour.TourID" class="more"><i class="fas fa-chevron-right"></i></a>
                                         </div>
                                     </div>
                                 </div>
@@ -229,8 +229,8 @@
                         {
                             foreach (var dest in (IEnumerable<GoEASy.Models.Destination>)ViewBag.PopularDestinations)
                             {
-                                var coverImg = dest.DestinationImages.FirstOrDefault(img => img.IsCover == true)?.ImageUrl
-                                    ?? dest.DestinationImages.FirstOrDefault()?.ImageUrl
+                                var coverImg = dest.DestinationImages.FirstOrDefault(img => img.IsCover == true)?.ImageURL
+                                    ?? dest.DestinationImages.FirstOrDefault()?.ImageURL
                                     ?? "/assets/images/destinations/destination1.jpg";
                                 <div class="swiper-slide">
                                     <div class="destination-item style-two" data-aos="flip-up" data-aos-duration="1500" data-aos-offset="50">
@@ -239,8 +239,8 @@
                                             <img src="@coverImg" alt="@dest.DestinationName" style="width:100%;height:220px;object-fit:cover;">
                                         </div>
                                         <div class="content">
-                                            <h6><a href="/destination/details/@dest.DestinationId">@dest.DestinationName</a></h6>
-                                            <a href="/destination/details/@dest.DestinationId" class="more"><i class="fas fa-chevron-right"></i></a>
+                                            <h6><a href="/destination/details/@dest.DestinationID">@dest.DestinationName</a></h6>
+                                            <a href="/destination/details/@dest.DestinationID" class="more"><i class="fas fa-chevron-right"></i></a>
                                         </div>
                                     </div>
                                 </div>

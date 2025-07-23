@@ -5,9 +5,9 @@ namespace GoEASy.Models;
 
 public partial class TourDetail
 {
-    public int TourDetailId { get; set; }
+    public int TourDetailID { get; set; }
 
-    public int? TourId { get; set; }
+    public int TourID { get; set; }
 
     public string? Description { get; set; }
 
@@ -19,5 +19,5 @@ public partial class TourDetail
 
     public DateTime? CreatedAt { get; set; }
 
-    public virtual Tour? Tour { get; set; }
+    public virtual Tour Tour { get; set; } = null!;
 }

@@ -32,7 +32,7 @@ namespace GoEASy.Controllers
             }
 
             // Kiểm tra user đã booking tour này chưa
-            bool hasBooking = await _context.Bookings.AnyAsync(b => b.UserId == userId && b.TourId == tourId && b.Status == true && b.PaymentStatus == "Paid");
+            bool hasBooking = await _context.Bookings.AnyAsync(b => b.UserID == userId && b.TourID == tourId && b.Status == true && b.PaymentStatus == "Paid");
             if (!hasBooking)
             {
                 if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
@@ -45,8 +45,8 @@ namespace GoEASy.Controllers
 
             var review = new Review
             {
-                UserId = userId,
-                TourId = tourId,
+                UserID = userId,
+                TourID = tourId,
                 Rating = rating,
                 Comment = comment,
                 CreatedDate = DateTime.Now

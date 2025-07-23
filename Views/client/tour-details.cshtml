@@ -101,13 +101,13 @@
                         @if (images.Count > 0)
                         {
                             <div class="gallery-item">
-                                <img src="@Url.Content(images[0].ImageUrl)" style="width:100%;height:316.05px;object-fit:cover;border-radius:16px;" alt="Tour Image 1" />
+                                <img src="@Url.Content(images[0].ImageURL)" style="width:100%;height:316.05px;object-fit:cover;border-radius:16px;" alt="Tour Image 1" />
                             </div>
                         }
                         @if (images.Count > 1)
                         {
                             <div class="gallery-item">
-                                <img src="@Url.Content(images[1].ImageUrl)" style="width:100%;height:316.05px;object-fit:cover;border-radius:16px;" alt="Tour Image 2" />
+                                <img src="@Url.Content(images[1].ImageURL)" style="width:100%;height:316.05px;object-fit:cover;border-radius:16px;" alt="Tour Image 2" />
                             </div>
                         }
                     </div>
@@ -115,7 +115,7 @@
                         @if (images.Count > 2)
                         {
                             <div class="gallery-item">
-                                <img src="@Url.Content(images[2].ImageUrl)" style="width:100%;height:640.01px;object-fit:cover;border-radius:16px;" alt="Tour Image 3" />
+                                <img src="@Url.Content(images[2].ImageURL)" style="width:100%;height:640.01px;object-fit:cover;border-radius:16px;" alt="Tour Image 3" />
                             </div>
                         }
                     </div>
@@ -123,13 +123,13 @@
                         @if (images.Count > 3)
                         {
                             <div class="gallery-item">
-                                <img src="@Url.Content(images[3].ImageUrl)" style="width:100%;height:316.05px;object-fit:cover;border-radius:16px;" alt="Tour Image 4" />
+                                <img src="@Url.Content(images[3].ImageURL)" style="width:100%;height:316.05px;object-fit:cover;border-radius:16px;" alt="Tour Image 4" />
                             </div>
                         }
                         @if (images.Count > 4)
                         {
                             <div class="gallery-item">
-                                <img src="@Url.Content(images[4].ImageUrl)" style="width:100%;height:316.05px;object-fit:cover;border-radius:16px;" alt="Tour Image 5" />
+                                <img src="@Url.Content(images[4].ImageURL)" style="width:100%;height:316.05px;object-fit:cover;border-radius:16px;" alt="Tour Image 5" />
                             </div>
                         }
                     </div>
@@ -206,7 +206,7 @@
                         <div class="widget widget-booking" id="customBookingBox" style="display:none; width:100%; margin-bottom:24px; background:#f9f9f9; border:1px solid #e5e5e5; border-radius:16px; box-shadow:0 4px 24px rgba(0,0,0,0.07); padding:32px 28px 24px 28px;">
                             <h5 class="widget-title">Custom Booking</h5>
                             <form id="customBookingForm" method="post" action="/booking/create">
-                                <input type="hidden" name="tourId" value="@Model.TourId" />
+                                <input type="hidden" name="TourID" value="@Model.TourID" />
                                 <input type="hidden" name="adultGuests" id="customAdultGuests" value="0" />
                                 <input type="hidden" name="childGuests" id="customChildGuests" value="0" />
                                 <input type="hidden" name="totalPrice" id="customTotalPrice" value="0" />
@@ -325,7 +325,7 @@
                                 int idx = 0;
                                 foreach (var faq in (IEnumerable<GoEASy.Models.TourFAQ>)ViewBag.FAQs)
                                 {
-                                    var collapseId = $"collapseFaq{faq.FaqId}";
+                                    var collapseId = $"collapseFaq{faq.FAQID}";
                                     <div class="accordion-item">
                                         <h5 class="accordion-header">
                                             <button class="accordion-button @(idx == 0 ? "" : "collapsed")" type="button" data-bs-toggle="collapse" data-bs-target="#@collapseId" aria-expanded="@(idx == 0 ? "true" : "false")">
@@ -478,7 +478,7 @@
                         @if (ViewBag.CanComment == true)
                         {
                             <form id="comment-form" class="comment-form bgc-lighter z-1 rel mt-30" name="review-form" action="/review/post" method="post" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                                <input type="hidden" name="tourId" value="@Model.TourId" />
+                                <input type="hidden" name="TourID" value="@Model.TourID" />
                                 <div class="form-group">
                                     <label>Đánh giá (1-5 sao)</label>
                                     <div id="star-rating" style="font-size: 2rem; color: #ffc107; cursor: pointer;">
@@ -587,7 +587,7 @@
                             <div class="widget widget-booking" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
                                 <h5 class="widget-title">Tour Booking</h5>
                                 <form id="booking-form" method="post" action="/booking/create">
-                                    <input type="hidden" name="tourId" value="@Model.TourId" />
+                                    <input type="hidden" name="TourID" value="@Model.TourID" />
                                     <input type="hidden" name="adultGuests" id="adultGuests" value="0" />
                                     <input type="hidden" name="childGuests" id="childGuests" value="0" />
                                     <input type="hidden" name="totalPrice" id="totalPriceInput" value="0" />

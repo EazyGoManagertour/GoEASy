@@ -74,12 +74,12 @@ namespace GoEASy.Controllers
             return images;
         }
 
-        private List<string> GetAvailableImagesByTour(int tourId)
+        private List<string> GetAvailableImagesByTour(int tourID)
         {
             var images = new List<string>();
             
             // Lấy tour để biết tên folder
-            var tour = _tourService.GetTourByIdForAdminAsync(tourId).Result;
+            var tour = _tourService.GetTourByIdForAdminAsync(tourID).Result;
             if (tour == null) return images;
             
             // Tạo tên folder từ tên tour
@@ -95,7 +95,7 @@ namespace GoEASy.Controllers
             
             if (string.IsNullOrEmpty(folderName))
             {
-                folderName = "tour-" + tour.TourId;
+                folderName = "tour-" + tour.TourID;
             }
             
             var tourPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "assets", "tours", folderName);
@@ -113,14 +113,14 @@ namespace GoEASy.Controllers
             return images;
         }
 
-        private List<string> GetAvailableImagesByDestination(int? destinationId)
+        private List<string> GetAvailableImagesByDestination(int? DestinationID)
         {
             var images = new List<string>();
             
-            if (destinationId == null) return images;
+            if (DestinationID == null) return images;
             
             // Lấy tên destination từ database
-            var destination = _tourService.GetDestinationById(destinationId.Value);
+            var destination = _tourService.GetDestinationById(DestinationID.Value);
             if (destination == null) return images;
             
             // Tạo tên thư mục từ tên destination (lowercase, replace spaces with hyphens)
@@ -143,13 +143,13 @@ namespace GoEASy.Controllers
             return images;
         }
 
-        // GET: admin/tour-admin/get-images-by-tour/{tourId}
-        [HttpGet("get-images-by-tour/{tourId}")]
-        public async Task<IActionResult> GetImagesByTour(int tourId)
+        // GET: admin/tour-admin/get-images-by-tour/{TourID}
+        [HttpGet("get-images-by-tour/{TourID}")]
+        public async Task<IActionResult> GetImagesByTour(int TourID)
         {
             try
             {
-                var images = GetAvailableImagesByTour(tourId);
+                var images = GetAvailableImagesByTour(TourID);
                 return Json(new { success = true, images = images });
             }
             catch (Exception ex)
@@ -284,7 +284,7 @@ namespace GoEASy.Controllers
         {
             try
             {
-                if (tour.TourId == 0)
+                if (tour.TourID == 0)
                 {
                     TempData["Error"] = "Tour ID is required!";
                     return RedirectToAction("Index");
@@ -298,7 +298,7 @@ namespace GoEASy.Controllers
                     return RedirectToAction("Index");
                 }
 
-                var existingTour = await _tourService.GetTourByIdForAdminAsync(tour.TourId);
+                var existingTour = await _tourService.GetTourByIdForAdminAsync(tour.TourID);
                 if (existingTour == null)
                 {
                     TempData["Error"] = "Tour not found!";
@@ -385,8 +385,8 @@ namespace GoEASy.Controllers
                 existingTour.EndDate = tour.EndDate;
                 existingTour.MaxSeats = tour.MaxSeats;
                 existingTour.AvailableSeats = tour.AvailableSeats;
-                existingTour.DestinationId = tour.DestinationId;
-                existingTour.CategoryId = tour.CategoryId;
+                existingTour.DestinationID = tour.DestinationID;
+                existingTour.CategoryID = tour.CategoryID;
 
                 await _tourService.UpdateTourAsync(existingTour, allImages);
                 TempData["Success"] = "Tour updated successfully!";

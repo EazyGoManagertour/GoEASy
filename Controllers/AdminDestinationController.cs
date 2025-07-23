@@ -172,7 +172,7 @@ namespace GoEASy.Controllers
         {
             try
             {
-                if (destination.DestinationId == 0)
+                if (destination.DestinationID == 0)
                 {
                     TempData["Error"] = "Destination ID is required!";
                     return RedirectToAction("Index");
@@ -186,7 +186,7 @@ namespace GoEASy.Controllers
                     return RedirectToAction("Index");
                 }
 
-                var existingDestination = await _destinationService.GetDestinationByIdAsync(destination.DestinationId);
+                var existingDestination = await _destinationService.GetDestinationByIdAsync(destination.DestinationID);
                 if (existingDestination == null)
                 {
                     TempData["Error"] = "Destination not found!";

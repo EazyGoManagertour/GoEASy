@@ -5,9 +5,9 @@ namespace GoEASy.Models;
 
 public partial class Favorite
 {
-    public int UserId { get; set; }
+    public int UserID { get; set; }
 
-    public int TourId { get; set; }
+    public int TourID { get; set; }
 
     public DateTime? AddedDate { get; set; }
 

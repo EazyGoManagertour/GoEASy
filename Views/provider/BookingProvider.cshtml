@@ -66,7 +66,7 @@
                         {
                             <tr>
                                 <td><input type="checkbox" /></td>
-                                <td>@booking.BookingId</td>
+                                <td>@booking.BookingID</td>
                                 <td>@booking.Tour?.TourName</td>
                                 <td>@booking.User?.FullName</td>
                                 <td>@booking.User?.Email</td>
@@ -83,10 +83,10 @@
                                 </td>
                                 <td>
                                     <div class="action-btns">
-                                        <button class="action-btn view" data-bs-toggle="modal" data-bs-target="#detailModal" onclick="showBookingDetail(@booking.BookingId)">
+                                        <button class="action-btn view" data-bs-toggle="modal" data-bs-target="#detailModal" onclick="showBookingDetail(@booking.BookingID)">
                                             <i class="fas fa-eye"></i>
                                         </button>
-                                        <button class="action-btn edit" data-bs-toggle="modal" data-bs-target="#editModal" onclick="fillEditModal(@booking.BookingId)">
+                                        <button class="action-btn edit" data-bs-toggle="modal" data-bs-target="#editModal" onclick="fillEditModal(@booking.BookingID)">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                     </div>
@@ -122,7 +122,7 @@
                 </div>
                 <form id="editBookingForm" method="post" action="/provider/booking/update">
                     <div class="modal-body">
-                        <input type="hidden" name="BookingId" id="editBookingId" />
+                        <input type="hidden" name="BookingID" id="editBookingID" />
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Tên Tour</label>
@@ -179,15 +179,15 @@
     </style>
     @Html.Partial("~/Views/admin/share/script.cshtml")
     <script>
-        function showBookingDetail(bookingId) {
-            var booking = @Html.Raw(JsonConvert.SerializeObject(Model.ToDictionary(b => b.BookingId), new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }));
-            var b = booking[bookingId];
+        function showBookingDetail(BookingID) {
+            var booking = @Html.Raw(JsonConvert.SerializeObject(Model.ToDictionary(b => b.BookingID), new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }));
+            var b = booking[BookingID];
             if (!b) {
                 document.getElementById('bookingDetailBody').innerHTML = '<div class="text-danger">Không tìm thấy thông tin booking!</div>';
                 return;
             }
             var html = `<div class='row'>
-                <div class='col-md-6'><b>Mã Booking:</b> ${b.BookingId}</div>
+                <div class='col-md-6'><b>Mã Booking:</b> ${b.BookingID}</div>
                 <div class='col-md-6'><b>Ngày đặt:</b> ${b.BookingDate ? new Date(b.BookingDate).toLocaleDateString() : 'N/A'}</div>
                 <div class='col-md-6'><b>Tour:</b> ${b.Tour ? b.Tour.TourName : ''}</div>
                 <div class='col-md-6'><b>Khách hàng:</b> ${b.User ? b.User.FullName : ''}</div>
@@ -201,11 +201,11 @@
             </div>`;
             document.getElementById('bookingDetailBody').innerHTML = html;
         }
-        function fillEditModal(bookingId) {
-            var booking = @Html.Raw(JsonConvert.SerializeObject(Model.ToDictionary(b => b.BookingId), new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }));
-            var b = booking[bookingId];
+        function fillEditModal(BookingID) {
+            var booking = @Html.Raw(JsonConvert.SerializeObject(Model.ToDictionary(b => b.BookingID), new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }));
+            var b = booking[BookingID];
             if (!b) return;
-            document.getElementById('editBookingId').value = b.BookingId;
+            document.getElementById('editBookingID').value = b.BookingID;
             document.getElementById('editTourName').value = b.Tour ? b.Tour.TourName : '';
             document.getElementById('editUserName').value = b.User ? b.User.FullName : '';
             document.getElementById('editBookingDate').value = b.BookingDate ? new Date(b.BookingDate).toLocaleDateString() : '';
