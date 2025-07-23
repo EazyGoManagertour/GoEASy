@@ -5,9 +5,9 @@ namespace GoEASy.Models;
 
 public partial class Companion
 {
-    public int CompanionId { get; set; }
+    public int CompanionID { get; set; }
 
-    public int UserId { get; set; }
+    public int UserID { get; set; }
 
     public string FullName { get; set; } = null!;
 
@@ -15,7 +15,7 @@ public partial class Companion
 
     public DateOnly? BirthDate { get; set; }
 
-    public string? NationalId { get; set; }
+    public string? NationalID { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 
