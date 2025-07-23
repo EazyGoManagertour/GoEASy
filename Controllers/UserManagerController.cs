@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GoEASy.Controllers
 {
-    //[AdminAuthorize]
+    // [AdminAuthorize]
     [Route("admin/user-manager")]
     public class UserManagerController : Controller
     {
@@ -24,7 +24,7 @@ namespace GoEASy.Controllers
         {
             var users = await _userService.GetAllUsersAsync();
             var roles = await _userService.GetAllRolesAsync();
-            
+
             ViewBag.Roles = roles;
             return View("~/Views/admin/user_manager/UserManager.cshtml", users);
         }
@@ -174,19 +174,6 @@ namespace GoEASy.Controllers
         }
 
         // POST: admin/user-manager/toggle-status/{id}
-        [HttpPost("toggle-status/{id}")]
-        public async Task<IActionResult> ToggleStatus(int id)
-        {
-            try
-            {
-                await _userService.ToggleStatusAsync(id);
-                return Json(new { success = true, message = "Cập nhật trạng thái user thành công!" });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, message = "Lỗi khi cập nhật trạng thái: " + ex.Message });
-            }
-        }
 
         // GET: admin/user-manager/get-roles
         [HttpGet("get-roles")]
@@ -201,6 +188,12 @@ namespace GoEASy.Controllers
             {
                 return Json(new { error = ex.Message });
             }
+        }
+        [HttpPost("toggle-status")]
+        public async Task<IActionResult> ToggleStatus(int id)
+        {
+            await _userService.ToggleStatusAsync(id);
+            return Ok();
         }
     }
 }

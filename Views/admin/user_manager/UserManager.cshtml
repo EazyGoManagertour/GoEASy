@@ -106,7 +106,9 @@
                                 <td>@(user.IsVip == true ? "VIP" : "Regular")</td>
                                 <td>@user.Vippoints</td>
                                 <td>
-                                    <button class="status admit" style="border: none; outline: none; background-color:@(user.Status == true ? "" : "#dc3545")">
+                                    <button class="status admit"
+                                            style="border: none; outline: none; background-color:@(user.Status == true ? "" : "#dc3545")"
+                                            onclick="toggleStatus(this, '@user.UserId', @(user.Status.ToString().ToLower()))">
                                         @(user.Status == true ? "Active" : "Disable")
                                     </button>
                                 </td>
@@ -192,7 +194,7 @@
                         <div class="mb-3">
                             <label for="addRole" class="form-label">Role</label>
                             <select class="form-control" id="addRole" name="RoleId" required>
-                                <option value="">Select Role</option>
+                                <option value="" disabled selected hidden>Select Role</option>
                                 @if (ViewBag.Roles != null)
                                 {
                                     foreach (var role in ViewBag.Roles)
@@ -259,7 +261,7 @@
                         <div class="mb-3">
                             <label for="editRole" class="form-label">Role</label>
                             <select class="form-control" id="editRole" name="RoleId" required>
-                                <option value="">Select Role</option>
+                                <option value="" disabled selected hidden>Select Role</option>
                                 @if (ViewBag.Roles != null)
                                 {
                                     foreach (var role in ViewBag.Roles)
@@ -287,7 +289,7 @@
                                 <option value="false">Disable</option>
                             </select>
                         </div>
-                        <div class="mb-3"></div>
+                        <div class="mb-3">
                             <label for="editSex" class="form-label">Sex</label>
                             <select class="form-control" id="editSex" name="Sex" required>
                                 <option value="Male">Male</option>
@@ -324,6 +326,42 @@
         </div>
     </div>
 
+    <script>
+        function toggleStatus(button, UserId, currentStatus) {
+            fetch(`/admin/user-manager/toggle-status?id=${UserId}`, {
+                method: 'POST'
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Cập nhật UI
+                    const newStatus = !(currentStatus === true || currentStatus === "true");
+                    button.textContent = newStatus ? "Active" : "Disable";
+                    button.style.backgroundColor = newStatus ? "" : "#dc3545";
+                    button.setAttribute("onclick", `toggleStatus(this, '${UserId}', ${newStatus})`);
+
+                    // Show success toast
+                    const msg = "Status updated successfully!";
+                    document.getElementById("toast-success-msg").value = msg;
+                    document.querySelector("#successToast .toast-body").innerText = msg;
+                    new bootstrap.Toast(document.getElementById("successToast"), { delay: 5000 }).show();
+                } else {
+                    // Show error toast
+                    const msg = "Failed to update status.";
+                    document.getElementById("toast-error-msg").value = msg;
+                    document.querySelector("#errorToast .toast-body").innerText = msg;
+                    new bootstrap.Toast(document.getElementById("errorToast"), { delay: 5000 }).show();
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                const msg = "An unexpected error occurred!";
+                document.getElementById("toast-error-msg").value = msg;
+                document.querySelector("#errorToast .toast-body").innerText = msg;
+                new bootstrap.Toast(document.getElementById("errorToast"), { delay: 5000 }).show();
+            });
+        }
+    </script> 
+
     @Html.Partial("~/Views/admin/share/script.cshtml")
 </body>
-</html> 
+</html>
