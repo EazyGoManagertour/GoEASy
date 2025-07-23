@@ -41,6 +41,8 @@ public partial class User
 
     public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 
+    public virtual ICollection<Companion> Companions { get; set; } = new List<Companion>();
+
     public virtual ICollection<Favorite> Favorites { get; set; } = new List<Favorite>();
 
     public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
