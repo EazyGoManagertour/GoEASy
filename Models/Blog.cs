@@ -5,17 +5,17 @@ namespace GoEASy.Models;
 
 public partial class Blog
 {
-    public int BlogId { get; set; }
+    public int BlogID { get; set; }
 
     public string Title { get; set; } = null!;
 
     public string? ShortDescription { get; set; }
 
-    public int CategoryId { get; set; }
+    public int CategoryID { get; set; }
 
-    public int? AuthorUserId { get; set; }
+    public int? AuthorUserID { get; set; }
 
-    public int? AuthorAdminId { get; set; }
+    public int? AuthorAdminID { get; set; }
 
     public byte? IsApproved { get; set; }
 

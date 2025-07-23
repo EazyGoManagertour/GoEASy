@@ -48,8 +48,8 @@ namespace GoEASy.Controllers
                     FullName = "Test User",
                     Phone = "0123456789",
                     Status = true,
-                    Vippoints = 0,
-                    IsVip = false,
+                    VIPPoints = 0,
+                    IsVIP = false,
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now
                 };
@@ -104,8 +104,8 @@ namespace GoEASy.Controllers
         {
             try
             {
-                var users = await _context.Users.Select(u => new { u.UserId, u.Email, u.FullName, u.Status }).ToListAsync();
-                var result = string.Join("<br/>", users.Select(u => $"ID: {u.UserId}, Email: {u.Email}, Name: {u.FullName}, Status: {u.Status}"));
+                var users = await _context.Users.Select(u => new { u.UserID, u.Email, u.FullName, u.Status }).ToListAsync();
+                var result = string.Join("<br/>", users.Select(u => $"ID: {u.UserID}, Email: {u.Email}, Name: {u.FullName}, Status: {u.Status}"));
                 return Content(result);
             }
             catch (Exception ex)

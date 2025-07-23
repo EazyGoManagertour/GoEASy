@@ -27,7 +27,7 @@ public class RequirePermissionAttribute : ActionFilterAttribute
             return;
         }
 
-        var admin = db.Admins.Include(a => a.Rule).FirstOrDefault(a => a.AdminId == adminId);
+        var admin = db.Admins.Include(a => a.Rule).FirstOrDefault(a => a.AdminID == adminId);
         if (admin == null || admin.Rule == null || string.IsNullOrEmpty(admin.Rule.ListRuleSlug))
         {
             HandleNoPermission(context, "Bạn không có quyền truy cập.");

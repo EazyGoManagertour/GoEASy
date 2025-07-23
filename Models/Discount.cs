@@ -5,7 +5,7 @@ namespace GoEASy.Models;
 
 public partial class Discount
 {
-    public int DiscountId { get; set; }
+    public int DiscountID { get; set; }
 
     public string Code { get; set; } = null!;
 

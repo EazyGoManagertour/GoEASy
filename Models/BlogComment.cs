@@ -5,11 +5,11 @@ namespace GoEASy.Models;
 
 public partial class BlogComment
 {
-    public int CommentId { get; set; }
+    public int CommentID { get; set; }
 
-    public int BlogId { get; set; }
+    public int BlogID { get; set; }
 
-    public int? UserId { get; set; }
+    public int? UserID { get; set; }
 
     public string Name { get; set; } = null!;
 

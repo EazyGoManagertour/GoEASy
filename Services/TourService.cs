@@ -45,7 +45,7 @@ namespace GoEASy.Services
                 .Include(t => t.Destination)
                 .Include(t => t.Category)
                 .Include(t => t.TourDetail)
-                .Where(t => t.TourId == id && (t.Status == true || t.Status == null))
+                .Where(t => t.TourID == id && (t.Status == true || t.Status == null))
                 .FirstOrDefaultAsync();
             return tour;
         }
@@ -57,7 +57,7 @@ namespace GoEASy.Services
                 .Include(t => t.Destination)
                 .Include(t => t.Category)
                 .Include(t => t.TourDetail)
-                .FirstOrDefaultAsync(t => t.TourId == id);
+                .FirstOrDefaultAsync(t => t.TourID == id);
             return tour;
         }
 
@@ -82,8 +82,8 @@ namespace GoEASy.Services
         // Phương thức search và filter tours
         public async Task<IEnumerable<Tour>> SearchToursAsync(
             string? searchTerm = null,
-            int? categoryId = null,
-            int? destinationId = null,
+            int? CategoryID = null,
+            int? DestinationID = null,
             decimal? minPrice = null,
             decimal? maxPrice = null,
             DateTime? startDate = null,
@@ -107,15 +107,15 @@ namespace GoEASy.Services
             }
 
             // Filter theo category
-            if (categoryId.HasValue)
+            if (CategoryID.HasValue)
             {
-                query = query.Where(t => t.CategoryId == categoryId.Value);
+                query = query.Where(t => t.CategoryID == CategoryID.Value);
             }
 
             // Filter theo destination
-            if (destinationId.HasValue)
+            if (DestinationID.HasValue)
             {
-                query = query.Where(t => t.DestinationId == destinationId.Value);
+                query = query.Where(t => t.DestinationID == DestinationID.Value);
             }
 
             // Filter theo price range (sử dụng AdultPrice)
@@ -167,13 +167,13 @@ namespace GoEASy.Services
                             : query.OrderBy(t => t.EndDate);
                         break;
                     default:
-                        query = query.OrderBy(t => t.TourId);
+                        query = query.OrderBy(t => t.TourID);
                         break;
                 }
             }
             else
             {
-                query = query.OrderBy(t => t.TourId);
+                query = query.OrderBy(t => t.TourID);
             }
 
             return await query.ToListAsync();
@@ -192,24 +192,24 @@ namespace GoEASy.Services
         }
 
         // Lấy tours theo category
-        public async Task<IEnumerable<Tour>> GetToursByCategoryAsync(int categoryId)
+        public async Task<IEnumerable<Tour>> GetToursByCategoryAsync(int CategoryID)
         {
             return await _context.Tours
                 .Include(t => t.TourImages)
                 .Include(t => t.Destination)
                 .Include(t => t.Category)
-                .Where(t => t.CategoryId == categoryId && (t.Status == true || t.Status == null))
+                .Where(t => t.CategoryID == CategoryID && (t.Status == true || t.Status == null))
                 .ToListAsync();
         }
 
         // Lấy tours theo destination
-        public async Task<IEnumerable<Tour>> GetToursByDestinationAsync(int destinationId)
+        public async Task<IEnumerable<Tour>> GetToursByDestinationAsync(int DestinationID)
         {
             return await _context.Tours
                 .Include(t => t.TourImages)
                 .Include(t => t.Destination)
                 .Include(t => t.Category)
-                .Where(t => t.DestinationId == destinationId && (t.Status == true || t.Status == null))
+                .Where(t => t.DestinationID == DestinationID && (t.Status == true || t.Status == null))
                 .ToListAsync();
         }
 
@@ -265,7 +265,7 @@ namespace GoEASy.Services
                 
                 if (string.IsNullOrEmpty(folderName))
                 {
-                    folderName = "tour-" + tour.TourId;
+                    folderName = "tour-" + tour.TourID;
                 }
                 
                 var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "assets", "tours", folderName);
@@ -282,12 +282,12 @@ namespace GoEASy.Services
                         await image.CopyToAsync(stream);
                     }
                     
-                    var imageUrl = $"/assets/tours/{folderName}/{fileName}";
+                    var ImageURL = $"/assets/tours/{folderName}/{fileName}";
                     
                     var tourImage = new TourImage
                     {
-                        TourId = tour.TourId,
-                        ImageUrl = imageUrl,
+                        TourID = tour.TourID,
+                        ImageURL = ImageURL,
                         IsCover = (i == 0),
                         UploadedAt = DateTime.Now
                     };
@@ -318,7 +318,7 @@ namespace GoEASy.Services
                 
                 if (string.IsNullOrEmpty(folderName))
                 {
-                    folderName = "tour-" + tour.TourId;
+                    folderName = "tour-" + tour.TourID;
                 }
                 
                 var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "assets", "tours", folderName);
@@ -326,7 +326,7 @@ namespace GoEASy.Services
                     Directory.CreateDirectory(uploadsFolder);
                     
                 // Xóa tất cả ảnh cũ của tour này
-                var oldImages = _context.TourImages.Where(i => i.TourId == tour.TourId).ToList();
+                var oldImages = _context.TourImages.Where(i => i.TourID == tour.TourID).ToList();
                 _context.TourImages.RemoveRange(oldImages);
                 await _context.SaveChangesAsync();
                 
@@ -339,11 +339,11 @@ namespace GoEASy.Services
                     {
                         await image.CopyToAsync(stream);
                     }
-                    var imageUrl = $"/assets/tours/{folderName}/{fileName}";
+                    var ImageURL = $"/assets/tours/{folderName}/{fileName}";
                     var tourImage = new TourImage
                     {
-                        TourId = tour.TourId,
-                        ImageUrl = imageUrl,
+                        TourID = tour.TourID,
+                        ImageURL = ImageURL,
                         IsCover = (i == 0),
                         UploadedAt = DateTime.Now
                     };
@@ -356,7 +356,7 @@ namespace GoEASy.Services
 
         public async Task<bool> DeleteTourAsync(int id)
         {
-            var tour = await _context.Tours.Include(t => t.TourImages).FirstOrDefaultAsync(t => t.TourId == id);
+            var tour = await _context.Tours.Include(t => t.TourImages).FirstOrDefaultAsync(t => t.TourID == id);
             if (tour != null)
             {
                 // Xóa ảnh liên quan
@@ -371,24 +371,24 @@ namespace GoEASy.Services
             return false;
         }
 
-        public async Task<List<TourItinerary>> GetTourItinerariesAsync(int tourId)
+        public async Task<List<TourItinerary>> GetTourItinerariesAsync(int TourID)
         {
             return await _context.TourItineraries
-                .Where(i => i.TourId == tourId)
+                .Where(i => i.TourID == TourID)
                 .OrderBy(i => i.DayNumber)
                 .ToListAsync();
         }
 
-        public async Task<List<TourFAQ>> GetTourFAQsAsync(int tourId)
+        public async Task<List<TourFAQ>> GetTourFAQsAsync(int TourID)
         {
             return await _context.TourFAQs
-                .Where(faq => faq.TourId == tourId)
+                .Where(faq => faq.TourID == TourID)
                 .ToListAsync();
         }
 
-        public Destination? GetDestinationById(int destinationId)
+        public Destination? GetDestinationById(int DestinationID)
         {
-            return _context.Destinations.FirstOrDefault(d => d.DestinationId == destinationId);
+            return _context.Destinations.FirstOrDefault(d => d.DestinationID == DestinationID);
         }
     }
 }

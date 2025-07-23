@@ -37,7 +37,7 @@ namespace GoEASy.Controllers
 
             // Lấy booking cần update
             var bookings = await _bookingService.GetBookingsByProviderAsync(providerId.Value);
-            var booking = bookings.FirstOrDefault(b => b.BookingId == BookingId);
+            var booking = bookings.FirstOrDefault(b => b.BookingID == BookingId);
             if (booking == null)
             {
                 TempData["Error"] = "Không tìm thấy booking!";

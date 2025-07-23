@@ -5,11 +5,11 @@ namespace GoEASy.Models;
 
 public partial class BlogImage
 {
-    public int ImageId { get; set; }
+    public int ImageID { get; set; }
 
-    public int BlogId { get; set; }
+    public int BlogID { get; set; }
 
-    public string ImageUrl { get; set; } = null!;
+    public string ImageURL { get; set; } = null!;
 
     public int? Position { get; set; }
 

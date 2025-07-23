@@ -5,13 +5,13 @@ namespace GoEASy.Models;
 
 public partial class Booking
 {
-    public int BookingId { get; set; }
+    public int BookingID { get; set; }
 
-    public int? UserId { get; set; }
+    public int? UserID { get; set; }
 
-    public int? TourId { get; set; }
+    public int? TourID { get; set; }
 
-    public int? DiscountId { get; set; }
+    public int? DiscountID { get; set; }
 
     public DateTime? BookingDate { get; set; }
 
@@ -21,7 +21,7 @@ public partial class Booking
 
     public string? PaymentStatus { get; set; }
 
-    public int? UsedVippoints { get; set; }
+    public int? UsedVIPPoints { get; set; }
 
     public decimal? DiscountAmount { get; set; }
 

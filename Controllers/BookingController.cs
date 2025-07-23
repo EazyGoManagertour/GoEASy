@@ -42,8 +42,8 @@ namespace GoEASy.Controllers
             // Tạo booking mới
             var booking = new Booking
             {
-                UserId = userId,
-                TourId = tourId,
+                UserID = userId,
+                TourID = tourId,
                 AdultGuests = adultGuests,
                 ChildGuests = childGuests,
                 TotalPrice = totalPrice,
@@ -57,7 +57,7 @@ namespace GoEASy.Controllers
             await _context.SaveChangesAsync();
 
             // Tạo request VNPAY
-            var orderId = booking.BookingId.ToString();
+            var orderId = booking.BookingID.ToString();
             var amount = ((long)totalPrice * 100).ToString(); // VNPAY yêu cầu x100
             var ipAddress = Utils.GetIpAddress(HttpContext);
             var createDate = DateTime.Now.ToString("yyyyMMddHHmmss");
@@ -104,7 +104,7 @@ namespace GoEASy.Controllers
 
             // Xử lý kết quả giao dịch
             int bookingId = int.Parse(vnp_TxnRef);
-            var booking = await _context.Bookings.FirstOrDefaultAsync(b => b.BookingId == bookingId);
+            var booking = await _context.Bookings.FirstOrDefaultAsync(b => b.BookingID == bookingId);
             if (booking == null)
             {
                 TempData["Error"] = "Không tìm thấy booking!";
@@ -116,30 +116,30 @@ namespace GoEASy.Controllers
                 booking.PaymentStatus = "Paid";
                 await _context.SaveChangesAsync();
                 // Thêm thông báo cho user
-                if (booking.UserId != null)
+                if (booking.UserID != null)
                 {
                     // Lấy thông tin tour
-                    var tour = await _context.Tours.FirstOrDefaultAsync(t => t.TourId == booking.TourId);
+                    var tour = await _context.Tours.FirstOrDefaultAsync(t => t.TourID == booking.TourID);
                     string tourName = tour?.TourName ?? "[Tour]";
                     string startDate = tour?.StartDate?.ToString("dd/MM/yyyy") ?? "?";
                     string title, message;
                     if (booking.Status == false) // custom booking, chờ duyệt
                     {
                         title = "Thanh toán thành công & chờ duyệt";
-                        message = $"Bạn đã thanh toán thành công tour '{tourName}' khởi hành ngày {startDate}. Booking của bạn đang chờ duyệt. Mã booking: #{booking.BookingId}";
+                        message = $"Bạn đã thanh toán thành công tour '{tourName}' khởi hành ngày {startDate}. Booking của bạn đang chờ duyệt. Mã booking: #{booking.BookingID}";
                     }
                     else // booking thường
                     {
                         title = "Thanh toán thành công";
-                        message = $"Bạn đã thanh toán thành công tour '{tourName}' khởi hành ngày {startDate}. Mã booking: #{booking.BookingId}";
+                        message = $"Bạn đã thanh toán thành công tour '{tourName}' khởi hành ngày {startDate}. Mã booking: #{booking.BookingID}";
                     }
                     var notification = new Notification
                     {
-                        UserId = booking.UserId.Value,
+                        UserId = booking.UserID.Value,
                         Title = title,
                         Message = message,
                         Type = "PaymentSuccess",
-                        RelatedId = booking.BookingId,
+                        RelatedId = booking.BookingID,
                         CreatedAt = DateTime.Now,
                         IsRead = false
                     };
@@ -170,7 +170,7 @@ namespace GoEASy.Controllers
             var bookings = await _context.Bookings
                 .Include(b => b.Tour)
                 .Include(b => b.Discount)
-                .Where(b => b.UserId == userId)
+                .Where(b => b.UserID == userId)
                 .OrderByDescending(b => b.BookingDate)
                 .ToListAsync();
             return View("~/Views/client/BookingHistory.cshtml", bookings);
@@ -205,7 +205,7 @@ namespace GoEASy.Controllers
             return Json(new
             {
                 success = true,
-                discountId = discount.DiscountId,
+                discountId = discount.DiscountID,
                 discountAmount = discountAmount,
                 description = discount.Description,
                 percentage = discount.Percentage,

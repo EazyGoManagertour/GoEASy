@@ -25,7 +25,7 @@ namespace GoEASy.Controllers
             {
                 // Giả sử bạn đã inject IFavoriteService vào controller này
                 favoriteTourIds = (await _favoriteService.GetFavoritesByUserIdAsync(userId.Value))
-                                    .Select(f => f.TourId)
+                                    .Select(f => f.TourID)
                                     .ToList();
             }
             ViewBag.FavoriteTourIds = favoriteTourIds;

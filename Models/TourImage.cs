@@ -5,11 +5,11 @@ namespace GoEASy.Models;
 
 public partial class TourImage
 {
-    public int ImageId { get; set; }
+    public int ImageID { get; set; }
 
-    public int? TourId { get; set; }
+    public int? TourID { get; set; }
 
-    public string ImageUrl { get; set; } = null!;
+    public string ImageURL { get; set; } = null!;
 
     public string? Caption { get; set; }
 

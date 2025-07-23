@@ -154,7 +154,7 @@ namespace GoEASy.Controllers
             int? providerId = HttpContext.Session.GetInt32("UserId");
             if (providerId == null)
                 return RedirectToAction("Index", "LoginAdmin");
-            if (tour.TourId == 0)
+            if (tour.TourID == 0)
             {
                 TempData["Error"] = "Tour ID is required!";
                 return RedirectToAction("Index");
@@ -165,7 +165,7 @@ namespace GoEASy.Controllers
                 TempData["Error"] = string.Join("<br/>", errors);
                 return RedirectToAction("Index");
             }
-            var existingTour = (await _tourService.GetToursByProviderAsync(providerId.Value)).FirstOrDefault(t => t.TourId == tour.TourId);
+            var existingTour = (await _tourService.GetToursByProviderAsync(providerId.Value)).FirstOrDefault(t => t.TourID == tour.TourID);
             if (existingTour == null)
             {
                 TempData["Error"] = "Tour not found!";
@@ -224,8 +224,8 @@ namespace GoEASy.Controllers
             existingTour.EndDate = tour.EndDate;
             existingTour.MaxSeats = tour.MaxSeats;
             existingTour.AvailableSeats = tour.AvailableSeats;
-            existingTour.DestinationId = tour.DestinationId;
-            existingTour.CategoryId = tour.CategoryId;
+            existingTour.DestinationID = tour.DestinationID;
+            existingTour.CategoryID = tour.CategoryID;
             await _tourService.UpdateTourAsync(existingTour, allImages);
             TempData["Success"] = "Tour updated successfully!";
             return RedirectToAction("Index");
@@ -237,7 +237,7 @@ namespace GoEASy.Controllers
             int? providerId = HttpContext.Session.GetInt32("UserId");
             if (providerId == null)
                 return RedirectToAction("Index", "LoginAdmin");
-            var tour = (await _tourService.GetToursByProviderAsync(providerId.Value)).FirstOrDefault(t => t.TourId == id);
+            var tour = (await _tourService.GetToursByProviderAsync(providerId.Value)).FirstOrDefault(t => t.TourID == id);
             if (tour == null)
             {
                 return NotFound();
@@ -254,7 +254,7 @@ namespace GoEASy.Controllers
             int? providerId = HttpContext.Session.GetInt32("UserId");
             if (providerId == null)
                 return RedirectToAction("Index", "LoginAdmin");
-            var tour = (await _tourService.GetToursByProviderAsync(providerId.Value)).FirstOrDefault(t => t.TourId == id);
+            var tour = (await _tourService.GetToursByProviderAsync(providerId.Value)).FirstOrDefault(t => t.TourID == id);
             if (tour == null)
             {
                 TempData["Error"] = "Tour not found!";

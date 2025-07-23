@@ -34,7 +34,7 @@ namespace GoEASy.Services
             return await _context.Destinations
                 .Include(d => d.DestinationImages)
                 .Include(d => d.Tours)
-                .FirstOrDefaultAsync(d => d.DestinationId == id);
+                .FirstOrDefaultAsync(d => d.DestinationID == id);
         }
 
         public async Task<bool> AddDestinationAsync(Destination destination, List<IFormFile> images = null)
@@ -46,7 +46,7 @@ namespace GoEASy.Services
 
             if (images != null && images.Count > 0)
             {
-                await SaveDestinationImagesAsync(destination.DestinationId, images);
+                await SaveDestinationImagesAsync(destination.DestinationID, images);
             }
 
             return true;
@@ -62,12 +62,12 @@ namespace GoEASy.Services
             if (images != null && images.Count > 0)
             {
                 var existingImages = await _context.DestinationImages
-                    .Where(img => img.DestinationId == destination.DestinationId)
+                    .Where(img => img.DestinationID == destination.DestinationID)
                     .ToListAsync();
 
                 foreach (var image in existingImages)
                 {
-                    var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", image.ImageUrl.TrimStart('/'));
+                    var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", image.ImageURL.TrimStart('/'));
                     if (System.IO.File.Exists(imagePath))
                     {
                         System.IO.File.Delete(imagePath);
@@ -77,7 +77,7 @@ namespace GoEASy.Services
                 _context.DestinationImages.RemoveRange(existingImages);
                 await _context.SaveChangesAsync();
 
-                await SaveDestinationImagesAsync(destination.DestinationId, images);
+                await SaveDestinationImagesAsync(destination.DestinationID, images);
             }
             return true;
         }
@@ -86,12 +86,12 @@ namespace GoEASy.Services
         {
             var destination = await _context.Destinations
                 .Include(d => d.DestinationImages)
-                .FirstOrDefaultAsync(d => d.DestinationId == id);
+                .FirstOrDefaultAsync(d => d.DestinationID == id);
             if (destination == null) return false;
 
             foreach (var image in destination.DestinationImages)
             {
-                var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", image.ImageUrl.TrimStart('/'));
+                var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", image.ImageURL.TrimStart('/'));
                 if (System.IO.File.Exists(imagePath))
                 {
                     System.IO.File.Delete(imagePath);
@@ -104,7 +104,7 @@ namespace GoEASy.Services
         }
 
         // Hàm xử lý ảnh giữ nguyên
-        private async Task SaveDestinationImagesAsync(int destinationId, List<IFormFile> images)
+        private async Task SaveDestinationImagesAsync(int DestinationID, List<IFormFile> images)
         {
             var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "destinations");
             if (!Directory.Exists(uploadPath))
@@ -129,8 +129,8 @@ namespace GoEASy.Services
 
                     var destinationImage = new DestinationImage
                     {
-                        DestinationId = destinationId,
-                        ImageUrl = "/uploads/destinations/" + fileName,
+                        DestinationID = DestinationID,
+                        ImageURL = "/uploads/destinations/" + fileName,
                         Caption = Path.GetFileNameWithoutExtension(image.FileName),
                         IsCover = isFirstImage,
                         UploadedAt = DateTime.Now

@@ -55,7 +55,7 @@ namespace GoEASy.Controllers
         {
             var admin = await _context.Admins
                 .Include(a => a.Rule) // Include để lấy thông tin từ bảng Rule
-                .FirstOrDefaultAsync(a => a.AdminId == adminId);
+                .FirstOrDefaultAsync(a => a.AdminID == adminId);
 
             if (admin == null)
                 return NotFound();
@@ -199,7 +199,7 @@ namespace GoEASy.Controllers
             try
             {
                 // Tìm đúng Admin
-                var admin = await _context.Admins.FirstOrDefaultAsync(a => a.AdminId == AdminId);
+                var admin = await _context.Admins.FirstOrDefaultAsync(a => a.AdminID == AdminId);
                 if (admin == null)
                 {
                     Console.WriteLine("Không tìm thấy admin.");

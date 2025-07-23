@@ -21,9 +21,9 @@ namespace GoEASy.Controllers
         {
             var destinations = (await _destinationService.GetAllDestinationsAsync())
                 .Select(d => new {
-                    d.DestinationId,
+                    d.DestinationID,
                     d.DestinationName,
-                    ImageUrl = d.DestinationImages.FirstOrDefault(img => img.IsCover == true)?.ImageUrl ?? "/assets/images/destinations/destination1.jpg"
+                    ImageUrl = d.DestinationImages.FirstOrDefault(img => img.IsCover == true)?.ImageURL ?? "/assets/images/destinations/destination1.jpg"
                 }).ToList();
 
             return View("~/Views/client/Destination.cshtml", destinations);

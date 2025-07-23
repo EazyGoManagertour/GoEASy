@@ -62,7 +62,7 @@ namespace GoEASy.Controllers
 
                 if (adminId.HasValue)
                 {
-                    blog.AuthorAdminId = adminId.Value;
+                    blog.AuthorAdminID = adminId.Value;
                 }
                 else
                 {
@@ -90,7 +90,7 @@ namespace GoEASy.Controllers
         {
             try
             {
-                var existing = await _blogService.GetByIdAsync(blog.BlogId);
+                var existing = await _blogService.GetByIdAsync(blog.BlogID);
                 if (existing == null)
                 {
                     TempData["Error"] = "Blog not found!";
@@ -99,7 +99,7 @@ namespace GoEASy.Controllers
 
                 existing.Title = blog.Title;
                 existing.ShortDescription = blog.ShortDescription;
-                existing.CategoryId = blog.CategoryId;
+                existing.CategoryID = blog.CategoryID;
                 existing.UpdatedAt = DateTime.Now;
 
                 if (avatar != null && avatar.Length > 0)
@@ -109,7 +109,7 @@ namespace GoEASy.Controllers
                     if (oldImage != null)
                     {
                         // Xóa ảnh vật lý
-                        var relativePath = oldImage.ImageUrl.Replace('/', Path.DirectorySeparatorChar).TrimStart(Path.DirectorySeparatorChar);
+                        var relativePath = oldImage.ImageURL.Replace('/', Path.DirectorySeparatorChar).TrimStart(Path.DirectorySeparatorChar);
                         var oldPath = Path.Combine(_env.WebRootPath, relativePath);
 
                         if (System.IO.File.Exists(oldPath))
@@ -201,7 +201,7 @@ namespace GoEASy.Controllers
 
                 return new BlogImage
                 {
-                    ImageUrl = $"/image/blogs/{fileName}",
+                    ImageURL = $"/image/blogs/{fileName}",
                     IsMain = true,
                     UploadedAt = DateTime.Now
                 };

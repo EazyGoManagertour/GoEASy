@@ -59,13 +59,13 @@ namespace GoEASy.Controllers
             {
                 var (isValid, errors) = ValidationService.ValidateAdmin(admin, isUpdate: true);
 
-                if (!isValid || admin.AdminId == 0)
+                if (!isValid || admin.AdminID == 0)
                 {
                     TempData["Error"] = string.Join("<br/>", errors); // Chỉ toast lỗi
                     return RedirectToAction("Index");
                 }
 
-                var existingAdmin = await _adminService.GetAdminByIdAsync(admin.AdminId);
+                var existingAdmin = await _adminService.GetAdminByIdAsync(admin.AdminID);
                 if (existingAdmin == null)
                 {
                     TempData["Error"] = "Admin not found!";

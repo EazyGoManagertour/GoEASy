@@ -26,7 +26,7 @@ namespace GoEASy.Controllers
             var allTours = await _tourService.GetAllToursAsync();
             var tours = allTours.AsQueryable();
             if (categoryId.HasValue)
-                tours = tours.Where(t => t.CategoryId == categoryId.Value);
+                tours = tours.Where(t => t.CategoryID == categoryId.Value);
 
             // Lấy tất cả category
             var categories = await _tourService.GetAllCategoriesAsync();
@@ -36,7 +36,7 @@ namespace GoEASy.Controllers
             ViewBag.Tours = tours.ToList();
 
             // Popular destinations vẫn giữ nguyên logic cũ
-            var allDestinations = (await _destinationService.GetAllDestinationsAsync()).Where(d => d.DestinationId != id).Take(6).ToList();
+            var allDestinations = (await _destinationService.GetAllDestinationsAsync()).Where(d => d.DestinationID != id).Take(6).ToList();
             ViewBag.PopularDestinations = allDestinations;
             return View("~/Views/client/destination-details.cshtml", destination);
         }

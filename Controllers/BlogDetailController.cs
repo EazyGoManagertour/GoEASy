@@ -154,7 +154,7 @@ namespace GoEASy.Controllers
 
                 return new BlogImage
                 {
-                    ImageUrl = $"/image/blogs/{fileName}",
+                    ImageURL = $"/image/blogs/{fileName}",
                     Type = type,
                     Position = position,
                     UploadedAt = DateTime.Now

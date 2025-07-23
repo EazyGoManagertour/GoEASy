@@ -27,7 +27,7 @@ namespace GoEASy.Services
 
         public Task<User> GetUserByIdAsync(int id)
         {
-            return _context.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.UserId == id);
+            return _context.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.UserID == id);
         }
 
         public async Task CreateUserAsync(User user)
@@ -37,10 +37,10 @@ namespace GoEASy.Services
                 user.UpdatedAt = System.DateTime.Now;
             if (user.Status == null)
                 user.Status = true;
-            if (user.Vippoints == null)
-                user.Vippoints = 0;
-            if (user.IsVip == null)
-                user.IsVip = false;
+            if (user.VIPPoints == null)
+                user.VIPPoints = 0;
+            if (user.IsVIP == null)
+                user.IsVIP = false;
             if (string.IsNullOrEmpty(user.Sex))
                 user.Sex = "Male";
             await _userRepo.AddAsync(user);
@@ -70,12 +70,12 @@ namespace GoEASy.Services
 
         public Task<bool> UsernameExistsAsync(string username, int? excludeId = null)
         {
-            return _context.Users.AnyAsync(u => u.Username == username && (!excludeId.HasValue || u.UserId != excludeId));
+            return _context.Users.AnyAsync(u => u.Username == username && (!excludeId.HasValue || u.UserID != excludeId));
         }
 
         public Task<bool> EmailExistsAsync(string email, int? excludeId = null)
         {
-            return _context.Users.AnyAsync(u => u.Email == email && (!excludeId.HasValue || u.UserId != excludeId));
+            return _context.Users.AnyAsync(u => u.Email == email && (!excludeId.HasValue || u.UserID != excludeId));
         }
 
         public Task<User> GetUserByUsernameAsync(string username)

@@ -5,7 +5,7 @@ namespace GoEASy.Models;
 
 public partial class User
 {
-    public int UserId { get; set; }
+    public int UserID { get; set; }
 
     public string Username { get; set; } = null!;
 
@@ -19,18 +19,20 @@ public partial class User
 
     public string? Address { get; set; }
 
-    public bool? IsVip { get; set; }
+    public bool? IsVIP { get; set; }
 
-    public int? Vippoints { get; set; }
+    public int? VIPPoints { get; set; }
 
-    public int? RoleId { get; set; }
+    public string? Sex { get; set; }
+
+    public int? RoleID { get; set; }
 
     public bool? Status { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
-    public string? Sex { get; set; }
+
     public virtual ICollection<AccessLog> AccessLogs { get; set; } = new List<AccessLog>();
 
     public virtual ICollection<BlogComment> BlogComments { get; set; } = new List<BlogComment>();
@@ -39,9 +41,9 @@ public partial class User
 
     public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 
-    public virtual ICollection<Companion> Companions { get; set; } = new List<Companion>();
-
     public virtual ICollection<Favorite> Favorites { get; set; } = new List<Favorite>();
+
+    public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 
     public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 
@@ -49,5 +51,5 @@ public partial class User
 
     public virtual ICollection<Tour> Tours { get; set; } = new List<Tour>();
 
-    public virtual ICollection<VippointHistory> VippointHistories { get; set; } = new List<VippointHistory>();
+    public virtual ICollection<VIPPointHistory> VIPPointHistories { get; set; } = new List<VIPPointHistory>();
 }

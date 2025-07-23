@@ -48,7 +48,7 @@ namespace GoEASy.Controllers
                 if (admin != null)
                 {
                     // Tạo session cho admin
-                    HttpContext.Session.SetInt32("AdminID", admin.AdminId);
+                    HttpContext.Session.SetInt32("AdminID", admin.AdminID);
                     HttpContext.Session.SetString("AdminUsername", admin.Username);
                     HttpContext.Session.SetString("AdminFullName", admin.FullName);
                     HttpContext.Session.SetString("AdminRole", admin.Role);
