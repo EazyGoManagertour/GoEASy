@@ -102,10 +102,10 @@ namespace GoEASy.Services
             }
         }
 
-        // Kiểm tra vippoints hợp lệ
-        public static bool IsValidVippoints(int? vippoints)
+        // Kiểm tra VIPPoints hợp lệ
+        public static bool IsValidVIPPoints(int? VIPPoints)
         {
-            return vippoints == null || vippoints >= 0;
+            return VIPPoints == null || VIPPoints >= 0;
         }
 
         // Validate toàn bộ User object
@@ -146,10 +146,10 @@ namespace GoEASy.Services
                 errors.Add("Số điện thoại không hợp lệ (định dạng Việt Nam)");
             }
 
-            // Vippoints validation
-            if (!IsValidVippoints(user.Vippoints))
+            // VIPPoints validation
+            if (!IsValidVIPPoints(user.VIPPoints))
             {
-                errors.Add("Vippoints phải là số không âm");
+                errors.Add("VIPPoints phải là số không âm");
             }
 
             return (errors.Count == 0, errors);
@@ -284,12 +284,12 @@ namespace GoEASy.Services
             }
 
             // Destination and Category validation
-            if (tour.DestinationId.HasValue && tour.DestinationId <= 0)
+            if (tour.DestinationID.HasValue && tour.DestinationID <= 0)
             {
                 errors.Add("ID điểm đến không hợp lệ");
             }
 
-            if (tour.CategoryId.HasValue && tour.CategoryId <= 0)
+            if (tour.CategoryID.HasValue && tour.CategoryID <= 0)
             {
                 errors.Add("ID danh mục không hợp lệ");
             }

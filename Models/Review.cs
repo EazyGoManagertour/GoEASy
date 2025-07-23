@@ -5,11 +5,11 @@ namespace GoEASy.Models;
 
 public partial class Review
 {
-    public int ReviewId { get; set; }
+    public int ReviewID { get; set; }
 
-    public int? UserId { get; set; }
+    public int? UserID { get; set; }
 
-    public int? TourId { get; set; }
+    public int? TourID { get; set; }
 
     public int? Rating { get; set; }
 

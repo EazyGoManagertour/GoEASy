@@ -5,7 +5,7 @@ namespace GoEASy.Models;
 
 public partial class Destination
 {
-    public int DestinationId { get; set; }
+    public int DestinationID { get; set; }
 
     public string DestinationName { get; set; } = null!;
 

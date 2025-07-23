@@ -19,16 +19,16 @@ namespace GoEASy.Services
         public async Task<List<Booking>> GetBookingsByProviderAsync(int providerId)
         {
             // Lấy các tour do provider này tạo
-            var tourIds = await _context.Tours
+            var TourIDs = await _context.Tours
                 .Where(t => t.CreatedBy == providerId)
-                .Select(t => t.TourId)
+                .Select(t => t.TourID)
                 .ToListAsync();
 
             // Lấy các booking của các tour đó, include User và Tour
             var bookings = await _context.Bookings
                 .Include(b => b.User)
                 .Include(b => b.Tour)
-                .Where(b => b.TourId != null && tourIds.Contains(b.TourId.Value))
+                .Where(b => b.TourID != null && TourIDs.Contains(b.TourID.Value))
                 .OrderByDescending(b => b.BookingDate)
                 .ToListAsync();
 
@@ -38,7 +38,7 @@ namespace GoEASy.Services
         public async Task UpdateBookingAsync(Booking booking)
         {
             // Lấy trạng thái cũ trước khi update
-            var oldBooking = await _context.Bookings.AsNoTracking().FirstOrDefaultAsync(b => b.BookingId == booking.BookingId);
+            var oldBooking = await _context.Bookings.AsNoTracking().FirstOrDefaultAsync(b => b.BookingID == booking.BookingID);
             bool wasPending = oldBooking?.Status == false;
             bool isNowConfirmed = booking.Status == true;
 
@@ -46,18 +46,18 @@ namespace GoEASy.Services
             await _context.SaveChangesAsync();
 
             // Nếu chuyển từ chờ duyệt sang xác nhận, gửi notification cho user
-            if (wasPending && isNowConfirmed && booking.UserId != null && booking.TourId != null)
+            if (wasPending && isNowConfirmed && booking.UserID != null && booking.TourID != null)
             {
-                var tour = await _context.Tours.FirstOrDefaultAsync(t => t.TourId == booking.TourId);
+                var tour = await _context.Tours.FirstOrDefaultAsync(t => t.TourID == booking.TourID);
                 string tourName = tour?.TourName ?? "[Tour]";
                 string startDate = tour?.StartDate?.ToString("dd/MM/yyyy") ?? "?";
                 var notification = new Notification
                 {
-                    UserId = booking.UserId.Value,
+                    UserId = booking.UserID.Value,
                     Title = "Tour đã xác nhận",
                     Message = $"Tour '{tourName}' khởi hành ngày {startDate} đã được xác nhận thành công.",
                     Type = "BookingConfirmed",
-                    RelatedId = booking.BookingId,
+                    RelatedId = booking.BookingID,
                     CreatedAt = DateTime.Now,
                     IsRead = false
                 };

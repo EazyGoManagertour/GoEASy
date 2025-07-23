@@ -57,7 +57,7 @@ namespace GoEASy.Controllers
                 .Include(b => b.AuthorUser)
                 .Include(b => b.BlogTagMappings)
                      .ThenInclude(m => m.Tag)
-                .FirstOrDefaultAsync(b => b.BlogId == blogId);
+                .FirstOrDefaultAsync(b => b.BlogID == blogId);
 
             if (blog == null)
                 return NotFound();
@@ -74,8 +74,8 @@ namespace GoEASy.Controllers
                 section2Content = blog.BlogDetail?.Section2Content,
                 quote = blog.BlogDetail?.Quote,
                 quoteAuthor = blog.BlogDetail?.QuoteAuthor,
-                mainImage = blog.BlogImages.FirstOrDefault(i => i.Type == "main")?.ImageUrl,
-                gallery = blog.BlogImages.Where(i => i.Type == "gallery").Select(i => i.ImageUrl).ToList(),
+                mainImage = blog.BlogImages.FirstOrDefault(i => i.Type == "main")?.ImageURL,
+                gallery = blog.BlogImages.Where(i => i.Type == "gallery").Select(i => i.ImageURL).ToList(),
                 tags = blog.BlogTagMappings.Select(m => m.Tag?.Name).Where(t => t != null).ToList()
             });
 

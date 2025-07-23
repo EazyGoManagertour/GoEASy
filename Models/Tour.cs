@@ -5,7 +5,7 @@ namespace GoEASy.Models;
 
 public partial class Tour
 {
-    public int TourId { get; set; }
+    public int TourID { get; set; }
 
     public string TourName { get; set; } = null!;
 
@@ -25,9 +25,9 @@ public partial class Tour
 
     public int? CreatedBy { get; set; }
 
-    public int? DestinationId { get; set; }
+    public int? DestinationID { get; set; }
 
-    public int? CategoryId { get; set; }
+    public int? CategoryID { get; set; }
 
     public bool? Status { get; set; }
 
@@ -47,9 +47,9 @@ public partial class Tour
 
     public virtual TourDetail? TourDetail { get; set; }
 
+    public virtual ICollection<TourFAQ> TourFAQs { get; set; } = new List<TourFAQ>();
+
     public virtual ICollection<TourImage> TourImages { get; set; } = new List<TourImage>();
 
     public virtual ICollection<TourItinerary> TourItineraries { get; set; } = new List<TourItinerary>();
-
-    public virtual ICollection<TourFAQ> TourFAQs { get; set; } = new List<TourFAQ>();
 }

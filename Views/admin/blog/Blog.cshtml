@@ -156,7 +156,7 @@
                                     <button class="action-btn edit"
                                             data-bs-toggle="modal"
                                             data-bs-target="#editModal"
-                                            onclick="fillEditModal('@blog.BlogId', '@blog.Title', '@blog.ShortDescription', '@blog.CategoryId')">
+                                            onclick="fillEditModal('@blog.BlogId', '@blog.Title', '@blog.ShortDescription', '@blog.CategoryID')">
                                         <i class="fas fa-edit"></i>
                                     </button>
                                     <button class="action-btn delete"
@@ -200,10 +200,10 @@
                         </div>
                         <div class="mb-3">
                             <label>Category</label>
-                            <select class="form-control" name="CategoryId" required>
+                            <select class="form-control" name="CategoryID" required>
                                 @foreach (var cat in ViewBag.Categories as List<GoEASy.Models.TourCategory>)
                                 {
-                                    <option value="@cat.CategoryId">@cat.CategoryName</option>
+                                    <option value="@cat.CategoryID">@cat.CategoryName</option>
                                 }
                             </select>
                         </div>
@@ -245,10 +245,10 @@
                         </div>
                         <div class="mb-3">
                             <label>Category</label>
-                            <select class="form-control" name="CategoryId" id="editCategory" required>
+                            <select class="form-control" name="CategoryID" id="editCategory" required>
                                 @foreach (var cat in ViewBag.Categories as List<GoEASy.Models.TourCategory>)
                                 {
-                                    <option value="@cat.CategoryId">@cat.CategoryName</option>
+                                    <option value="@cat.CategoryID">@cat.CategoryName</option>
                                 }
                             </select>
                         </div>
@@ -291,11 +291,11 @@
 
 
     <script>
-        function fillEditModal(id, title, desc, categoryId) {
+        function fillEditModal(id, title, desc, CategoryID) {
             document.getElementById('editBlogId').value = id;
             document.getElementById('editTitle').value = title;
             document.getElementById('editDesc').value = desc;
-            document.getElementById('editCategory').value = categoryId;
+            document.getElementById('editCategory').value = CategoryID;
         }
 
         function setDeleteBlogId(id) {

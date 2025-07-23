@@ -5,9 +5,9 @@ namespace GoEASy.Models;
 
 public partial class BlogTagMapping
 {
-    public int BlogId { get; set; }
+    public int BlogID { get; set; }
 
-    public int TagId { get; set; }
+    public int TagID { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 

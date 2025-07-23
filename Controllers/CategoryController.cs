@@ -52,7 +52,7 @@ namespace GoEASy.Controllers
         {
             try
             {
-                var existing = await _categoryService.GetCategoryByIdAsync(category.CategoryId);
+                var existing = await _categoryService.GetCategoryByIdAsync(category.CategoryID);
                 if (existing == null)
                 {
                     TempData["Error"] = "Category not found!";

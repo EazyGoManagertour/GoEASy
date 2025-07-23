@@ -5,15 +5,15 @@ namespace GoEASy.Models;
 
 public partial class AccessLog
 {
-    public int LogId { get; set; }
+    public int LogID { get; set; }
 
-    public int? UserId { get; set; }
+    public int? UserID { get; set; }
 
     public string? Action { get; set; }
 
     public string? Description { get; set; }
 
-    public string? Ipaddress { get; set; }
+    public string? IPAddress { get; set; }
 
     public string? UserAgent { get; set; }
 

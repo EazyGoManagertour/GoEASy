@@ -40,7 +40,7 @@ namespace GoEASy.Services
                 .Include(b => b.AuthorAdmin)
                 .Include(b => b.AuthorUser)
                 .Include(b => b.Category)
-                .FirstOrDefaultAsync(b => b.BlogId == id);
+                .FirstOrDefaultAsync(b => b.BlogID == id);
         }
 
         public async Task CreateAsync(Blog blog)

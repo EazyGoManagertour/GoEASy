@@ -37,20 +37,20 @@ namespace GoEASy.Controllers
                 if (success && user != null)
                 {
                     // Tạo session cho user
-                    HttpContext.Session.SetInt32("UserId", user.UserId); // Sửa lại dùng SetInt32
+                    HttpContext.Session.SetInt32("UserID", user.UserID); // Sửa lại dùng SetInt32
                     HttpContext.Session.SetString("UserEmail", user.Email ?? "");
                     HttpContext.Session.SetString("UserName", user.FullName);
                     HttpContext.Session.SetString("UserRole", user.Role?.RoleName ?? "User");
-                    HttpContext.Session.SetInt32("RoleId", user.RoleId ?? 1);
+                    HttpContext.Session.SetInt32("RoleID", user.RoleID ?? 1);
 
                     TempData["Success"] = "Đăng nhập thành công!";
                     
                     // Redirect theo role
-                    if (user.RoleId == 1)
+                    if (user.RoleID == 1)
                     {
                         return RedirectToAction("Index", "Home");
                     }
-                    else if (user.RoleId == 2)
+                    else if (user.RoleID == 2)
                     {
                         return RedirectToAction("Index", "ProviderTour");
                     }

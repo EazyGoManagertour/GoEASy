@@ -97,7 +97,7 @@
                                     @if (images != null && images.Any())
                                     {
                                         var coverImage = images.FirstOrDefault(img => img.IsCover == true) ?? images.FirstOrDefault();
-                                        <img src="@coverImage.ImageUrl" alt="@tour.TourName" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;" />
+                                        <img src="@coverImage.ImageURL" alt="@tour.TourName" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;" />
                                     }
                                     else
                                     {
@@ -119,7 +119,7 @@
                                 <td>
                                     <button class="status admit"
                                             style="border: none; background-color:@(tour.Status == true ? "" : "#dc3545")"
-                                            onclick="toggleStatus(this, '@tour.TourId', @(tour.Status.ToString().ToLower()))">
+                                            onclick="toggleStatus(this, '@tour.TourID', @(tour.Status.ToString().ToLower()))">
                                         @(tour.Status == true ? "Active" : "Disable")
                                     </button>
                                 </td>
@@ -129,7 +129,7 @@
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#editModal"
                                                 onclick="fillEditModal(
-                                                '@tour.TourId',
+                                                '@tour.TourID',
                                                 '@tour.TourName',
                                                 '@(tour.Description ?? "")',
                                                 '@tour.AdultPrice',
@@ -138,15 +138,15 @@
                                                 '@(tour.EndDate?.ToString("yyyy-MM-dd") ?? "")',
                                                 '@(tour.MaxSeats?.ToString() ?? "")',
                                                 '@(tour.AvailableSeats?.ToString() ?? "")',
-                                                '@(tour.DestinationId?.ToString() ?? "")',
-                                                '@(tour.CategoryId?.ToString() ?? "")')">
+                                                '@(tour.DestinationID?.ToString() ?? "")',
+                                                '@(tour.CategoryID?.ToString() ?? "")')">
                                             <i class="fas fa-edit"></i>
                                         </button>
 
                                         <button class="action-btn delete"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal"
-                                                onclick="setDeleteTourId('@tour.TourId')">
+                                                onclick="setDeleteTourID('@tour.TourID')">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
@@ -284,7 +284,7 @@
                 </div>
                 <div class="modal-body">
                     <form action="/provider/tour/update" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" name="TourId" id="editTourID">
+                        <input type="hidden" name="TourID" id="editTourID">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -401,7 +401,7 @@
                 <form method="post" action="/provider/tour/delete-confirm">
                     <div class="modal-body">
                         <p>Are you sure you want to delete this tour?</p>
-                        <input type="hidden" name="id" id="deleteTourId" />
+                        <input type="hidden" name="id" id="deleteTourID" />
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -490,8 +490,8 @@
     @Html.Partial("~/Views/admin/share/script.cshtml")
 
     <script>
-        function toggleStatus(button, tourId, currentStatus) {
-            fetch(`/provider/tour/toggle-status?id=${tourId}`, {
+        function toggleStatus(button, TourID, currentStatus) {
+            fetch(`/provider/tour/toggle-status?id=${TourID}`, {
                 method: 'POST'
             })
             .then(response => {
@@ -499,7 +499,7 @@
                     const newStatus = !(currentStatus === true || currentStatus === "true");
                     button.textContent = newStatus ? "Active" : "Disable";
                     button.style.backgroundColor = newStatus ? "" : "#dc3545";
-                    button.setAttribute("onclick", `toggleStatus(this, '${tourId}', ${newStatus})`);
+                    button.setAttribute("onclick", `toggleStatus(this, '${TourID}', ${newStatus})`);
 
                     const msg = "Status updated successfully!";
                     document.getElementById("toast-success-msg").value = msg;
@@ -521,8 +521,8 @@
             });
         }
 
-        function setDeleteTourId(id) {
-            document.getElementById("deleteTourId").value = id;
+        function setDeleteTourID(id) {
+            document.getElementById("deleteTourID").value = id;
         }
 
         function fillEditModal(id, name, desc, aPrice, cPrice, start, end, max, avail, destId, catId) {

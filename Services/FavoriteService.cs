@@ -21,19 +21,19 @@ namespace GoEASy.Services
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Favorite>> GetFavoritesByUserIdAsync(int userId)
+        public async Task<IEnumerable<Favorite>> GetFavoritesByUserIdAsync(int userID)
         {
             return await _context.Favorites
                 .Include(f => f.Tour)
                 .Include(f => f.User)
-                .Where(f => f.UserId == userId)
+                .Where(f => f.UserID == userID)
                 .ToListAsync();
         }
 
-        public async Task<bool> RemoveFavoriteAsync(int userId, int tourId)
+        public async Task<bool> RemoveFavoriteAsync(int userID, int tourID)
         {
             var favorite = await _context.Favorites
-                .FirstOrDefaultAsync(f => f.UserId == userId && f.TourId == tourId);
+                .FirstOrDefaultAsync(f => f.UserID == userID && f.TourID == tourID);
 
             if (favorite != null)
             {
@@ -44,16 +44,16 @@ namespace GoEASy.Services
 
             return false;
         }
-        public async Task<bool> AddFavoriteAsync(int userId, int tourId)
+        public async Task<bool> AddFavoriteAsync(int userID, int tourID)
         {
-            var exists = await _context.Favorites.AnyAsync(f => f.UserId == userId && f.TourId == tourId);
+            var exists = await _context.Favorites.AnyAsync(f => f.UserID == userID && f.TourID == tourID);
             if (exists)
                 return false;
 
             var favorite = new Favorite
             {
-                UserId = userId,
-                TourId = tourId,
+                UserID = userID,
+                TourID = tourID,
                 CreatedAt = DateTime.Now
             };
             _context.Favorites.Add(favorite);
