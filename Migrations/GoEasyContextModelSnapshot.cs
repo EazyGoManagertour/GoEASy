@@ -55,7 +55,7 @@ namespace GoEASy.Migrations
                     b.HasKey("LogID")
                         .HasName("PK__AccessLo__5E5499A829083A81");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex(new[] { "UserID" }, "IX_AccessLog_UserID");
 
                     b.ToTable("AccessLog", (string)null);
                 });
@@ -153,14 +153,14 @@ namespace GoEASy.Migrations
                     b.HasKey("AdminID")
                         .HasName("PK__Admins__719FE4E8103D4241");
 
-                    b.HasIndex("RuleId");
+                    b.HasIndex(new[] { "RuleId" }, "IX_Admins_RuleId");
 
                     b.HasIndex(new[] { "Username" }, "UQ__Admins__536C85E4EC6305B7")
                         .IsUnique();
 
                     b.HasIndex(new[] { "Email" }, "UQ__Admins__A9D1053452D3FF2D")
                         .IsUnique()
-                        .HasFilter("[Email] IS NOT NULL");
+                        .HasFilter("([Email] IS NOT NULL)");
 
                     b.ToTable("Admins");
                 });
@@ -214,11 +214,11 @@ namespace GoEASy.Migrations
                     b.HasKey("BlogID")
                         .HasName("PK__Blogs__54379E5054BD6FC5");
 
-                    b.HasIndex("AuthorAdminID");
+                    b.HasIndex(new[] { "AuthorAdminID" }, "IX_Blogs_AuthorAdminID");
 
-                    b.HasIndex("AuthorUserID");
+                    b.HasIndex(new[] { "AuthorUserID" }, "IX_Blogs_AuthorUserID");
 
-                    b.HasIndex("CategoryID");
+                    b.HasIndex(new[] { "CategoryID" }, "IX_Blogs_CategoryID");
 
                     b.ToTable("Blogs");
                 });
@@ -259,9 +259,9 @@ namespace GoEASy.Migrations
                     b.HasKey("CommentID")
                         .HasName("PK__BlogComm__C3B4DFAA9DEABC40");
 
-                    b.HasIndex("BlogID");
+                    b.HasIndex(new[] { "BlogID" }, "IX_BlogComments_BlogID");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex(new[] { "UserID" }, "IX_BlogComments_UserID");
 
                     b.ToTable("BlogComments");
                 });
@@ -356,7 +356,7 @@ namespace GoEASy.Migrations
                     b.HasKey("ImageID")
                         .HasName("PK__BlogImag__7516F4EC54DE70B5");
 
-                    b.HasIndex("BlogID");
+                    b.HasIndex(new[] { "BlogID" }, "IX_BlogImages_BlogID");
 
                     b.ToTable("BlogImages");
                 });
@@ -383,7 +383,7 @@ namespace GoEASy.Migrations
 
                     b.HasIndex(new[] { "Name" }, "UQ__BlogTags__737584F6AEFE61A6")
                         .IsUnique()
-                        .HasFilter("[Name] IS NOT NULL");
+                        .HasFilter("([Name] IS NOT NULL)");
 
                     b.ToTable("BlogTags");
                 });
@@ -404,7 +404,7 @@ namespace GoEASy.Migrations
                     b.HasKey("BlogID", "TagID")
                         .HasName("PK__BlogTagM__826051F465023A30");
 
-                    b.HasIndex("TagID");
+                    b.HasIndex(new[] { "TagID" }, "IX_BlogTagMapping_TagID");
 
                     b.ToTable("BlogTagMapping", (string)null);
                 });
@@ -436,7 +436,7 @@ namespace GoEASy.Migrations
                     b.Property<decimal?>("DiscountAmount")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("decimal(10, 2)")
-                        .HasDefaultValue(0m);
+                        .HasDefaultValue(0.0m);
 
                     b.Property<int?>("DiscountID")
                         .HasColumnType("int");
@@ -455,7 +455,7 @@ namespace GoEASy.Migrations
                     b.Property<decimal?>("TotalPrice")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("decimal(10, 2)")
-                        .HasDefaultValue(0m);
+                        .HasDefaultValue(0.0m);
 
                     b.Property<int?>("TourID")
                         .HasColumnType("int");
@@ -476,11 +476,11 @@ namespace GoEASy.Migrations
                     b.HasKey("BookingID")
                         .HasName("PK__Bookings__73951ACDFA0E4E79");
 
-                    b.HasIndex("DiscountID");
+                    b.HasIndex(new[] { "DiscountID" }, "IX_Bookings_DiscountID");
 
-                    b.HasIndex("TourID");
+                    b.HasIndex(new[] { "TourID" }, "IX_Bookings_TourID");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex(new[] { "UserID" }, "IX_Bookings_UserID");
 
                     b.ToTable("Bookings");
                 });
@@ -525,7 +525,7 @@ namespace GoEASy.Migrations
                     b.HasKey("CompanionID")
                         .HasName("PK__Companio__8B53BE8BB4D8595E");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex(new[] { "UserID" }, "IX_Companions_UserID");
 
                     b.ToTable("Companions");
                 });
@@ -604,7 +604,7 @@ namespace GoEASy.Migrations
                     b.HasKey("ImageID")
                         .HasName("PK__Destinat__7516F4ECDC4B0B39");
 
-                    b.HasIndex("DestinationID");
+                    b.HasIndex(new[] { "DestinationID" }, "IX_DestinationImages_DestinationID");
 
                     b.ToTable("DestinationImages");
                 });
@@ -691,7 +691,7 @@ namespace GoEASy.Migrations
                     b.HasKey("UserID", "TourID")
                         .HasName("PK__Favorite__018C020D2A7422D0");
 
-                    b.HasIndex("TourID");
+                    b.HasIndex(new[] { "TourID" }, "IX_Favorites_TourID");
 
                     b.ToTable("Favorites");
                 });
@@ -771,7 +771,7 @@ namespace GoEASy.Migrations
                     b.HasKey("PaymentID")
                         .HasName("PK__Payments__9B556A583D71F123");
 
-                    b.HasIndex("BookingID");
+                    b.HasIndex(new[] { "BookingID" }, "IX_Payments_BookingID");
 
                     b.ToTable("Payments");
                 });
@@ -808,9 +808,9 @@ namespace GoEASy.Migrations
                     b.HasKey("ReviewID")
                         .HasName("PK__Reviews__74BC79AEE3A98EAA");
 
-                    b.HasIndex("TourID");
+                    b.HasIndex(new[] { "TourID" }, "IX_Reviews_TourID");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex(new[] { "UserID" }, "IX_Reviews_UserID");
 
                     b.ToTable("Reviews");
                 });
@@ -912,9 +912,33 @@ namespace GoEASy.Migrations
                     b.HasKey("ScheduleID")
                         .HasName("PK__Schedule__9C8A5B696B2581C2");
 
-                    b.HasIndex("TourID");
+                    b.HasIndex(new[] { "TourID" }, "IX_Schedules_TourID");
 
                     b.ToTable("Schedules");
+                });
+
+            modelBuilder.Entity("GoEASy.Models.SemanticQuery", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Query")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("TopK")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(5);
+
+                    b.HasKey("ID")
+                        .HasName("PK__Semantic__3214EC27CD216E46");
+
+                    b.ToTable("SemanticQueries");
                 });
 
             modelBuilder.Entity("GoEASy.Models.Tour", b =>
@@ -968,11 +992,11 @@ namespace GoEASy.Migrations
                     b.HasKey("TourID")
                         .HasName("PK__Tours__604CEA10C292330F");
 
-                    b.HasIndex("CategoryID");
+                    b.HasIndex(new[] { "CategoryID" }, "IX_Tours_CategoryID");
 
-                    b.HasIndex("CreatedBy");
+                    b.HasIndex(new[] { "CreatedBy" }, "IX_Tours_CreatedBy");
 
-                    b.HasIndex("DestinationID");
+                    b.HasIndex(new[] { "DestinationID" }, "IX_Tours_DestinationID");
 
                     b.ToTable("Tours");
                 });
@@ -1055,6 +1079,28 @@ namespace GoEASy.Migrations
                     b.ToTable("TourDetails");
                 });
 
+            modelBuilder.Entity("GoEASy.Models.TourDto", b =>
+                {
+                    b.Property<int>("ID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Desc")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("ID")
+                        .HasName("PK__TourDtos__3214EC27758DAF54");
+
+                    b.ToTable("TourDtos");
+                });
+
             modelBuilder.Entity("GoEASy.Models.TourFAQ", b =>
                 {
                     b.Property<int>("FAQID")
@@ -1082,7 +1128,7 @@ namespace GoEASy.Migrations
                     b.HasKey("FAQID")
                         .HasName("PK__TourFAQs__4B89D1E2AA962951");
 
-                    b.HasIndex("TourID");
+                    b.HasIndex(new[] { "TourID" }, "IX_TourFAQs_TourID");
 
                     b.ToTable("TourFAQs");
                 });
@@ -1120,7 +1166,7 @@ namespace GoEASy.Migrations
                     b.HasKey("ImageID")
                         .HasName("PK__TourImag__7516F4EC3FE9F5B0");
 
-                    b.HasIndex("TourID");
+                    b.HasIndex(new[] { "TourID" }, "IX_TourImages_TourID");
 
                     b.ToTable("TourImages");
                 });
@@ -1162,9 +1208,39 @@ namespace GoEASy.Migrations
                     b.HasKey("ItineraryID")
                         .HasName("PK__TourItin__361216A6B2E37400");
 
-                    b.HasIndex("TourID");
+                    b.HasIndex(new[] { "TourID" }, "IX_TourItineraries_TourID");
 
                     b.ToTable("TourItineraries");
+                });
+
+            modelBuilder.Entity("GoEASy.Models.TourViewLog", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("ActionType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int?>("TourID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ViewTime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.HasKey("ID")
+                        .HasName("PK__TourView__3214EC27460BF978");
+
+                    b.ToTable("TourViewLogs");
                 });
 
             modelBuilder.Entity("GoEASy.Models.User", b =>
@@ -1237,14 +1313,14 @@ namespace GoEASy.Migrations
                     b.HasKey("UserID")
                         .HasName("PK__Users__1788CCACF72813F8");
 
-                    b.HasIndex("RoleID");
+                    b.HasIndex(new[] { "RoleID" }, "IX_Users_RoleID");
 
                     b.HasIndex(new[] { "Username" }, "UQ__Users__536C85E462158B79")
                         .IsUnique();
 
                     b.HasIndex(new[] { "Email" }, "UQ__Users__A9D1053449FFE89D")
                         .IsUnique()
-                        .HasFilter("[Email] IS NOT NULL");
+                        .HasFilter("([Email] IS NOT NULL)");
 
                     b.ToTable("Users");
                 });
@@ -1275,7 +1351,7 @@ namespace GoEASy.Migrations
                     b.HasKey("HistoryID")
                         .HasName("PK__VIPPoint__4D7B4ADD00D970C3");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex(new[] { "UserID" }, "IX_VIPPointHistory_UserID");
 
                     b.ToTable("VIPPointHistory", (string)null);
                 });

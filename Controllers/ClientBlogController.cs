@@ -18,12 +18,12 @@ namespace GoEASy.Controllers
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> Index(string? keyword, string? category, int page = 1, int pageSize = 5)
+        public async Task<IActionResult> Index(string? keyword, string? category, int page = 1, int pageSize = 3)
         {
             var blogs = await _blogService.GetAllAsync();
 
-            // ✅ Lọc dữ liệu
-            blogs = blogs.Where(b => b.IsApproved == 1).ToList();
+            // ✅ Lọc dữ liệu
+            blogs = blogs.Where(b => b.IsApproved == 1).ToList();
 
             if (!string.IsNullOrWhiteSpace(keyword))
             {
@@ -44,17 +44,17 @@ namespace GoEASy.Controllers
             ViewBag.Categories = await _categoryService.GetAllCategoriesAsync();
             ViewBag.RecentBlogs = blogs.OrderByDescending(b => b.CreatedAt).Take(3).ToList();
 
-            // ✅ Tính phân trang
-            int totalItems = blogs.Count();
+            // ✅ Tính phân trang
+            int totalItems = blogs.Count();
             int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
             ViewBag.TotalPages = totalPages;
             ViewBag.CurrentPage = page;
 
-            // ✅ Lấy blog theo trang
-            var pagedBlogs = blogs
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
+            // ✅ Lấy blog theo trang
+            var pagedBlogs = blogs
+               .Skip((page - 1) * pageSize)
+               .Take(pageSize)
+               .ToList();
 
             return View("~/Views/client/blog/ListBlog.cshtml", pagedBlogs);
         }

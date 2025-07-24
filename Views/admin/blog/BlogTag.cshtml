@@ -93,7 +93,7 @@
                                 <td>
                                     <button class="status admit"
                                             style="border: none; outline: none; background-color:@(tag.Status == true ? "" : "#dc3545")"
-                                            onclick="toggleStatus(this, '@tag.TagId', @(tag.Status.ToString().ToLower()))">
+                                            onclick="toggleStatus(this, '@tag.TagID', @(tag.Status.ToString().ToLower()))">
                                         @(tag.Status == true ? "Active" : "Disable")
                                     </button>
                                 </td>
@@ -102,13 +102,13 @@
                                         <button class="action-btn edit"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#editModal"
-                                                onclick="fillEditModal('@tag.TagId', '@tag.Name', '@(tag.Status == true ? "true" : "false")')">
+                                                onclick="fillEditModal('@tag.TagID', '@tag.Name', '@(tag.Status == true ? "true" : "false")')">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                         <button class="action-btn delete"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal"
-                                                onclick="setDeleteTagId('@tag.TagId')">
+                                                onclick="setDeleteTagId('@tag.TagID')">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
@@ -216,8 +216,8 @@
             document.getElementById('deleteTagId').value = id;
         }
 
-        function toggleStatus(button, tagId, currentStatus) {
-            fetch(`/admin/blog-tag/toggle-status?id=${tagId}`, {
+        function toggleStatus(button, tagID, currentStatus) {
+            fetch(`/admin/blog-tag/toggle-status?id=${tagID}`, {
                 method: 'POST'
             })
             .then(response => {
@@ -225,7 +225,7 @@
                     const newStatus = !(currentStatus === true || currentStatus === "true");
                     button.textContent = newStatus ? "Active" : "Disable";
                     button.style.backgroundColor = newStatus ? "" : "#dc3545";
-                    button.setAttribute("onclick", `toggleStatus(this, '${tagId}', ${newStatus})`);
+                    button.setAttribute("onclick", `toggleStatus(this, '${tagID}', ${newStatus})`);
 
                     const msg = "Status updated successfully!";
                     document.getElementById("toast-success-msg").value = msg;

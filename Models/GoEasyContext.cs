@@ -57,17 +57,23 @@ public partial class GoEasyContext : DbContext
 
     public virtual DbSet<Schedule> Schedules { get; set; }
 
+    public virtual DbSet<SemanticQuery> SemanticQueries { get; set; }
+
     public virtual DbSet<Tour> Tours { get; set; }
 
     public virtual DbSet<TourCategory> TourCategories { get; set; }
 
     public virtual DbSet<TourDetail> TourDetails { get; set; }
 
+    public virtual DbSet<TourDto> TourDtos { get; set; }
+
     public virtual DbSet<TourFAQ> TourFAQs { get; set; }
 
     public virtual DbSet<TourImage> TourImages { get; set; }
 
     public virtual DbSet<TourItinerary> TourItineraries { get; set; }
+
+    public virtual DbSet<TourViewLog> TourViewLogs { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
@@ -84,6 +90,8 @@ public partial class GoEasyContext : DbContext
             entity.HasKey(e => e.LogID).HasName("PK__AccessLo__5E5499A829083A81");
 
             entity.ToTable("AccessLog");
+
+            entity.HasIndex(e => e.UserID, "IX_AccessLog_UserID");
 
             entity.Property(e => e.Action).HasMaxLength(100);
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetime())");
@@ -109,9 +117,13 @@ public partial class GoEasyContext : DbContext
         {
             entity.HasKey(e => e.AdminID).HasName("PK__Admins__719FE4E8103D4241");
 
+            entity.HasIndex(e => e.RuleId, "IX_Admins_RuleId");
+
             entity.HasIndex(e => e.Username, "UQ__Admins__536C85E4EC6305B7").IsUnique();
 
-            entity.HasIndex(e => e.Email, "UQ__Admins__A9D1053452D3FF2D").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__Admins__A9D1053452D3FF2D")
+                .IsUnique()
+                .HasFilter("([Email] IS NOT NULL)");
 
             entity.Property(e => e.Address).HasMaxLength(255);
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetime())");
@@ -132,6 +144,12 @@ public partial class GoEasyContext : DbContext
         modelBuilder.Entity<Blog>(entity =>
         {
             entity.HasKey(e => e.BlogID).HasName("PK__Blogs__54379E5054BD6FC5");
+
+            entity.HasIndex(e => e.AuthorAdminID, "IX_Blogs_AuthorAdminID");
+
+            entity.HasIndex(e => e.AuthorUserID, "IX_Blogs_AuthorUserID");
+
+            entity.HasIndex(e => e.CategoryID, "IX_Blogs_CategoryID");
 
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetime())");
             entity.Property(e => e.IsApproved).HasDefaultValue((byte)0);
@@ -157,6 +175,10 @@ public partial class GoEasyContext : DbContext
         modelBuilder.Entity<BlogComment>(entity =>
         {
             entity.HasKey(e => e.CommentID).HasName("PK__BlogComm__C3B4DFAA9DEABC40");
+
+            entity.HasIndex(e => e.BlogID, "IX_BlogComments_BlogID");
+
+            entity.HasIndex(e => e.UserID, "IX_BlogComments_UserID");
 
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetime())");
             entity.Property(e => e.Email).HasMaxLength(100);
@@ -193,6 +215,8 @@ public partial class GoEasyContext : DbContext
         {
             entity.HasKey(e => e.ImageID).HasName("PK__BlogImag__7516F4EC54DE70B5");
 
+            entity.HasIndex(e => e.BlogID, "IX_BlogImages_BlogID");
+
             entity.Property(e => e.ImageURL).HasMaxLength(255);
             entity.Property(e => e.IsMain).HasDefaultValue(false);
             entity.Property(e => e.Type).HasMaxLength(50);
@@ -207,7 +231,9 @@ public partial class GoEasyContext : DbContext
         {
             entity.HasKey(e => e.TagID).HasName("PK__BlogTags__657CFA4CBAFE00EC");
 
-            entity.HasIndex(e => e.Name, "UQ__BlogTags__737584F6AEFE61A6").IsUnique();
+            entity.HasIndex(e => e.Name, "UQ__BlogTags__737584F6AEFE61A6")
+                .IsUnique()
+                .HasFilter("([Name] IS NOT NULL)");
 
             entity.Property(e => e.Name).HasMaxLength(50);
             entity.Property(e => e.Status).HasDefaultValue(true);
@@ -218,6 +244,8 @@ public partial class GoEasyContext : DbContext
             entity.HasKey(e => new { e.BlogID, e.TagID }).HasName("PK__BlogTagM__826051F465023A30");
 
             entity.ToTable("BlogTagMapping");
+
+            entity.HasIndex(e => e.TagID, "IX_BlogTagMapping_TagID");
 
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetime())");
 
@@ -234,17 +262,23 @@ public partial class GoEasyContext : DbContext
         {
             entity.HasKey(e => e.BookingID).HasName("PK__Bookings__73951ACDFA0E4E79");
 
+            entity.HasIndex(e => e.DiscountID, "IX_Bookings_DiscountID");
+
+            entity.HasIndex(e => e.TourID, "IX_Bookings_TourID");
+
+            entity.HasIndex(e => e.UserID, "IX_Bookings_UserID");
+
             entity.Property(e => e.BookingDate).HasDefaultValueSql("(sysdatetime())");
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetime())");
             entity.Property(e => e.DiscountAmount)
-                .HasDefaultValue(0m)
+                .HasDefaultValue(0.0m)
                 .HasColumnType("decimal(10, 2)");
             entity.Property(e => e.PaymentStatus)
                 .HasMaxLength(20)
                 .HasDefaultValue("Pending");
             entity.Property(e => e.Status).HasDefaultValue(true);
             entity.Property(e => e.TotalPrice)
-                .HasDefaultValue(0m)
+                .HasDefaultValue(0.0m)
                 .HasColumnType("decimal(10, 2)");
             entity.Property(e => e.UpdatedAt).HasDefaultValueSql("(sysdatetime())");
             entity.Property(e => e.UsedVIPPoints).HasDefaultValue(0);
@@ -265,6 +299,8 @@ public partial class GoEasyContext : DbContext
         modelBuilder.Entity<Companion>(entity =>
         {
             entity.HasKey(e => e.CompanionID).HasName("PK__Companio__8B53BE8BB4D8595E");
+
+            entity.HasIndex(e => e.UserID, "IX_Companions_UserID");
 
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetime())");
             entity.Property(e => e.FullName).HasMaxLength(100);
@@ -291,6 +327,8 @@ public partial class GoEasyContext : DbContext
         modelBuilder.Entity<DestinationImage>(entity =>
         {
             entity.HasKey(e => e.ImageID).HasName("PK__Destinat__7516F4ECDC4B0B39");
+
+            entity.HasIndex(e => e.DestinationID, "IX_DestinationImages_DestinationID");
 
             entity.Property(e => e.Caption).HasMaxLength(255);
             entity.Property(e => e.ImageURL).HasMaxLength(255);
@@ -320,6 +358,8 @@ public partial class GoEasyContext : DbContext
         modelBuilder.Entity<Favorite>(entity =>
         {
             entity.HasKey(e => new { e.UserID, e.TourID }).HasName("PK__Favorite__018C020D2A7422D0");
+
+            entity.HasIndex(e => e.TourID, "IX_Favorites_TourID");
 
             entity.Property(e => e.AddedDate).HasDefaultValueSql("(sysdatetime())");
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetime())");
@@ -359,6 +399,8 @@ public partial class GoEasyContext : DbContext
         {
             entity.HasKey(e => e.PaymentID).HasName("PK__Payments__9B556A583D71F123");
 
+            entity.HasIndex(e => e.BookingID, "IX_Payments_BookingID");
+
             entity.Property(e => e.Amount).HasColumnType("decimal(10, 2)");
             entity.Property(e => e.PaymentMethod).HasMaxLength(50);
             entity.Property(e => e.Status)
@@ -373,6 +415,10 @@ public partial class GoEasyContext : DbContext
         modelBuilder.Entity<Review>(entity =>
         {
             entity.HasKey(e => e.ReviewID).HasName("PK__Reviews__74BC79AEE3A98EAA");
+
+            entity.HasIndex(e => e.TourID, "IX_Reviews_TourID");
+
+            entity.HasIndex(e => e.UserID, "IX_Reviews_UserID");
 
             entity.Property(e => e.CreatedDate).HasDefaultValueSql("(sysdatetime())");
             entity.Property(e => e.SentimentScore).HasMaxLength(20);
@@ -411,6 +457,8 @@ public partial class GoEasyContext : DbContext
         {
             entity.HasKey(e => e.ScheduleID).HasName("PK__Schedule__9C8A5B696B2581C2");
 
+            entity.HasIndex(e => e.TourID, "IX_Schedules_TourID");
+
             entity.Property(e => e.Location).HasMaxLength(200);
             entity.Property(e => e.Title).HasMaxLength(200);
 
@@ -420,9 +468,23 @@ public partial class GoEasyContext : DbContext
                 .HasConstraintName("FK__Schedules__TourI__656C112C");
         });
 
+        modelBuilder.Entity<SemanticQuery>(entity =>
+        {
+            entity.HasKey(e => e.ID).HasName("PK__Semantic__3214EC27CD216E46");
+
+            entity.Property(e => e.Query).HasMaxLength(500);
+            entity.Property(e => e.TopK).HasDefaultValue(5);
+        });
+
         modelBuilder.Entity<Tour>(entity =>
         {
             entity.HasKey(e => e.TourID).HasName("PK__Tours__604CEA10C292330F");
+
+            entity.HasIndex(e => e.CategoryID, "IX_Tours_CategoryID");
+
+            entity.HasIndex(e => e.CreatedBy, "IX_Tours_CreatedBy");
+
+            entity.HasIndex(e => e.DestinationID, "IX_Tours_DestinationID");
 
             entity.Property(e => e.AdultPrice).HasColumnType("decimal(10, 2)");
             entity.Property(e => e.ChildPrice).HasColumnType("decimal(10, 2)");
@@ -468,9 +530,20 @@ public partial class GoEasyContext : DbContext
                 .HasConstraintName("FK__TourDetai__TourI__3B40CD36");
         });
 
+        modelBuilder.Entity<TourDto>(entity =>
+        {
+            entity.HasKey(e => e.ID).HasName("PK__TourDtos__3214EC27758DAF54");
+
+            entity.Property(e => e.ID).ValueGeneratedNever();
+            entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.Title).HasMaxLength(255);
+        });
+
         modelBuilder.Entity<TourFAQ>(entity =>
         {
             entity.HasKey(e => e.FAQID).HasName("PK__TourFAQs__4B89D1E2AA962951");
+
+            entity.HasIndex(e => e.TourID, "IX_TourFAQs_TourID");
 
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetime())");
             entity.Property(e => e.Question).HasMaxLength(255);
@@ -483,6 +556,8 @@ public partial class GoEasyContext : DbContext
         modelBuilder.Entity<TourImage>(entity =>
         {
             entity.HasKey(e => e.ImageID).HasName("PK__TourImag__7516F4EC3FE9F5B0");
+
+            entity.HasIndex(e => e.TourID, "IX_TourImages_TourID");
 
             entity.Property(e => e.Caption).HasMaxLength(255);
             entity.Property(e => e.ImageURL).HasMaxLength(255);
@@ -499,6 +574,8 @@ public partial class GoEasyContext : DbContext
         {
             entity.HasKey(e => e.ItineraryID).HasName("PK__TourItin__361216A6B2E37400");
 
+            entity.HasIndex(e => e.TourID, "IX_TourItineraries_TourID");
+
             entity.Property(e => e.Accommodation).HasMaxLength(255);
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetime())");
             entity.Property(e => e.Meals).HasMaxLength(255);
@@ -510,13 +587,27 @@ public partial class GoEasyContext : DbContext
                 .HasConstraintName("FK__TourItine__TourI__3F115E1A");
         });
 
+        modelBuilder.Entity<TourViewLog>(entity =>
+        {
+            entity.HasKey(e => e.ID).HasName("PK__TourView__3214EC27460BF978");
+
+            entity.Property(e => e.ActionType).HasMaxLength(50);
+            entity.Property(e => e.ViewTime)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+        });
+
         modelBuilder.Entity<User>(entity =>
         {
             entity.HasKey(e => e.UserID).HasName("PK__Users__1788CCACF72813F8");
 
+            entity.HasIndex(e => e.RoleID, "IX_Users_RoleID");
+
             entity.HasIndex(e => e.Username, "UQ__Users__536C85E462158B79").IsUnique();
 
-            entity.HasIndex(e => e.Email, "UQ__Users__A9D1053449FFE89D").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__Users__A9D1053449FFE89D")
+                .IsUnique()
+                .HasFilter("([Email] IS NOT NULL)");
 
             entity.Property(e => e.Address).HasMaxLength(255);
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetime())");
@@ -541,6 +632,8 @@ public partial class GoEasyContext : DbContext
             entity.HasKey(e => e.HistoryID).HasName("PK__VIPPoint__4D7B4ADD00D970C3");
 
             entity.ToTable("VIPPointHistory");
+
+            entity.HasIndex(e => e.UserID, "IX_VIPPointHistory_UserID");
 
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetime())");
             entity.Property(e => e.Reason).HasMaxLength(255);

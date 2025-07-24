@@ -147,7 +147,7 @@
                             <td>
                                 <button class="status admit"
                                         style="border: none; outline: none; background-color:@(blog.Status == true ? "" : "#dc3545")"
-                                        onclick="toggleStatus(this, '@blog.BlogId', @(blog.Status.ToString().ToLower()))">
+                                        onclick="toggleStatus(this, '@blog.BlogID', @(blog.Status.ToString().ToLower()))">
                                     @(blog.Status == true ? "Active" : "Disabled")
                                 </button>
                             </td>
@@ -156,13 +156,13 @@
                                     <button class="action-btn edit"
                                             data-bs-toggle="modal"
                                             data-bs-target="#editModal"
-                                            onclick="fillEditModal('@blog.BlogId', '@blog.Title', '@blog.ShortDescription', '@blog.CategoryID')">
+                                            onclick="fillEditModal('@blog.BlogID', '@blog.Title', '@blog.ShortDescription', '@blog.CategoryID')">
                                         <i class="fas fa-edit"></i>
                                     </button>
                                     <button class="action-btn delete"
                                             data-bs-toggle="modal"
                                             data-bs-target="#deleteModal"
-                                            onclick="setDeleteBlogId('@blog.BlogId')">
+                                            onclick="setDeleteBlogId('@blog.BlogID')">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
@@ -306,8 +306,8 @@
 
 
     <script>
-        function toggleStatus(button, blogId, currentStatus) {
-            fetch(`/admin/blog/toggle-status?id=${blogId}`, {
+        function toggleStatus(button, blogID, currentStatus) {
+            fetch(`/admin/blog/toggle-status?id=${blogID}`, {
                 method: 'POST'
             })
             .then(response => {
@@ -316,7 +316,7 @@
                     const newStatus = !(currentStatus === true || currentStatus === "true");
                     button.textContent = newStatus ? "Active" : "Disable";
                     button.style.backgroundColor = newStatus ? "" : "#dc3545";
-                    button.setAttribute("onclick", `toggleStatus(this, '${blogId}', ${newStatus})`);
+                    button.setAttribute("onclick", `toggleStatus(this, '${blogID}', ${newStatus})`);
 
                     // Show success toast
                     const msg = "Status updated successfully!";
