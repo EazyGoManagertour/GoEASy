@@ -53,7 +53,7 @@ namespace GoEASy.Controllers
             ViewBag.TotalPages = totalPages;
 
             // Kiểm tra user đã booking và thanh toán tour này chưa
-            int? userId = HttpContext.Session.GetInt32("UserId");
+            int? userId = HttpContext.Session.GetInt32("UserID");
             bool canComment = false;
             if (userId != null)
             {

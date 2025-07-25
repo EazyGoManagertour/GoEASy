@@ -118,7 +118,7 @@
                                 <td>
                                     @if (gallery.Any())
                                     {
-                                        string carouselId = $"carousel_{detail.BlogDetailId}";
+                                        string carouselId = $"carousel_{detail.BlogDetailID}";
                                         <div id="@carouselId" class="carousel slide" data-bs-ride="carousel" style="width: 120px;">
                                             <div class="carousel-inner">
                                                 @for (int i = 0; i < gallery.Count; i++)
@@ -208,7 +208,7 @@
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#editModal"
                                                 onclick="fillEditDetail(this)"
-                                                data-id="@detail.BlogDetailId"
+                                                data-id="@detail.BlogDetailID"
                                                 data-intro="@detail.Introduction"
                                                 data-s1title="@detail.Section1Title"
                                                 data-s1content="@detail.Section1Content"
@@ -224,7 +224,7 @@
                                         <button class="action-btn delete"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal"
-                                                onclick="setDeleteDetailId('@detail.BlogDetailId')">
+                                                onclick="setDeleteDetailID('@detail.BlogDetailID')">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
@@ -337,7 +337,7 @@
                     </div>
 
                     <div class="modal-body row g-3">
-                        <input type="hidden" name="BlogDetailId" id="editDetailId" />
+                        <input type="hidden" name="BlogDetailID" id="editDetailID" />
 
                         <div class="col-md-12">
                             <label>Introduction</label>
@@ -415,7 +415,7 @@
                     </div>
                     <div class="modal-body">
                         <p>Are you sure you want to delete this blog detail?</p>
-                        <input type="hidden" name="id" id="deleteDetailId" />
+                        <input type="hidden" name="id" id="deleteDetailID" />
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -449,7 +449,7 @@
 
         async function fillEditDetail(btn) {
             // Gán giá trị như cũ
-            document.getElementById('editDetailId').value    = btn.dataset.id;
+            document.getElementById('editDetailID').value    = btn.dataset.id;
             document.getElementById('editIntro').value       = decodeURIComponent(btn.dataset.intro);
             document.getElementById('editS1Title').value     = decodeURIComponent(btn.dataset.s1title);
             document.getElementById('editS2Title').value     = decodeURIComponent(btn.dataset.s2title);

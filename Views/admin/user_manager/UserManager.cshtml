@@ -103,12 +103,12 @@
                                 <td>@user.Address</td>
                                 <td>@user.Sex</td>
                                 <td>@user.Role?.RoleName</td>
-                                <td>@(user.IsVip == true ? "VIP" : "Regular")</td>
-                                <td>@user.Vippoints</td>
+                                <td>@(user.IsVIP == true ? "VIP" : "Regular")</td>
+                                <td>@user.VIPPoints</td>
                                 <td>
                                     <button class="status admit"
                                             style="border: none; outline: none; background-color:@(user.Status == true ? "" : "#dc3545")"
-                                            onclick="toggleStatus(this, '@user.UserId', @(user.Status.ToString().ToLower()))">
+                                            onclick="toggleStatus(this, '@user.UserID', @(user.Status.ToString().ToLower()))">
                                         @(user.Status == true ? "Active" : "Disable")
                                     </button>
                                 </td>
@@ -119,7 +119,7 @@
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#editModal"
                                                 onclick="fillEditModal(
-                                                '@user.UserId',
+                                                '@user.UserID',
                                                 '@user.Username',
                                                 '',
                                                 '@user.FullName',
@@ -127,9 +127,9 @@
                                                 '@user.Phone',
                                                 '@user.Address',
                                                 '@user.Sex',
-                                                '@user.RoleId',
-                                                '@(user.IsVip == true ? "true" : "false")',
-                                                '@user.Vippoints',
+                                                '@user.RoleID',
+                                                '@(user.IsVIP == true ? "true" : "false")',
+                                                '@user.VIPPoints',
                                                 '@(user.Status == true ? "true" : "false")')">
                                             <i class="fas fa-edit"></i>
                                         </button>
@@ -137,7 +137,7 @@
                                         <button class="action-btn delete"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal"
-                                                onclick="setDeleteUserId('@user.UserId')">
+                                                onclick="setDeleteUserID('@user.UserID')">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
@@ -193,27 +193,27 @@
                         </div>
                         <div class="mb-3">
                             <label for="addRole" class="form-label">Role</label>
-                            <select class="form-control" id="addRole" name="RoleId" required>
+                            <select class="form-control" id="addRole" name="RoleID" required>
                                 <option value="" disabled selected hidden>Select Role</option>
                                 @if (ViewBag.Roles != null)
                                 {
                                     foreach (var role in ViewBag.Roles)
                                     {
-                                        <option value="@role.RoleId">@role.RoleName</option>
+                                        <option value="@role.RoleID">@role.RoleName</option>
                                     }
                                 }
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="addIsVip" class="form-label">VIP Status</label>
-                            <select class="form-control" id="addIsVip" name="IsVip" required>
+                            <label for="addIsVIP" class="form-label">VIP Status</label>
+                            <select class="form-control" id="addIsVIP" name="IsVIP" required>
                                 <option value="false">Regular</option>
                                 <option value="true">VIP</option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="addVippoints" class="form-label">Vippoints</label>
-                            <input type="number" class="form-control" id="addVippoints" name="Vippoints" value="0" required>
+                            <label for="addVIPPoints" class="form-label">VIPPoints</label>
+                            <input type="number" class="form-control" id="addVIPPoints" name="VIPPoints" value="0" required>
                         </div>
                         <button type="submit" class="btn btn-success">Add User</button>
                     </form>
@@ -232,7 +232,7 @@
                 </div>
                 <div class="modal-body">
                     <form action="/admin/user-manager/update" method="POST">
-                        <input type="hidden" name="UserId" id="editUserID">
+                        <input type="hidden" name="UserID" id="editUserID">
 
                         <div class="mb-3">
                             <label for="editUsername" class="form-label">Username</label>
@@ -260,27 +260,27 @@
                         </div>
                         <div class="mb-3">
                             <label for="editRole" class="form-label">Role</label>
-                            <select class="form-control" id="editRole" name="RoleId" required>
+                            <select class="form-control" id="editRole" name="RoleID" required>
                                 <option value="" disabled selected hidden>Select Role</option>
                                 @if (ViewBag.Roles != null)
                                 {
                                     foreach (var role in ViewBag.Roles)
                                     {
-                                        <option value="@role.RoleId">@role.RoleName</option>
+                                        <option value="@role.RoleID">@role.RoleName</option>
                                     }
                                 }
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="editIsVip" class="form-label">VIP Status</label>
-                            <select class="form-control" id="editIsVip" name="IsVip" required>
+                            <label for="editIsVIP" class="form-label">VIP Status</label>
+                            <select class="form-control" id="editIsVIP" name="IsVIP" required>
                                 <option value="false">Regular</option>
                                 <option value="true">VIP</option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="editVippoints" class="form-label">Vippoints</label>
-                            <input type="number" class="form-control" id="editVippoints" name="Vippoints" required>
+                            <label for="editVIPPoints" class="form-label">VIPPoints</label>
+                            <input type="number" class="form-control" id="editVIPPoints" name="VIPPoints" required>
                         </div>
                         <div class="mb-3">
                             <label for="editStatus" class="form-label">Status</label>
@@ -315,7 +315,7 @@
                 <form method="post" action="/admin/user-manager/delete-confirm">
                     <div class="modal-body">
                         <p>Are you sure you want to delete this user?</p>
-                        <input type="hidden" name="id" id="deleteUserId" />
+                        <input type="hidden" name="id" id="deleteUserID" />
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -327,8 +327,8 @@
     </div>
 
     <script>
-        function toggleStatus(button, UserId, currentStatus) {
-            fetch(`/admin/user-manager/toggle-status?id=${UserId}`, {
+        function toggleStatus(button, UserID, currentStatus) {
+            fetch(`/admin/user-manager/toggle-status?id=${UserID}`, {
                 method: 'POST'
             })
             .then(response => {
@@ -337,7 +337,7 @@
                     const newStatus = !(currentStatus === true || currentStatus === "true");
                     button.textContent = newStatus ? "Active" : "Disable";
                     button.style.backgroundColor = newStatus ? "" : "#dc3545";
-                    button.setAttribute("onclick", `toggleStatus(this, '${UserId}', ${newStatus})`);
+                    button.setAttribute("onclick", `toggleStatus(this, '${UserID}', ${newStatus})`);
 
                     // Show success toast
                     const msg = "Status updated successfully!";

@@ -1,8 +1,8 @@
 ﻿<!DOCTYPE html>
 <html lang="vi">
- @Html.Partial("~/Views/admin/share/head.cshtml")
+@Html.Partial("~/Views/admin/share/head.cshtml")
 
- <link rel="stylesheet" href="~/css/style-rules.css" />
+<link rel="stylesheet" href="~/css/style-rules.css" />
 <body>
     <!-- Header -->
     @Html.Partial("~/Views/admin/share/header.cshtml")
@@ -134,7 +134,7 @@
                                             <option value="">Loading...</option>
                                         </select>
                                     </div>
-                                    
+
 
                                     <div class="form-group">
                                         <label class="form-label">
@@ -150,7 +150,7 @@
                                         </select>
                                     </div>
 
-                                    
+
                                     <div class="d-flex justify-content-end">
                                         <button class="btn btn-sm btn-warning" style="margin-right:5px;" data-bs-toggle="modal" data-bs-target="#editRuleModal">
                                             <i class="fa-light fa-pen"></i> Edit
@@ -167,8 +167,8 @@
                                                 Apply
                                             </button>
                                         </form>
-                                    </div>                               
-                                    
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -462,7 +462,6 @@
             const name = button.getAttribute("data-name");
             const slug = button.getAttribute("data-slug");
             const isOpen = button.getAttribute("data-isopen");
-
             document.getElementById("editRuleId").value = id;
             document.getElementById("editRuleName").value = name;
             document.getElementById("editSlug").value = slug;
@@ -474,14 +473,11 @@
         document.getElementById("adminSelect").addEventListener("change", function () {
             const adminId = this.value;
             document.getElementById("adminIdHidden").value = adminId;
-
             const roleSelect = document.getElementById("roleSelect");
-
             if (!adminId) {
                 roleSelect.value = "";
                 return;
             }
-
             fetch(`/admin/rules/get-role?adminId=${adminId}`)
                 .then(res => res.json())
                 .then(data => {
@@ -498,17 +494,13 @@
                 document.getElementById("adminSelect").addEventListener("change", function () {
             const adminId = this.value;
             document.getElementById("adminIdHidden").value = adminId;
-
             const permissionDisplay = document.getElementById("currentPermissionDisplay");
-
             // Clear and reset default
             permissionDisplay.innerHTML = "";
-
             if (!adminId) {
                 permissionDisplay.innerHTML = `<option value="">Chưa có quyền nào</option>`;
                 return;
             }
-
             fetch(`/admin/rules/get-rule?adminId=${adminId}`)
                 .then(response => {
                     if (!response.ok) throw new Error("Không tìm thấy admin hoặc lỗi máy chủ.");
@@ -534,7 +526,6 @@
                 .replace(/[\s\W-]+/g, '-') // Chuyển khoảng trắng và ký tự đặc biệt thành -
                 .replace(/^-+|-+$/g, '');  // Xoá dấu - ở đầu/cuối nếu có
         }
-
         document.getElementById("addRuleName").addEventListener("input", function () {
             const name = this.value;
             const slug = toSlug(name);
@@ -550,7 +541,6 @@
                 .replace(/[\s\W-]+/g, '-')
                 .replace(/^-+|-+$/g, '');
         }
-
         document.getElementById("editRuleName").addEventListener("input", function () {
             const name = this.value;
             document.getElementById("editRuleSlug").value = toSlug(name);
@@ -565,7 +555,6 @@
                 .replace(/[\s\W-]+/g, '-') // khoảng trắng/ký tự đặc biệt → dấu -
                 .replace(/^-+|-+$/g, '');
         }
-
         document.getElementById("addActionName").addEventListener("input", function () {
             const name = this.value;
             document.getElementById("addActionSlug").value = toSlug(name);
@@ -575,18 +564,15 @@
     <script>
         document.getElementById("editPermissionSelect").addEventListener("change", function () {
             const selected = this.options[this.selectedIndex];
-
             const ruleId = selected.value;
             const ruleName = selected.getAttribute("data-name");
             const slug = selected.getAttribute("data-slug");
             const isOpen = selected.getAttribute("data-isopen");
-
             // Gán vào form
             document.getElementById("editRuleId").value = ruleId;
             document.getElementById("editRuleName").value = ruleName;
             document.getElementById("editRuleSlug").value = slug;
             document.getElementById("editIsOpen").value = isOpen === "true" ? "true" : "false";
-
             // Mở khoá các input để sửa
             document.getElementById("editRuleName").disabled = false;
             document.getElementById("editIsOpen").disabled = false;
@@ -600,7 +586,6 @@
             let slug = this.value.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9\-]/g, "");
             document.getElementById("editActionSlug").value = slug;
         });
-
         // Gán dữ liệu khi bấm Edit
         document.querySelectorAll(".action-btn.edit").forEach(btn => {
             btn.addEventListener("click", function () {
@@ -608,15 +593,12 @@
                 const id = this.dataset.id;
                 const name = row.querySelector(".permission-name").textContent.trim();
                 const slug = row.querySelector("td:nth-child(3)").textContent.trim();
-
                 document.getElementById("editActionId").value = id;
                 document.getElementById("editActionName").value = name;
                 document.getElementById("editActionSlug").value = slug;
-
                 new bootstrap.Modal(document.getElementById("editPermissionModal")).show();
             });
         });
-
         // Gán dữ liệu khi bấm Delete
         document.querySelectorAll(".action-btn.delete").forEach(btn => {
             btn.addEventListener("click", function () {
@@ -626,7 +608,6 @@
             });
         });
     </script>
-
     <script>
         // Select All
         document.getElementById("selectAll").addEventListener("click", function () {
@@ -634,7 +615,6 @@
                 cb.checked = true;
             });
         });
-
         // Clear All
         document.getElementById("clearAll").addEventListener("click", function () {
             document.querySelectorAll('#permissionsTableBody input[type="checkbox"]').forEach(cb => {
@@ -642,18 +622,15 @@
             });
         });
     </script>
-
     <script>
         // Bắt sự kiện khi chọn Rule
         document.querySelector('select[name="SelectedRuleId"]').addEventListener('change', function () {
             const selectedSlugList = this.selectedOptions[0].getAttribute('data-slugs');
             const slugs = selectedSlugList ? selectedSlugList.split(',') : [];
-
             // Reset tất cả checkbox trước
             document.querySelectorAll('#permissionsTableBody input[type="checkbox"]').forEach(cb => {
                 cb.checked = false;
             });
-
             // Tick lại những cái có slug khớp
             document.querySelectorAll('#permissionsTableBody input[type="checkbox"]').forEach(cb => {
                 if (slugs.includes(cb.dataset.module)) {
@@ -662,33 +639,26 @@
             });
         });
     </script>
-
     <script>
         document.getElementById('applyForm').addEventListener("submit", function (e) {
             const ruleId = document.querySelector('select[name="SelectedRuleId"]').value;
             document.getElementById("selectedRuleId").value = ruleId;
-
             const selectedSlugs = Array.from(document.querySelectorAll('#permissionsTableBody input[type="checkbox"]:checked'))
                 .map(cb => cb.dataset.module);
-
             document.getElementById("selectedSlugs").value = selectedSlugs.join(",");
-
             console.log("🎯 Sending to backend:");
             console.log("AdminId:", document.querySelector('input[name="AdminId"]').value);
             console.log("RuleId:", ruleId);
             console.log("SelectedSlugs:", selectedSlugs.join(","));
         });
     </script>
-
     <script>
         document.getElementById("permissionSearch").addEventListener("input", function () {
             const keyword = this.value.toLowerCase().trim();
             const rows = document.querySelectorAll(".permission-row");
-
             rows.forEach(row => {
                 const actionName = row.querySelector(".permission-name").textContent.toLowerCase();
                 const actionSlug = row.querySelector("td:nth-child(3)").textContent.toLowerCase();
-
                 if (actionName.includes(keyword) || actionSlug.includes(keyword)) {
                     row.style.display = "";
                 } else {
@@ -697,24 +667,6 @@
             });
         });
     </script>
-
     @Html.Partial("~/Views/admin/share/script.cshtml")
-
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
