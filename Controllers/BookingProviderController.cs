@@ -20,7 +20,7 @@ namespace GoEASy.Controllers
         [HttpGet("")]
         public async Task<IActionResult> Index()
         {
-            int? providerId = HttpContext.Session.GetInt32("UserId");
+            int? providerId = HttpContext.Session.GetInt32("UserID");
             if (providerId == null)
                 return RedirectToAction("Index", "LoginAdmin");
 
@@ -31,7 +31,7 @@ namespace GoEASy.Controllers
         [HttpPost("update")]
         public async Task<IActionResult> Update(int BookingId, string Status)
         {
-            int? providerId = HttpContext.Session.GetInt32("UserId");
+            int? providerId = HttpContext.Session.GetInt32("UserID");
             if (providerId == null)
                 return RedirectToAction("Index", "LoginAdmin");
 

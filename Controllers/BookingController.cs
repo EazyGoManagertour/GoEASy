@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace GoEASy.Controllers
 {
-    [AdminAuthorize]
+    //[AdminAuthorize]
     [Route("booking")]
     public class BookingController : Controller
     {
@@ -32,7 +32,7 @@ namespace GoEASy.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> Create(int tourId, int adultGuests, int childGuests, decimal totalPrice, bool isCustom = false)
         {
-            int? userId = HttpContext.Session.GetInt32("UserId");
+            int? userId = HttpContext.Session.GetInt32("UserID");
             if (userId == null)
             {
                 TempData["Error"] = "Bạn cần đăng nhập để đặt tour.";
@@ -161,7 +161,7 @@ namespace GoEASy.Controllers
         [HttpGet("history")]
         public async Task<IActionResult> BookingHistory()
         {
-            int? userId = HttpContext.Session.GetInt32("UserId");
+            int? userId = HttpContext.Session.GetInt32("UserID");
             if (userId == null)
             {
                 TempData["Error"] = "Bạn cần đăng nhập để xem lịch sử đặt tour.";
