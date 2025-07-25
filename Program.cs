@@ -36,7 +36,9 @@ builder.Services.AddScoped<TourService>();
 builder.Services.AddScoped<DestinationService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddHttpClient();
+builder.Services.AddScoped<IRuleService, RuleService>();
 
+builder.Services.AddScoped<IActionService, ActionService>();
 
 // Đăng ký LoginService
 builder.Services.AddScoped<LoginService>();
