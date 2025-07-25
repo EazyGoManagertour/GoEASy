@@ -23,8 +23,6 @@ public partial class User
 
     public int? VIPPoints { get; set; }
 
-    public string? Sex { get; set; }
-
     public int? RoleID { get; set; }
 
     public bool? Status { get; set; }
@@ -32,6 +30,8 @@ public partial class User
     public DateTime? CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
+
+    public string? Sex { get; set; }
 
     public virtual ICollection<AccessLog> AccessLogs { get; set; } = new List<AccessLog>();
 
@@ -44,8 +44,6 @@ public partial class User
     public virtual ICollection<Companion> Companions { get; set; } = new List<Companion>();
 
     public virtual ICollection<Favorite> Favorites { get; set; } = new List<Favorite>();
-
-    public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 
     public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 

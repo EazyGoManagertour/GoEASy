@@ -11,8 +11,6 @@ public partial class Notification
 
     public string Message { get; set; } = null!;
 
-    public string? Title { get; set; }
-
     public bool? IsRead { get; set; }
 
     public DateTime? CreatedAt { get; set; }
@@ -21,5 +19,5 @@ public partial class Notification
 
     public int? RelatedId { get; set; }
 
-    public virtual User User { get; set; } = null!;
+    public string? Title { get; set; }
 }
