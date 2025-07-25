@@ -1,1 +1,87 @@
-﻿
+﻿<!DOCTYPE html>
+<html lang="vi">
+ @Html.Partial("~/Views/admin/share/head.cshtml")
+
+<link rel="stylesheet" href="~/css/style-404.css" />
+<body>
+    <!-- Header -->
+    @Html.Partial("~/Views/admin/share/header.cshtml")
+
+    <!-- Overlay for mobile -->
+    <div class="overlay" onclick="toggleSidebar()"></div>
+
+    <div class="container-content">
+        <!-- Sidebar -->
+        @Html.Partial("~/Views/admin/share/menu.cshtml")
+
+
+
+        <!-- Toast Notification Area (independent from sidebar and overlay) -->
+        <div id="toastArea"
+             aria-live="polite"
+             aria-atomic="true"
+             class="toast-container position-fixed top-0 end-0 p-3"
+             style="z-index: 1060; margin-top: 75px;">
+            <input type="hidden" id="toast-success-msg" value="@TempData["Success"]" />
+            <input type="hidden" id="toast-error-msg" value="@TempData["Error"]" />
+            <!-- Success Toast -->
+            <div class="toast align-items-center text-white bg-success border-0"
+                 id="successToast"
+                 role="alert"
+                 aria-live="assertive"
+                 aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        @TempData["Success"]
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+
+            <!-- Error Toast -->
+            <div class="toast align-items-center text-white bg-danger border-0"
+                 id="errorToast"
+                 role="alert"
+                 aria-live="assertive"
+                 aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        @TempData["Error"]
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="access-container">
+                <div class="access-box">
+                    <div class="maintenance-hat"></div>
+                    <h1>Bạn không đủ quyền truy cập trang này</h1>
+                    <p>Vui lòng liên hệ quản trị viên để được hỗ trợ.</p>
+                </div>
+            </div>
+          
+        </main>
+    </div>
+
+    @Html.Partial("~/Views/admin/share/script.cshtml")
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

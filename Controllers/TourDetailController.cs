@@ -22,6 +22,13 @@ namespace GoEASy.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Index(int id, int page = 1)
         {
+            int? userId = HttpContext.Session.GetInt32("UserID");
+            if (userId != null)
+            {
+                var logService = new TourLogService(_context);
+                await logService.LogAsync(id, userId, "view");
+            }
+
             var tour = await _tourService.GetTourByIdAsync(id);
             if (tour == null)
                 return NotFound();
@@ -46,7 +53,6 @@ namespace GoEASy.Controllers
             ViewBag.TotalPages = totalPages;
 
             // Kiểm tra user đã booking và thanh toán tour này chưa
-            int? userId = HttpContext.Session.GetInt32("UserID");
             bool canComment = false;
             if (userId != null)
             {
