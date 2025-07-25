@@ -264,6 +264,7 @@
                 </div>
             </div>
         </section>
+
         <!-- Popular Destinations Area end -->
         <!-- Features Area start -->
         <section class="features-area pt-100 pb-45 rel z-1">
@@ -333,7 +334,7 @@
         </section>
         <!-- Features Area end -->
         <!-- Hotel Area start -->
-        <section class="hotel-area bgc-black py-100 rel z-1">
+        <section id="ai-recommend-section" class="hotel-area bgc-black py-100 rel z-1">
             <div class="container-fluid">
                 <div class="row justify-content-center">
                     <div class="col-lg-12">
@@ -713,6 +714,265 @@
         }
     </style>
 
+            if (swiperElement) {
+                var swiper = new Swiper('.destinations-swiper', {
+                slidesPerView: 4,
+                spaceBetween: 30,
+                loop: true,
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                breakpoints: {
+                    1200: { slidesPerView: 4 },
+                    992: { slidesPerView: 3 },
+                    768: { slidesPerView: 2 },
+                    0: { slidesPerView: 1 }
+                }
+            });
+            } else {
+                console.log('Swiper element not found!');
+            }
+        });
+    </script>
+
+
+    <script>
+        function loadSuggestions() {
+            const userId = document.getElementById('currentUserId')?.value;
+            if (!userId) {
+                document.getElementById('suggested-tours').innerHTML = '<li>Bạn cần đăng nhập để nhận gợi ý.</li>';
+                return;
+            }
+
+            fetch('/api/recommend/history?userId=<%= session.getAttribute("UserID") %>')
+                .then(res => res.json())
+                .then(data => {
+                    let html = "";
+                    data.forEach(t => {
+                        html += `<li><b>${t.title}</b> (${t.price}đ) - ${t.shortDescription}</li>`;
+                    });
+                    document.getElementById('suggested-tours').innerHTML = html;
+                });
+        }
+
+        window.onload = loadSuggestions;
+    </script>
+
+
+    <script>
+        function recommendAI() {
+            const query = document.getElementById('ai-query').value;
+            fetch('/api/recommend/semantic', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query: query, topK: 5 })
+            }).then(res => res.json())
+              .then(data => {
+                let html = '';
+                data.forEach(t => {
+                    html += `<li><b>${t.title}</b> (${t.price}đ) - ${t.desc}</li>`;
+                });
+                document.getElementById('ai-result').innerHTML = html;
+              });
+        }
+    </script>
+
+    <script>
+                function getCurrentTourIdFromUrl() {
+            const path = window.location.pathname; // /tour-details/5
+            const parts = path.split('/');
+            const id = parseInt(parts[parts.length - 1]);
+            return isNaN(id) ? 0 : id;
+        }
+    </script>
+
+    <script>
+                function autoRecommendForUser() {
+                    const currentTourId = getCurrentTourIdFromUrl();
+            const userId = parseInt(document.getElementById('currentUserId')?.value);
+            if (!userId) {
+                document.getElementById('auto-recommend').innerHTML = '<div style="color:gray">Bạn cần <a href="/login">đăng nhập</a> để nhận gợi ý theo lịch sử.</div>';
+                return;
+            }
+
+            fetch('http://localhost:5001/recommend', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    query: "",
+                    user_id: userId,
+                    current_tour_id: currentTourId, // ✅ tour vừa bấm
+                    top_k: 4
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+            let html = '<h3 class="mb-4 text-center">Gợi ý cho bạn:</h3>';
+
+            data.forEach((tour, i) => {
+                const title = tour.title || "Không có tiêu đề";
+                const desc = tour.desc || "Không có mô tả.";
+                const price = tour.price ? Number(tour.price).toLocaleString() : "0";
+                const destination = tour.destination || "Không rõ địa điểm";
+                const image = tour.image?.startsWith("/") ? tour.image : "/assets/images/no-image.jpg";
+
+                html += `
+                <div class="col-xxl-6 col-xl-8 col-lg-10 mb-4">
+                    <div class="destination-item style-three" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                        <div class="image">
+                            <div class="ratting"><i class="fas fa-star"></i> 4.8</div>
+                            <a href="#" class="heart"><i class="fas fa-heart"></i></a>
+                            <img src="${image}" alt="Tour Image" style="width:100%">
+                        </div>
+                        <div class="content">
+                            <span class="location"><i class="fal fa-map-marker-alt"></i> ${destination}</span>
+                            <h5><a href="/tour-details/${tour.id}">${title}</a></h5>
+                            <ul class="list-style-one">
+                                <span class="time">${desc}</span>
+                            </ul>
+                            <div class="destination-footer">
+                                <span class="price"><span>${price} đ</span> /người</span>
+                                <a href="" class="read-more">Đặt ngay <i class="fal fa-angle-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            });
+
+            document.getElementById('auto-recommend').innerHTML = html;
+
+            // ✅ Quan trọng: khởi động lại AOS
+            if (AOS) AOS.init();
+            });
+        }
+        // Gọi hàm này khi vào trang (hoặc sau khi click xem tour xong)
+        window.onload = autoRecommendForUser;
+    </script>
+
+    <script>
+        let currentIndex = 0;
+        const items = document.querySelectorAll('.slider-wrapper .col-xxl-3');
+        const totalItems = items.length;
+        const itemsPerView = getItemsPerView();
+
+        function getItemsPerView() {
+            if (window.innerWidth <= 576) return 1;
+            if (window.innerWidth <= 768) return 2;
+            if (window.innerWidth <= 1200) return 3;
+            return 4;
+        }
+
+        function updateSlider() {
+            const sliderWrapper = document.getElementById('sliderWrapper');
+            const itemWidth = 100 / getItemsPerView();
+            const translateX = -(currentIndex * itemWidth);
+
+            sliderWrapper.style.transform = `translateX(${translateX}%)`;
+
+            updateNavigationButtons();
+            updateDots();
+        }
+
+        function updateNavigationButtons() {
+            const prevBtn = document.querySelector('.slider-nav.prev');
+            const nextBtn = document.querySelector('.slider-nav.next');
+            const maxIndex = totalItems - getItemsPerView();
+
+            prevBtn.classList.toggle('disabled', currentIndex === 0);
+            nextBtn.classList.toggle('disabled', currentIndex >= maxIndex);
+        }
+
+        function updateDots() {
+            const dotsContainer = document.getElementById('sliderDots');
+            const itemsPerView = getItemsPerView();
+            const totalDots = Math.ceil((totalItems - itemsPerView + 1));
+
+            // Tạo dots
+            dotsContainer.innerHTML = '';
+            for (let i = 0; i < totalDots; i++) {
+                const dot = document.createElement('span');
+                dot.className = 'dot';
+                if (i === currentIndex) dot.classList.add('active');
+                dot.onclick = () => goToSlide(i);
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        function nextSlide() {
+            const maxIndex = totalItems - getItemsPerView();
+            if (currentIndex < maxIndex) {
+                currentIndex++;
+                updateSlider();
+            }
+        }
+
+        function prevSlide() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateSlider();
+            }
+        }
+
+        function goToSlide(index) {
+            const maxIndex = totalItems - getItemsPerView();
+            currentIndex = Math.min(index, maxIndex);
+            updateSlider();
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            const newItemsPerView = getItemsPerView();
+            const maxIndex = totalItems - newItemsPerView;
+            if (currentIndex > maxIndex) {
+                currentIndex = Math.max(0, maxIndex);
+            }
+            updateSlider();
+        });
+
+        // Initialize
+        updateSlider();
+    </script>
+    <script>
+        $(document).on('click', '.heart', function(e) {
+                e.preventDefault();
+                var $btn = $(this);
+                var tourId = $btn.data('tour-id');
+                var isActive = $btn.hasClass('active');
+                var url = isActive ? '/favorite/remove' : '/favorite/add';
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: { tourId: tourId },
+                    success: function(response) {
+                        if (response.success) {
+                            $btn.toggleClass('active');
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function() {
+                        alert('Có lỗi xảy ra, vui lòng thử lại!');
+                    }
+                });
+            });
+    </script>
+
+    <script>
+        window.addEventListener("DOMContentLoaded", function () {
+            const userId = parseInt(document.getElementById("currentUserId")?.value || "0");
+            const section = document.getElementById("ai-recommend-section");
+
+            if (!userId && section) {
+                section.style.display = "none";
+            }
+        });
+    </script>
 </body>
 
 <!-- Mirrored from webtendtheme.net/html/2024/ravelo/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 07 Oct 2024 09:27:04 GMT -->

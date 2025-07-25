@@ -57,6 +57,8 @@ public partial class GoEasyContext : DbContext
 
     public virtual DbSet<Schedule> Schedules { get; set; }
 
+    public virtual DbSet<SemanticQuery> SemanticQueries { get; set; }
+
     public virtual DbSet<Tour> Tours { get; set; }
 
     public virtual DbSet<TourCategory> TourCategories { get; set; }
