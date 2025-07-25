@@ -93,7 +93,7 @@
                                 <td>
                                     <button class="status admit"
                                             style="border: none; outline: none; background-color:@(tag.Status == true ? "" : "#dc3545")"
-                                            onclick="toggleStatus(this, '@tag.TagID', @(tag.Status.ToString().ToLower()))">
+                                            onclick="toggleStatus(this, '@tag.TagId', @(tag.Status.ToString().ToLower()))">
                                         @(tag.Status == true ? "Active" : "Disable")
                                     </button>
                                 </td>
@@ -102,13 +102,13 @@
                                         <button class="action-btn edit"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#editModal"
-                                                onclick="fillEditModal('@tag.TagID', '@tag.Name', '@(tag.Status == true ? "true" : "false")')">
+                                                onclick="fillEditModal('@tag.TagId', '@tag.Name', '@(tag.Status == true ? "true" : "false")')">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                         <button class="action-btn delete"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal"
-                                                onclick="setDeleteTagID('@tag.TagID')">
+                                                onclick="setDeleteTagId('@tag.TagId')">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
@@ -163,7 +163,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <input type="hidden" name="TagID" id="editTagID">
+                        <input type="hidden" name="TagId" id="editTagID">
                         <div class="mb-3">
                             <label for="editName" class="form-label">Tag Name</label>
                             <input type="text" class="form-control" id="editName" name="Name" required>
@@ -193,7 +193,7 @@
                     </div>
                     <div class="modal-body">
                         <p>Are you sure you want to delete this blog tag?</p>
-                        <input type="hidden" name="id" id="deleteTagID" />
+                        <input type="hidden" name="id" id="deleteTagId" />
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -206,18 +206,18 @@
 
 
     <script>
-        function fillEditModal(TagID, name, status) {
-            document.getElementById('editTagID').value = TagID;
+        function fillEditModal(id, name, status) {
+            document.getElementById('editTagID').value = id;
             document.getElementById('editName').value = name;
             document.getElementById('editStatus').value = status;
         }
 
-        function setDeleteTagID(id) {
-            document.getElementById('deleteTagID').value = id;
+        function setDeleteTagId(id) {
+            document.getElementById('deleteTagId').value = id;
         }
 
-        function toggleStatus(button, TagID, currentStatus) {
-            fetch(`/admin/blog-tag/toggle-status?id=${TagID}`, {
+        function toggleStatus(button, tagId, currentStatus) {
+            fetch(`/admin/blog-tag/toggle-status?id=${tagId}`, {
                 method: 'POST'
             })
             .then(response => {
@@ -225,7 +225,7 @@
                     const newStatus = !(currentStatus === true || currentStatus === "true");
                     button.textContent = newStatus ? "Active" : "Disable";
                     button.style.backgroundColor = newStatus ? "" : "#dc3545";
-                    button.setAttribute("onclick", `toggleStatus(this, '${TagID}', ${newStatus})`);
+                    button.setAttribute("onclick", `toggleStatus(this, '${tagId}', ${newStatus})`);
 
                     const msg = "Status updated successfully!";
                     document.getElementById("toast-success-msg").value = msg;
