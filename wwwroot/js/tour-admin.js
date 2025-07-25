@@ -223,6 +223,7 @@ async function generateDescription(type) {
 }
 
 // Reset image selection when modal is closed
+//ok123
 document.addEventListener('DOMContentLoaded', function () {
     const addModal = document.getElementById('addModal');
     const editModal = document.getElementById('editModal');

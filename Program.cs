@@ -28,6 +28,7 @@ builder.Services.AddScoped<GoEASy.Services.DestinationService>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<TourService>();
 // Đăng ký UserService
+//ok
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<BookingService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
