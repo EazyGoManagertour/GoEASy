@@ -52,7 +52,7 @@ namespace GoEASy.Controllers
             ViewBag.CurrentPage = page;
             ViewBag.TotalPages = totalPages;
 
-            // Kiểm tra user đã booking và thanh toán tour này chưa
+
             bool canComment = false;
             if (userId != null)
             {

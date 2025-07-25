@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace GoEASy.Controllers
 {
-    [AdminAuthorize]
+    //[AdminAuthorize]
     [Route("admin/tour-admin")]
     public class AdminTourController : Controller
     {
