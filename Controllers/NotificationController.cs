@@ -17,7 +17,7 @@ namespace GoEASy.Controllers
         public async Task Stream()
         {
             Response.ContentType = "text/event-stream";
-            int? userId = HttpContext.Session.GetInt32("UserID");
+            int? userId = HttpContext.Session.GetInt32("UserId");
             if (userId == null) return;
 
             var lastId = 0;
