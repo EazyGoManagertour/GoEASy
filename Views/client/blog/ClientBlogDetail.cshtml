@@ -4,7 +4,7 @@
 @Html.Partial("~/Views/client/share/head.cshtml")
 <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/35.0.1/classic/styles.css">
 <link href="~/assets/css/CKEditor.css" rel="stylesheet" />
-<link href="~/assets/css/blogdetail-gallery.css" rel="stylesheet" />
+<link href="~/assets/css/blogdetail-gallery.css" rel="stylesheet" /> 
 
 
 <body>
@@ -43,7 +43,7 @@
                         <div class="form-group">
                             <button type="submit" class="theme-btn style-two">
                                 <span data-hover="Submit now">Submit now</span>
-                                <i class="fal fa-arrow-right">
+                                <i class="fal fa-arrow-right"></i>
                             </button>
                         </div>
                     </form>
@@ -51,16 +51,16 @@
 
                 <!--Social Icons-->
                 <div class="social-style-one">
-                    <a href="contact.html"><i class="fab fa-twitter"></a>
-                    <a href="contact.html"><i class="fab fa-facebook-f"></a>
-                    <a href="contact.html"><i class="fab fa-instagram"></a>
-                    <a href="#"><i class="fab fa-pinterest-p"></a>
+                    <a href="contact.html"><i class="fab fa-twitter"></i></a>
+                    <a href="contact.html"><i class="fab fa-facebook-f"></i></a>
+                    <a href="contact.html"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-pinterest-p"></i></a>
                 </div>
             </div>
         </section>
         <!--End Hidden Sidebar -->
         <!-- Page Banner Start -->
-        <section class="page-banner-area pt-50 pb-35 rel z-1 bgs-cover" style="background-image: url('@Url.Content("~/assets/images/banner/banner.jpg")');">
+        <section class="page-banner-area pt-50 pb-35 rel z-1 bgs-cover" style="background-image: url(assets/images/banner/banner.jpg);">
             <div class="container">
                 <div class="banner-inner text-white">
 
@@ -93,13 +93,13 @@
                                     <a href="#">@((Model.AuthorAdmin?.FullName ?? Model.AuthorUser?.FullName) ?? "Unknown")</a>
                                 </li>
                                 <li>
-                                    <i class="far fa-calendar-alt">
-                                        <a href="#">@Model.CreatedAt?.ToString("dd MMM yyyy")</a>
+                                    <i class="far fa-calendar-alt"></i>
+                                    <a href="#">@Model.CreatedAt?.ToString("dd MMM yyyy")</a>
                                 </li>
-                                @* <li>
-                                    <i class="far fa-comments">
-                                    <a href="#">Comments (0)</a> <!-- ✅ Nếu có comment real thì đổ ViewBag.CommentCount -->
-                                </li> *@
+                                <li>
+                                    <i class="far fa-comments"></i>
+                                    <a href="#">Comments (0)</a> <!-- ✅ Nếu có comment real thì đổ ViewBag.CommentCount -->
+                                </li>
                             </ul>
 
                             <!-- Introduction -->
@@ -137,8 +137,8 @@
                                                 @for (int i = 0; i < gallery.Count; i++)
                                                 {
                                                     <button type="button" data-bs-target="#galleryCarousel" data-bs-slide-to="@i"
-                                                             class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : "false")"
-                                                             aria-label="Slide @(i + 1)"></button>
+                                                            class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : "false")"
+                                                            aria-label="Slide @(i + 1)"></button>
                                                 }
                                             </div>
 
@@ -202,10 +202,10 @@
                             <div class="item" data-aos="fade-right" data-aos-duration="1500" data-aos-offset="50">
                                 <h6>Share </h6>
                                 <div class="social-style-one">
-                                    <a href="#"><i class="fab fa-facebook-f"></a>
-                                    <a href="#"><i class="fab fa-twitter"></a>
-                                    <a href="#"><i class="fab fa-linkedin-in"></a>
-                                    <a href="#"><i class="fab fa-instagram"></a>
+                                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                    <a href="#"><i class="fab fa-twitter"></i></a>
+                                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                    <a href="#"><i class="fab fa-instagram"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -222,7 +222,43 @@
                             </div>
                         </div>
 
+ 
 
+                        <form id="comment-form" class="comment-form bgc-lighter z-1 rel mt-25" name="review-form" action="#" method="post" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                            <h5>Leave A Comments</h5>
+                            <p>Your email address will not be published. Required fields are marked *</p>
+                            <div class="row gap-20 mt-30">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input type="text" id="full-name" name="full-name" class="form-control" placeholder="Name" value="" required="">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input type="email" id="email-address" name="email" class="form-control" placeholder="Email" value="" required="">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <textarea name="message" id="message" class="form-control" rows="5" placeholder="Message" required=""></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group mb-0">
+                                        <ul class="radio-filter mb-25">
+                                            <li>
+                                                <input class="form-check-input" type="radio" name="terms-condition" id="terms-condition">
+                                                <label for="terms-condition">Save my name, email, and website in this browser for the next time I comment.</label>
+                                            </li>
+                                        </ul>
+                                        <button type="submit" class="theme-btn style-two">
+                                            <span data-hover="Send Comments">Send Comments</span>
+                                            <i class="fal fa-arrow-right"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
 
                     </div>
 
@@ -233,9 +269,9 @@
                         <div class="blog-sidebar">
 
                             <div class="widget widget-search" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                                <form method="get" action="/blog-detail/@Model.BlogID" class="default-search-form">
+                                <form method="get" action="/blog-detail/@Model.BlogId" class="default-search-form">
                                     <input type="text" name="keyword" placeholder="Search"
-                                            value="@ViewBag.Keyword" required />
+                                           value="@ViewBag.Keyword" required />
                                     <button type="submit" class="searchbutton far fa-search"></button>
                                 </form>
                             </div>
@@ -248,7 +284,7 @@
                                         var isActive = (cat.CategoryName == (ViewBag.SelectedCategory as string)) ? "active" : "";
                                         <li>
                                             <a class="@isActive"
-                                                href="/blog-detail/@Model.BlogID?category=@cat.CategoryName">
+                                               href="/blog-detail/@Model.BlogId?category=@cat.CategoryName">
                                                 @cat.CategoryName
                                             </a>
                                         </li>
@@ -271,7 +307,7 @@
                                                 <h6>
                                                     <a href="/blog-detail/@blog.BlogID">@blog.Title</a>
                                                 </h6>
-                                                <span class="date"><i class="far fa-calendar-alt"> @date</span>
+                                                <span class="date"><i class="far fa-calendar-alt"></i> @date</span>
                                             </div>
                                         </li>
                                     }
@@ -329,5 +365,5 @@
     </script>
 </body>
 
-<!-- Mirrored from webtendtheme.net/html/2024/ravelo/blog-details.html by HTTrack Website Copier/3.x \[XR\&CO'2014], Mon, 07 Oct 2024 09:28:49 GMT -->
+<!-- Mirrored from webtendtheme.net/html/2024/ravelo/blog-details.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 07 Oct 2024 09:28:49 GMT -->
 </html>

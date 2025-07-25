@@ -1,10 +1,9 @@
 ﻿<!DOCTYPE html>
 <html lang="zxx">
 
-@Html.Partial("~/Views/client/share/head.cshtml")
+     @Html.Partial("~/Views/client/share/head.cshtml")
 <!-- Swiper CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-<link href="/assets/css/home.css" rel="stylesheet" />
 
 <body>
     <div class="page-wrapper">
@@ -66,73 +65,91 @@
                 <h1 class="hero-title" data-aos="flip-up" data-aos-delay="50" data-aos-duration="1500" data-aos-offset="50">Du lịch & Khám phá</h1>
                 <div class="main-hero-image bgs-cover" style="background-image: url(assets/images/hero/hero.jpg);"></div>
             </div>
+            <div class="container container-1400">
+                <div class="search-filter-inner" data-aos="zoom-out-down" data-aos-duration="1500" data-aos-offset="50">
+                    <div class="filter-item clearfix">
+                        <div class="icon"><i class="fal fa-map-marker-alt"></i></div>
+                        <span class="title">Điểm đến</span>
+                        <select name="city" id="city">
+                            <option value="value1">Thành phố hoặc Khu vực</option>
+                            <option value="value2">Thành phố</option>
+                            <option value="value2">Khu vực</option>
+                        </select>
+                    </div>
+                    <div class="filter-item clearfix">
+                        <div class="icon"><i class="fal fa-flag"></i></div>
+                        <span class="title">Hoạt động</span>
+                        <select name="activity" id="activity">
+                            <option value="value1">Chọn hoạt động</option>
+                            <option value="value2">Hàng ngày</option>
+                            <option value="value2">Hàng tháng</option>
+                        </select>
+                    </div>
+                    <div class="filter-item clearfix">
+                        <div class="icon"><i class="fal fa-calendar-alt"></i></div>
+                        <span class="title">Ngày khởi hành</span>
+                        <select name="date" id="date">
+                            <option value="value1">Từ ngày</option>
+                            <option value="value2">10</option>
+                            <option value="value2">20</option>
+                        </select>
+                    </div>
+                    <div class="filter-item clearfix">
+                        <div class="icon"><i class="fal fa-users"></i></div>
+                        <span class="title">Số khách</span>
+                        <select name="cuests" id="cuests">
+                            <option value="value1">0</option>
+                            <option value="value2">1</option>
+                            <option value="value2">2</option>
+                        </select>
+                    </div>
+                    <div class="search-button">
+                        <button class="theme-btn">
+                            <span data-hover="Tìm kiếm">Tìm kiếm</span>
+                            <i class="far fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </section>
         <!-- Hero Area End -->
         <!-- Destinations Area start -->
-        <section class="destinations-area bgc-black pt-100 pb-70 rel z-1">
-            <div class="container-fluid">
-                <div class="row justify-content-center">
-                    <div class="col-lg-12">
-                        <div class="section-title text-white text-center counter-text-wrap mb-70" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                            <h2>Tour du lịch độc đáo tại Việt Nam</h2>
-                            <p>Nơi hội tụ những trải nghiệm nổi bật nhất bạn sẽ nhớ mãi</p>
-                        </div>
-                    </div>
+        <section class="popular-destinations-area pt-100 pb-90 rel z-1 bgc-black">
+            <div class="container pb-5">
+                <div class="section-title text-center counter-text-wrap mb-50" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50" style="color: #fff;">
+                    <h2 style="color: #fff;">Tour du lịch độc đáo tại Việt Nam</h2>
+                    <p style="color: #fff;">Nơi hội tụ những trải nghiệm nổi bật nhất bạn sẽ nhớ mãi</p>
                 </div>
-                <div class="row justify-content-center">
-                    <div class="slider-container">
-                        <!-- Navigation buttons -->
-                        <div class="slider-nav prev" onclick="prevSlide()">
-                            <i class="fas fa-chevron-left"></i>
-                        </div>
-                        <div class="slider-nav next" onclick="nextSlide()">
-                            <i class="fas fa-chevron-right"></i>
-                        </div>
-
-                        <!-- Slider wrapper -->
-                        <div class="slider-wrapper" id="sliderWrapper">
-                            @if (ViewBag.Tours != null)
+                <div class="swiper destinations-swiper">
+                    <div class="swiper-wrapper">
+                        @if (ViewBag.Tours != null)
+                        {
+                            foreach (var tour in (IEnumerable<GoEASy.Models.Tour>)ViewBag.Tours)
                             {
-                                foreach (var tour in (IEnumerable<GoEASy.Models.Tour>)ViewBag.Tours)
-                                {
-                                    var coverImg = tour.TourImages?.FirstOrDefault(img => img.IsCover == true)?.ImageURL
-                                    ?? tour.TourImages?.FirstOrDefault()?.ImageURL
-                                    ?? "/assets/images/destinations/destination1.jpg";
-
-                                    <div class="col-xxl-3 col-xl-4 col-md-6">
-                                        <div class="destination-item" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                                            <div class="image" style="height: 294.18px;">
-                                                <div class="ratting"><i class="fas fa-star"></i> 4.8</div>
-                                                @{
-                                                    var isFavorite = ViewBag.FavoriteTourIds != null && ((List<int>)ViewBag.FavoriteTourIds).Contains(tour.TourID);
-                                                }
-                                                <a href="javascript:void(0);" class="heart@(isFavorite ? " active" : "")" data-tour-id="@tour.TourID">
-                                                    <i class="fas fa-heart"></i>
-                                                </a>
-                                                <img src="@coverImg" alt="@tour.TourName">
-                                            </div>
-
-                                            <div class="content">
-                                                <span class="location"><i class="fal fa-map-marker-alt"></i>@tour.Destination.DestinationName</span>
-                                                <h5><a href="/tour-details/@tour.TourID">@tour.TourName</a></h5>
-                                                <span class="time">@tour.Description</span>
-                                            </div>
-                                            <div class="destination-footer">
-                                                <span class="price">@tour.AdultPrice.ToString("N0") VNĐ/người</span>
-                                                <a href="/tour-details/@tour.TourID" class="read-more">See Now <i class="fal fa-angle-right"></i></a>
-                                            </div>
+                                var coverImg = tour.TourImages?.FirstOrDefault(img => img.IsCover == true)?.ImageURL
+                                ?? tour.TourImages?.FirstOrDefault()?.ImageURL
+                                ?? "/assets/images/destinations/destination1.jpg";
+                                <div class="swiper-slide">
+                                    <div class="destination-item style-two" data-aos="flip-up" data-aos-duration="1500" data-aos-offset="50" style="background: #181c1f; color: #fff; border-radius: 16px;">
+                                        <div class="image">
+                                            <a href="#" class="heart"><i class="fas fa-heart"></i></a>
+                                            <img src="@coverImg" alt="@tour.TourName" style="width:100%;height:220px;object-fit:cover;">
+                                        </div>
+                                        <div class="content" style="color: #fff;">
+                                            <h6><a href="/tour-details/@tour.TourID" style="color: #fff;">@tour.TourName</a></h6>
+                                            <span class="time" style="color: #fff;">@tour.AdultPrice.ToString("N0") VNĐ/người</span>
+                                            <a href="/tour-details/@tour.TourID" class="more"><i class="fas fa-chevron-right"></i></a>
                                         </div>
                                     </div>
-                                }
+                                </div>
                             }
-
-                        </div>
-
-                        <!-- Dots indicator - sẽ tự động tạo theo số item -->
-                        <div class="slider-dots" id="sliderDots"></div>
+                        }
                     </div>
-
-
+                </div>
+                <div class="swiper-controls-wrapper mt-4">
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-next"></div>
                 </div>
             </div>
         </section>
@@ -196,48 +213,52 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            @{
-
-                                var colClasses = new[] {
-                                                        "col-xl-3 col-md-6", "col-xl-3 col-md-6","col-md-6",  "col-md-6" ,"col-xl-3 col-md-6"
-                                                        , "col-xl-3 col-md-6"
-                                                        };
-                                int i = 0;
-                            }
-                            @foreach (var dest in Model)
-                            {
-                                GoEASy.Models.DestinationImage coverImage = null;
-                                foreach (var img in dest.DestinationImages)
+                    <div class="container pb-5">
+                        <div class="swiper destinations-swiper">
+                            <div class="swiper-wrapper">
+                                @if (Model != null)
                                 {
-                                    if (img.IsCover == true)
+                                    @foreach (var dest in Model)
                                     {
-                                        coverImage = img;
-                                        break;
+                                        GoEASy.Models.DestinationImage coverImage = null;
+                                        foreach (var img in dest.DestinationImages)
+                                        {
+                                            if (img.IsCover == true)
+                                            {
+                                                coverImage = img;
+                                                break;
+                                            }
+                                        }
+                                        var imageUrl = coverImage != null ? coverImage.ImageURL : "/assets/images/destinations/destination1.jpg";
+                                        <div class="swiper-slide">
+                                            <div class="destination-item style-two" data-aos="flip-up" data-aos-duration="1500" data-aos-offset="50">
+                                                <div class="image">
+                                                    <a href="#" class="heart"><i class="fas fa-heart"></i></a>
+                                                    <img src="@imageUrl" alt="@dest.DestinationName">
+                                                </div>
+                                                <div class="content">
+                                                    <h6><a href="/destination/details/@dest.DestinationID">@dest.DestinationName</a></h6>
+                                                    @{
+                                                        var tourCount = dest.Tours?.Count ?? 0;
+                                                    }
+                                                    <span class="time">@tourCount tour khả dụng</span>
+                                                    <a href="/destination/details/@dest.DestinationID" class="more"><i class="fas fa-chevron-right"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
                                     }
                                 }
-                                var imageUrl = coverImage != null ? coverImage.ImageURL : "/assets/images/destinations/destination1.jpg";
-                                var colClass = colClasses.Length > i ? colClasses[i] : "col-xl-3 col-md-6";
-                                <div class="@colClass">
-                                    <div class="destination-item style-two" data-aos="flip-up" data-aos-delay="@(100 + i * 100)" data-aos-duration="1500" data-aos-offset="50">
-                                        <div class="image">
-                                            <a href="#" class="heart"><i class="fas fa-heart"></i></a>
-                                            <img src="@imageUrl" alt="@dest.DestinationName">
-                                        </div>
-                                        <div class="content">
-                                            <h6><a href="/destination/details/@dest.DestinationID">@dest.DestinationName</a></h6>
-                                            @{
-                                                var tourCount = dest.Tours?.Count ?? 0;
-                                            }
-                                            <span class="time">@tourCount tour &amp; activity</span>
-                                            <a href="/destination/details/@dest.DestinationID" class="more"><i class="fas fa-chevron-right"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                i++;
-                            }
+                                else
+                                {
+                                    <div style="color: red; padding: 10px;">Debug: Model is NULL!</div>
+                                }
+                            </div>
+                        </div>
+                        <!-- Đưa các controls ra ngoài grid -->
+                        <div class="swiper-controls-wrapper mt-4">
+                            <div class="swiper-button-prev"></div>
+                            <div class="swiper-pagination"></div>
+                            <div class="swiper-button-next"></div>
                         </div>
                     </div>
                 </div>
@@ -245,67 +266,394 @@
         </section>
 
         <!-- Popular Destinations Area end -->
-        @* <h3>Gợi ý cho bạn</h3>
-        <ul id="suggest-list"></ul>
-
-        <h4>Gợi ý AI (VIP PRO)</h4>
-        <input type="text" id="ai-query" placeholder="Ví dụ: tour biển, 5 triệu, lặn san hô..." />
-        <button onclick="recommendAI()">Gợi ý AI</button>
-        <ul id="ai-result"></ul>
-        
-        <div id="auto-recommend"></div> *@
-
+        <!-- Features Area start -->
+        <section class="features-area pt-100 pb-45 rel z-1">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-xl-6">
+                        <div class="features-content-part mb-55" data-aos="fade-left" data-aos-duration="1500" data-aos-offset="50">
+                            <div class="section-title mb-60">
+                                <h2>Trải nghiệm du lịch tuyệt vời - Những điểm nổi bật của chúng tôi</h2>
+                            </div>
+                            <div class="features-customer-box">
+                                <div class="image">
+                                    <img src="assets/images/features/features-box.jpg" alt="Features">
+                                </div>
+                                <div class="content">
+                                    <div class="feature-authors mb-15">
+                                        <img src="assets/images/features/feature-author1.jpg" alt="Author">
+                                        <img src="assets/images/features/feature-author2.jpg" alt="Author">
+                                        <img src="assets/images/features/feature-author3.jpg" alt="Author">
+                                        <span>4k+</span>
+                                    </div>
+                                    <h6>850K+ Khách hàng hài lòng</h6>
+                                    <div class="divider style-two counter-text-wrap my-25"><span><span class="count-text plus" data-speed="3000" data-stop="25">0</span> Năm</span></div>
+                                    <p>Chúng tôi tự hào mang đến hành trình cá nhân hóa cho từng khách hàng.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6" data-aos="fade-right" data-aos-duration="1500" data-aos-offset="50">
+                        <div class="row pb-25">
+                            <div class="col-md-6">
+                                <div class="feature-item">
+                                    <div class="icon"><i class="flaticon-tent"></i></div>
+                                    <div class="content">
+                                        <h5><a href="tour-details.html">Cắm trại lều</a></h5>
+                                        <p>Cắm trại lều là cách tuyệt vời để hòa mình vào thiên nhiên.</p>
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="icon"><i class="flaticon-tent"></i></div>
+                                    <div class="content">
+                                        <h5><a href="tour-details.html">Chèo thuyền kayak</a></h5>
+                                        <p>Chèo thuyền kayak là hoạt động ngoài trời đầy thú vị.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-item mt-20">
+                                    <div class="icon"><i class="flaticon-tent"></i></div>
+                                    <div class="content">
+                                        <h5><a href="tour-details.html">Đạp xe địa hình</a></h5>
+                                        <p>Đạp xe địa hình giúp rèn luyện sức khỏe và khám phá thiên nhiên.</p>
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="icon"><i class="flaticon-tent"></i></div>
+                                    <div class="content">
+                                        <h5><a href="tour-details.html">Câu cá & Thuyền</a></h5>
+                                        <p>Câu cá và đi thuyền mang lại niềm vui và trải nghiệm khó quên.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Features Area end -->
         <!-- Hotel Area start -->
         <section id="ai-recommend-section" class="hotel-area bgc-black py-100 rel z-1">
             <div class="container-fluid">
                 <div class="row justify-content-center">
                     <div class="col-lg-12">
                         <div class="section-title text-white text-center counter-text-wrap mb-70" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                            <h2>Chúng tôi chọn lọc những điểm du lịch đáng giá nhất dành cho bạn.</h2>
-                            <p>Có thể bạn sẽ quan tâm đến những hành trình tương tự…</p>
+                            <h2>Khám phá khách sạn hàng đầu thế giới</h2>
+                            <p>Nơi hội tụ những trải nghiệm nổi bật nhất bạn sẽ nhớ mãi</p>
                         </div>
                     </div>
                 </div>
-                <div class="row justify-content-center" id="auto-recommend">
-                    <!-- Hiển thị danh sách gợi ý ở đây -->
-                    <!-- Ở đầu file, backend render ra userId nếu đã đăng nhập -->
-                    <input type="hidden" id="currentUserId" value="@Context.Session.GetInt32("UserID")">
+                <div class="row justify-content-center">
+                    <div class="col-xxl-6 col-xl-8 col-lg-10">
+                        <div class="destination-item style-three" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                            <div class="image">
+                                <div class="ratting"><i class="fas fa-star"></i> 4.8</div>
+                                <a href="#" class="heart"><i class="fas fa-heart"></i></a>
+                                <img src="assets/images/destinations/hotel1.jpg" alt="Hotel">
+                            </div>
+                            <div class="content">
+                                <span class="location"><i class="fal fa-map-marker-alt"></i> Ao Nang, Thailand</span>
+                                <h5><a href="destination-details.html">The brown bench near swimming pool Hotel</a></h5>
+                                <ul class="list-style-one">
+                                    <li><i class="fal fa-bed-alt"></i> 2 Bed room</li>
+                                    <li><i class="fal fa-hat-chef"></i> 1 kitchen</li>
+                                    <li><i class="fal fa-bath"></i> 2 Wash room</li>
+                                    <li><i class="fal fa-router"></i> Internet</li>
+                                </ul>
+                                <div class="destination-footer">
+                                    <span class="price"><span>$85.00</span>/đêm</span>
+                                    <a href="#" class="read-more">Đặt ngay <i class="fal fa-angle-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-6 col-xl-8 col-lg-10">
+                        <div class="destination-item style-three" data-aos="fade-up" data-aos-delay="50" data-aos-duration="1500" data-aos-offset="50">
+                            <div class="image">
+                                <div class="ratting"><i class="fas fa-star"></i> 4.8</div>
+                                <a href="#" class="heart"><i class="fas fa-heart"></i></a>
+                                <img src="assets/images/destinations/hotel2.jpg" alt="Hotel">
+                            </div>
+                            <div class="content">
+                                <span class="location"><i class="fal fa-map-marker-alt"></i> Kigali, Rwanda</span>
+                                <h5><a href="destination-details.html">Green trees and body of water Marriott Hotel</a></h5>
+                                <ul class="list-style-one">
+                                    <li><i class="fal fa-bed-alt"></i> 2 Bed room</li>
+                                    <li><i class="fal fa-hat-chef"></i> 1 kitchen</li>
+                                    <li><i class="fal fa-bath"></i> 2 Wash room</li>
+                                    <li><i class="fal fa-router"></i> Internet</li>
+                                </ul>
+                                <div class="destination-footer">
+                                    <span class="price"><span>$85.00</span>/đêm</span>
+                                    <a href="#" class="read-more">Đặt ngay <i class="fal fa-angle-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-6 col-xl-8 col-lg-10">
+                        <div class="destination-item style-three" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                            <div class="content">
+                                <span class="location"><i class="fal fa-map-marker-alt"></i> Ao Nang, Thailand</span>
+                                <h5><a href="#">Painted house surrounded with trees Hotel</a></h5>
+                                <ul class="list-style-one">
+                                    <li><i class="fal fa-bed-alt"></i> 2 Bed room</li>
+                                    <li><i class="fal fa-hat-chef"></i> 1 kitchen</li>
+                                    <li><i class="fal fa-bath"></i> 2 Wash room</li>
+                                    <li><i class="fal fa-router"></i> Internet</li>
+                                </ul>
+                                <div class="destination-footer">
+                                    <span class="price"><span>$85.00</span>/đêm</span>
+                                    <a href="#" class="read-more">Đặt ngay <i class="fal fa-angle-right"></i></a>
+                                </div>
+                            </div>
+                            <div class="image">
+                                <div class="ratting"><i class="fas fa-star"></i> 4.8</div>
+                                <a href="#" class="heart"><i class="fas fa-heart"></i></a>
+                                <img src="assets/images/destinations/hotel3.jpg" alt="Hotel">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-6 col-xl-8 col-lg-10">
+                        <div class="destination-item style-three" data-aos="fade-up" data-aos-delay="50" data-aos-duration="1500" data-aos-offset="50">
+                            <div class="content">
+                                <span class="location"><i class="fal fa-map-marker-alt"></i> Ao Nang, Thailand</span>
+                                <h5><a href="#">house pool Jungle Pool Indonesia Hotel</a></h5>
+                                <ul class="list-style-one">
+                                    <li><i class="fal fa-bed-alt"></i> 2 Bed room</li>
+                                    <li><i class="fal fa-hat-chef"></i> 1 kitchen</li>
+                                    <li><i class="fal fa-bath"></i> 2 Wash room</li>
+                                    <li><i class="fal fa-router"></i> Internet</li>
+                                </ul>
+                                <div class="destination-footer">
+                                    <span class="price"><span>$85.00</span>/đêm</span>
+                                    <a href="#" class="read-more">Đặt ngay <i class="fal fa-angle-right"></i></a>
+                                </div>
+                            </div>
+                            <div class="image">
+                                <div class="ratting"><i class="fas fa-star"></i> 4.8</div>
+                                <a href="#" class="heart"><i class="fas fa-heart"></i></a>
+                                <img src="assets/images/destinations/hotel4.jpg" alt="Hotel">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hotel-more-btn text-center mt-40">
+                    <a href="destination2.html" class="theme-btn style-four">
+                        <span data-hover="Xem thêm khách sạn">Xem thêm khách sạn</span>
+                        <i class="fal fa-arrow-right"></i>
+                    </a>
                 </div>
             </div>
         </section>
         <!-- Hotel Area end -->
-        <!-- Blog Area start -->
-        @{
-            var blogs = ViewBag.Blogs as List<GoEASy.Models.Blog>;
-
-        }
-
+        <!-- Mobile App Area start -->
+        <section class="mobile-app-area py-100 rel z-1">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-5">
+                        <div class="mobile-app-content rmb-55" data-aos="fade-left" data-aos-duration="1500" data-aos-offset="50">
+                            <div class="section-title mb-30">
+                                <h2>Tải ứng dụng di động của chúng tôi trên các kho ứng dụng</h2>
+                            </div>
+                            <p>Chúng tôi luôn nỗ lực để mang đến trải nghiệm tuyệt vời nhất cho bạn. Tin tưởng chúng tôi để xử lý các chi tiết, bạn có thể tạo những kỷ niệm không quên. Khám phá thế giới với niềm tin.</p>
+                            <ul class="list-style-two mt-35 mb-30">
+                                <li>Kinh nghiệm lâu năm</li>
+                                <li>Đội ngũ chuyên nghiệp</li>
+                                <li>Du lịch giá tốt</li>
+                                <li>Hỗ trợ trực tuyến 24/7</li>
+                            </ul>
+                            <div class="google-play-app-store">
+                                <a href="#"><img src="assets/images/mobile-app/g-play.jpg" alt="Google Play"></a>
+                                <a href="#"><img src="assets/images/mobile-app/a-store.jpg" alt="App Store"></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="mobile-app-images">
+                            <div class="bg"><img src="assets/images/mobile-app/phone-bg.png" alt="BG"></div>
+                            <div class="images">
+                                <img src="assets/images/mobile-app/phone2.png" alt="Phone" data-aos="fade-down-left" data-aos-duration="1500" data-aos-offset="50">
+                                <img src="assets/images/mobile-app/phone.png" alt="Phone">
+                                <img src="assets/images/mobile-app/phone3.png" alt="Phone" data-aos="fade-up-right" data-aos-duration="1500" data-aos-offset="50">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Mobile App Area end -->
+        <!-- Testimonials Area start -->
+        <section class="testimonials-area rel z-1">
+            <div class="container">
+                <div class="testimonials-wrap bgc-lighter">
+                    <div class="row">
+                        <div class="col-lg-5 rel" data-aos="fade-right" data-aos-duration="1500" data-aos-offset="50">
+                            <div class="testimonial-left-image rmb-55" style="background-image: url(assets/images/testimonials/testimonial-left.jpg);"></div>
+                        </div>
+                        <div class="col-lg-7">
+                            <div class="testimonial-right-content" data-aos="fade-left" data-aos-duration="1500" data-aos-offset="50">
+                                <div class="section-title mb-55">
+                                    <h2><span>5280</span>  Khách hàng toàn cầu nói về dịch vụ của chúng tôi</h2>
+                                </div>
+                                <div class="testimonials-active">
+                                    <div class="testimonial-item">
+                                        <div class="testi-header">
+                                            <div class="quote"><i class="flaticon-double-quotes"></i></div>
+                                            <h4>Dịch vụ chất lượng</h4>
+                                            <div class="ratting">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                        </div>
+                                        <div class="text">"Chuyến đi của chúng tôi thật tuyệt vời, cảm ơn công ty du lịch đã chăm sóc mọi chi tiết và gợi ý những trải nghiệm tuyệt vời."</div>
+                                        <div class="author">
+                                            <div class="image"><img src="assets/images/testimonials/author.jpg" alt="Author"></div>
+                                            <div class="content">
+                                                <h5>Randall V. Vasquez</h5>
+                                                <span>Nhà thiết kế đồ họa</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="testimonial-item">
+                                        <div class="testi-header">
+                                            <div class="quote"><i class="flaticon-double-quotes"></i></div>
+                                            <h4>Dịch vụ chất lượng</h4>
+                                            <div class="ratting">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                        </div>
+                                        <div class="text">"Chuyến đi của chúng tôi thật tuyệt vời, cảm ơn công ty du lịch đã chăm sóc mọi chi tiết và gợi ý những trải nghiệm tuyệt vời."</div>
+                                        <div class="author">
+                                            <div class="image"><img src="assets/images/testimonials/author.jpg" alt="Author"></div>
+                                            <div class="content">
+                                                <h5>Randall V. Vasquez</h5>
+                                                <span>Nhà thiết kế đồ họa</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Testimonials Area end -->
+        <!-- CTA Area start -->
         <section class="cta-area pt-100 rel z-1">
             <div class="container-fluid">
                 <div class="row">
-                    @if (blogs != null && blogs.Count > 0)
-                    {
-                        foreach (var blog in blogs)
-                        {
-
-                            var cover = blog.BlogImages?.FirstOrDefault(img => img.IsMain == true)?.ImageURL ?? "/image/default.jpg"; ;
-
-                            <div class="col-xl-4 col-md-6" data-aos="zoom-in-down" data-aos-duration="1500" data-aos-offset="50">
-                                <div class="cta-item" style="background-image: url('@cover');">
-                                    <span class="category">@blog.Category?.CategoryName</span>
-                                    <h2>@blog.Title</h2>
-                                    <a href="/blog-detail/@blog.BlogID" class="theme-btn style-two bgc-secondary">
-                                        <span data-hover="Khám phá tour">See Blog</span>
-                                        <i class="fal fa-arrow-right"></i>
-                                    </a>
-                                </div>
+                    <div class="col-xl-4 col-md-6" data-aos="zoom-in-down" data-aos-duration="1500" data-aos-offset="50">
+                        <div class="cta-item" style="background-image: url(assets/images/cta/cta1.jpg);">
+                            <span class="category">Cắm trại lều</span>
+                            <h2>Khám phá du lịch tuyệt vời nhất thế giới</h2>
+                            <a href="tour-details.html" class="theme-btn style-two bgc-secondary">
+                                <span data-hover="Khám phá tour">Khám phá tour</span>
+                                <i class="fal fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-md-6" data-aos="zoom-in-down" data-aos-delay="50" data-aos-duration="1500" data-aos-offset="50">
+                        <div class="cta-item" style="background-image: url(assets/images/cta/cta2.jpg);">
+                            <span class="category">Bãi biển</span>
+                            <h2>Bãi biển lớn nhất thế giới tại Thái Lan</h2>
+                            <a href="tour-details.html" class="theme-btn style-two">
+                                <span data-hover="Khám phá tour">Khám phá tour</span>
+                                <i class="fal fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-md-6" data-aos="zoom-in-down" data-aos-delay="100" data-aos-duration="1500" data-aos-offset="50">
+                        <div class="cta-item" style="background-image: url(assets/images/cta/cta3.jpg);">
+                            <span class="category">Thác nước</span>
+                            <h2>Thác nước lớn nhất Bali, Indonesia</h2>
+                            <a href="tour-details.html" class="theme-btn style-two bgc-secondary">
+                                <span data-hover="Khám phá tour">Khám phá tour</span>
+                                <i class="fal fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- CTA Area end -->
+        <!-- Blog Area start -->
+        <section class="blog-area py-70 rel z-1">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-12">
+                        <div class="section-title text-center counter-text-wrap mb-70" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                            <h2>Tin tức & Blog mới nhất</h2>
+                            <p>Nơi hội tụ những trải nghiệm nổi bật nhất bạn sẽ nhớ mãi</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-xl-4 col-md-6">
+                        <div class="blog-item" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                            <div class="content">
+                                <a href="blog.html" class="category">Du lịch</a>
+                                <h5><a href="blog-details.html">Hướng dẫn lên kế hoạch kỳ nghỉ mơ ước cùng Ravelo</a></h5>
+                                <ul class="blog-meta">
+                                    <li><i class="far fa-calendar-alt"></i> <a href="#">25 Tháng 2 2024</a></li>
+                                    <li><i class="far fa-comments"></i> <a href="#">Bình luận (5)</a></li>
+                                </ul>
                             </div>
-                        }
-                    }
-                    else
-                    {
-                        <div style="color:red;padding:15px">Không có bài viết nào!</div>
-                    }
+                            <div class="image">
+                                <img src="assets/images/blog/blog1.jpg" alt="Blog">
+                            </div>
+                            <a href="blog-details.html" class="theme-btn">
+                                <span data-hover="Đọc thêm">Đọc thêm</span>
+                                <i class="fal fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-md-6">
+                        <div class="blog-item" data-aos="fade-up" data-aos-delay="50" data-aos-duration="1500" data-aos-offset="50">
+                            <div class="content">
+                                <a href="blog.html" class="category">Du lịch</a>
+                                <h5><a href="blog-details.html">Những trải nghiệm không thể quên cùng Ravelo</a></h5>
+                                <ul class="blog-meta">
+                                    <li><i class="far fa-calendar-alt"></i> <a href="#">25 Tháng 2 2024</a></li>
+                                    <li><i class="far fa-comments"></i> <a href="#">Bình luận (5)</a></li>
+                                </ul>
+                            </div>
+                            <div class="image">
+                                <img src="assets/images/blog/blog2.jpg" alt="Blog">
+                            </div>
+                            <a href="blog-details.html" class="theme-btn">
+                                <span data-hover="Đọc thêm">Đọc thêm</span>
+                                <i class="fal fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-md-6">
+                        <div class="blog-item" data-aos="fade-up" data-aos-delay="100" data-aos-duration="1500" data-aos-offset="50">
+                            <div class="content">
+                                <a href="blog.html" class="category">Du lịch</a>
+                                <h5><a href="blog-details.html">Khám phá văn hóa và ẩm thực tại các điểm đến tuyệt vời cùng Ravelo</a></h5>
+                                <ul class="blog-meta">
+                                    <li><i class="far fa-calendar-alt"></i> <a href="#">25 Tháng 2 2024</a></li>
+                                    <li><i class="far fa-comments"></i> <a href="#">Bình luận (5)</a></li>
+                                </ul>
+                            </div>
+                            <div class="image">
+                                <img src="assets/images/blog/blog3.jpg" alt="Blog">
+                            </div>
+                            <a href="blog-details.html" class="theme-btn">
+                                <span data-hover="Đọc thêm">Đọc thêm</span>
+                                <i class="fal fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -323,6 +671,48 @@
             console.log('DOM loaded, initializing Swiper...');
             var swiperElement = document.querySelector('.destinations-swiper');
             console.log('Swiper element:', swiperElement);
+
+            if (swiperElement) {
+                var swiper = new Swiper('.destinations-swiper', {
+                slidesPerView: 4,
+                spaceBetween: 30,
+                loop: true,
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                breakpoints: {
+                    1200: { slidesPerView: 4 },
+                    992: { slidesPerView: 3 },
+                    768: { slidesPerView: 2 },
+                    0: { slidesPerView: 1 }
+                }
+            });
+            } else {
+                console.log('Swiper element not found!');
+            }
+        });
+    </script>
+    <style>
+        .destination-item .image img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 16px;
+            display: block;
+        }
+
+        .destination-item {
+            min-height: 370px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+    </style>
 
             if (swiperElement) {
                 var swiper = new Swiper('.destinations-swiper', {
