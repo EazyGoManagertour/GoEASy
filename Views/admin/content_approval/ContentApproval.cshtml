@@ -151,9 +151,9 @@
 
                                                 foreach (var img in blog.BlogImages)
                                                 {
-                                                    if (img.IsMain == true && !string.IsNullOrEmpty(img.ImageUrl))
+                                                    if (img.IsMain == true && !string.IsNullOrEmpty(img.ImageURL))
                                                     {
-                                                        avatar = "/" + img.ImageUrl.TrimStart('/'); // đảm bảo format đúng
+                                                        avatar = "/" + img.ImageURL.TrimStart('/'); // đảm bảo format đúng
                                                         break;
                                                     }
                                                 }
@@ -166,21 +166,21 @@
                                         </td>
                                         
                                         <td>
-                                            <a href="#" class="text-info preview-btn" data-id="@blog.BlogId">
+                                            <a href="#" class="text-info preview-btn" data-id="@blog.BlogID">
                                                 <i class="fas fa-eye"></i> Preview
                                             </a>
                                         </td>
                                         <td class="text-center">
                                             <div class="d-flex gap-2">
                                                 <form method="post" action="/admin/content-approval/approve">
-                                                    <input type="hidden" name="id" value="@blog.BlogId" />
+                                                    <input type="hidden" name="id" value="@blog.BlogID" />
                                                     <button type="submit" class="action-btn edit">
                                                         <i class="fas fa-check text-white"></i>
                                                     </button>
                                                 </form>
 
                                                 <form method="post" action="/admin/content-approval/reject">
-                                                    <input type="hidden" name="id" value="@blog.BlogId" />
+                                                    <input type="hidden" name="id" value="@blog.BlogID" />
                                                     <button type="submit" class="action-btn delete">
                                                         <i class="fas fa-times text-white"></i>
                                                     </button>
@@ -418,9 +418,9 @@
         document.querySelectorAll('.preview-btn').forEach(btn => {
             btn.addEventListener('click', function (e) {
                 e.preventDefault();
-                const blogId = this.getAttribute('data-id');
+                const blogID = this.getAttribute('data-id');
 
-                fetch(`/admin/content-approval/get-blog-detail?blogId=${blogId}`)
+                fetch(`/admin/content-approval/get-blog-detail?blogID=${blogID}`)
                     .then(res => res.json())
                     .then(async data => {
                         document.getElementById('previewTitle').textContent = data.title;

@@ -19,11 +19,11 @@
             {
                 var booking = b.val;
                 var idx = b.idx;
-                var collapseId = $"collapseBooking{booking.BookingID}";
+                var collapseID = $"collapseBooking{booking.BookingID}";
                 var isOpen = openId == booking.BookingID.ToString();
                 <div class="accordion-item mb-3" style="border-radius: 12px; overflow: hidden;">
                     <h2 class="accordion-header" id="heading@booking.BookingID">
-                        <button class="accordion-button @(isOpen ? "" : "collapsed")" type="button" data-bs-toggle="collapse" data-bs-target="#@collapseId" aria-expanded="@(isOpen ? "true" : "false")" aria-controls="@collapseId" style="font-weight: 600; font-size: 1.1rem;">
+                        <button class="accordion-button @(isOpen ? "" : "collapsed")" type="button" data-bs-toggle="collapse" data-bs-target="#@collapseID" aria-expanded="@(isOpen ? "true" : "false")" aria-controls="@collapseID" style="font-weight: 600; font-size: 1.1rem;">
                             <span style="min-width: 90px; display: inline-block;">#@booking.BookingID</span>
                             <span style="flex:1;">@booking.Tour?.TourName</span>
                             <span style="margin-left: 12px;">
@@ -38,7 +38,7 @@
                             </span>
                         </button>
                     </h2>
-                    <div id="@collapseId" class="accordion-collapse collapse @(isOpen ? "show" : "")" aria-labelledby="heading@booking.BookingID" data-bs-parent="#bookingAccordion">
+                    <div id="@collapseID" class="accordion-collapse collapse @(isOpen ? "show" : "")" aria-labelledby="heading@booking.BookingID" data-bs-parent="#bookingAccordion">
                         <div class="accordion-body" style="background: #f9fafb;">
                             <div class="row mb-2">
                                 <div class="col-6"><b>Ngày đặt:</b> @(booking.BookingDate?.ToString("dd/MM/yyyy HH:mm") ?? "")</div>

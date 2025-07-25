@@ -16,6 +16,8 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = TimeSpan.FromMinutes(30);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
+    options.Cookie.SameSite = SameSiteMode.Lax; // hoặc thử None nếu vẫn bị mất session
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Bắt buộc dùng HTTPS
 });
 
 // Đăng ký GoEasyContext
@@ -33,6 +35,7 @@ builder.Services.AddScoped<IFavoriteService, FavoriteService>();
 builder.Services.AddScoped<TourService>();
 builder.Services.AddScoped<DestinationService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddHttpClient();
 
 
 // Đăng ký LoginService
@@ -46,12 +49,8 @@ builder.Services.AddScoped<IBlogDetailService, BlogDetailService>();
 
 builder.Services.AddScoped<IDiscountService, DiscountService>();
 
-// Đăng ký RuleService
-builder.Services.AddScoped<IRuleService, RuleService>();
-
-builder.Services.AddScoped<IActionService, ActionService>();
-
-
+builder.Services.Configure<MomoApiOptions>(builder.Configuration.GetSection("MomoAPI"));
+builder.Services.AddScoped<IMomoService, MomoService>();
 
 var app = builder.Build();
 

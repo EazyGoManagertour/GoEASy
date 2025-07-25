@@ -105,7 +105,7 @@
                                 <td>
                                     <button class="status admit"
                                             style="border: none; outline: none; background-color:@(admin.Status == true ? "" : "#dc3545")"
-                                            onclick="toggleStatus(this, '@admin.AdminId', @(admin.Status.ToString().ToLower()))">
+                                            onclick="toggleStatus(this, '@admin.AdminID', @(admin.Status.ToString().ToLower()))">
                                         @(admin.Status == true ? "Active" : "Disable")
                                     </button>
                                 </td>
@@ -115,7 +115,7 @@
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#editModal"
                                                 onclick="fillEditModal(
-                                                '@admin.AdminId',
+                                                '@admin.AdminID',
                                                 '@admin.Username',
                                                 '@admin.Password',
                                                 '@admin.FullName',
@@ -130,7 +130,7 @@
                                         <button class="action-btn delete"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal"
-                                                onclick="setDeleteAdminId('@admin.AdminId')">
+                                                onclick="setDeleteAdminID('@admin.AdminID')">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
@@ -211,7 +211,7 @@
                 </div>
                 <div class="modal-body">
                     <form action="/admin/account-admin/update" method="POST">
-                        <input type="hidden" name="AdminId" id="editAdminID">
+                        <input type="hidden" name="AdminID" id="editAdminID">
 
                         <div class="mb-3">
                             <label for="editUsername" class="form-label">Username</label>
@@ -270,7 +270,7 @@
                 <form method="post" action="/admin/account-admin/delete-confirm">
                     <div class="modal-body">
                         <p>Are you sure you want to delete this admin?</p>
-                        <input type="hidden" name="id" id="deleteAdminId" />
+                        <input type="hidden" name="id" id="deleteAdminID" />
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -282,8 +282,8 @@
     </div>
 
     <script>
-        function toggleStatus(button, adminId, currentStatus) {
-            fetch(`/admin/account-admin/toggle-status?id=${adminId}`, {
+        function toggleStatus(button, AdminID, currentStatus) {
+            fetch(`/admin/account-admin/toggle-status?id=${AdminID}`, {
                 method: 'POST'
             })
                 .then(response => {
@@ -292,7 +292,7 @@
                     const newStatus = !(currentStatus === true || currentStatus === "true");
                     button.textContent = newStatus ? "Active" : "Disable";
                     button.style.backgroundColor = newStatus ? "" : "#dc3545";
-                    button.setAttribute("onclick", `toggleStatus(this, '${adminId}', ${newStatus})`);
+                    button.setAttribute("onclick", `toggleStatus(this, '${AdminID}', ${newStatus})`);
 
                     const msg = "Status updated successfully!";
                     document.getElementById("toast-success-msg").value = msg;
