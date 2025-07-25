@@ -20,7 +20,7 @@ namespace GoEASy.Controllers
             _adminService = adminService;
         }
 
-        //[RequirePermission("view-admin")]
+        [RequirePermission("view-admin")]
         // GET: admin/account-admin
         [HttpGet("")]
         public async Task<IActionResult> Index()
@@ -29,7 +29,7 @@ namespace GoEASy.Controllers
             return View("~/Views/admin/account_admin/AccountAdmin.cshtml", admins);
         }
 
-        //[RequirePermission("create-admin")]
+        [RequirePermission("create-admin")]
         // POST: admin/account-admin/create
         [HttpPost("create")]
         public async Task<IActionResult> Create(Admin admin)
@@ -50,7 +50,7 @@ namespace GoEASy.Controllers
             return RedirectToAction("Index");
         }
 
-        //[RequirePermission("edit-admin")]
+        [RequirePermission("edit-admin")]
         // POST: admin/account-admin/update
         [HttpPost("update")]
         public async Task<IActionResult> Update(Admin admin)
@@ -97,7 +97,7 @@ namespace GoEASy.Controllers
             return RedirectToAction("Index");
         }
 
-        //[RequirePermission("delete-admin")]
+        [RequirePermission("delete-admin")]
         [HttpPost("delete-confirm")]
         public async Task<IActionResult> DeleteConfirm(int id)
         {
