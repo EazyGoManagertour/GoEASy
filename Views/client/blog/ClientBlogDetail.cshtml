@@ -235,7 +235,7 @@
                         <div class="blog-sidebar">
 
                             <div class="widget widget-search" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                                <form method="get" action="/blog-detail/@Model.BlogID" class="default-search-form">
+                                <form method="get" action="/blog-detail/@Model.BlogId" class="default-search-form">
                                     <input type="text" name="keyword" placeholder="Search"
                                            value="@ViewBag.Keyword" required />
                                     <button type="submit" class="searchbutton far fa-search"></button>
@@ -250,7 +250,7 @@
                                         var isActive = (cat.CategoryName == (ViewBag.SelectedCategory as string)) ? "active" : "";
                                         <li>
                                             <a class="@isActive"
-                                               href="/blog-detail/@Model.BlogID?category=@cat.CategoryName">
+                                               href="/blog-detail/@Model.BlogId?category=@cat.CategoryName">
                                                 @cat.CategoryName
                                             </a>
                                         </li>
