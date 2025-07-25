@@ -17,7 +17,7 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
-
+ 
 // Đăng ký GoEasyContext
 builder.Services.AddDbContext<GoEasyContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
