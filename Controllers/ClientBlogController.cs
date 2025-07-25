@@ -18,7 +18,7 @@ namespace GoEASy.Controllers
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> Index(string? keyword, string? category, int page = 1, int pageSize = 5)
+        public async Task<IActionResult> Index(string? keyword, string? category, int page = 1, int pageSize = 3)
         {
             var blogs = await _blogService.GetAllAsync();
 
