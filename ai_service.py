@@ -1,4 +1,11 @@
-﻿
+﻿import os
+from dotenv import load_dotenv 
+
+
+load_dotenv()
+print("🔍 ENV Path:", os.getcwd())  # kiểm tra thư mục hiện tại
+print("🔑 KEY:", os.getenv("OPENAI_API_KEY"))
+
 import pyodbc
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -6,8 +13,7 @@ import openai
 import faiss
 import numpy as np
 import traceback
-
-load_dotenv()  # Tự động load từ .env nếu có
+ # Tự động load từ .env nếu có
 
 # ✅ Lấy key từ biến môi trường
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -84,7 +90,7 @@ def get_history_embedding(tour_ids, all_tours):
 
 
 def get_embedding(text):
-    client = openai.OpenAI(api_key=openai.api_key)
+    client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
     response = client.embeddings.create(
         input=text,
         model="text-embedding-3-small"
