@@ -1,0 +1,373 @@
+@model GoEASy.Models.User
+@{
+    ViewBag.Title = "Thông tin cá nhân";
+}
+@Html.Partial("~/Views/client/share/head.cshtml")
+<link rel="stylesheet" href="@Url.Content("~/assets/css/profile.css")" asp-append-version="true" />
+
+<body>
+    <div class="page-wrapper">
+        <!-- Preloader -->
+        <div class="preloader"><div class="custom-loader"></div></div>
+
+        <!-- main header -->
+        <header class="main-header header-one white-menu menu-absolute">
+            @Html.Partial("~/Views/client/share/header.cshtml")
+        </header>
+
+        <!-- Page Banner -->
+        <section class="page-banner-area pt-200 rpt-140 pb-100 rpb-60 rel z-1 bgs-cover text-center" style="background-image: url(/assets/images/hero/hero.jpg);">
+            <div class="container">
+                <div class="banner-inner rpt-10">
+                    <h2 class="page-title wow fadeInUp delay-0-2s">Hồ sơ cá nhân</h2>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center wow fadeInUp delay-0-4s">
+                            <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                            <li class="breadcrumb-item active">Hồ sơ cá nhân</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Section -->
+        <section class="contact-form-area py-130 rpy-100 rel z-1">
+            <div class="container">
+                <div class="row">
+                    <!-- Left Sidebar Menu -->
+                    <div class="col-lg-3">
+                        <div class="profile-sidebar wow fadeInUp delay-0-2s">
+                            <div class="profile-menu">
+                                <div class="menu-header">
+                                    <div class="user-avatar">
+                                        <img src="/assets/images/blog/comment-author1.jpg" alt="Avatar" class="avatar-img">
+                                    </div>
+                                    <h4 class="user-name">@Model.FullName</h4>
+                                    <p class="user-email">@Model.Email</p>
+                                </div>
+                                <ul class="menu-list">
+                                    <li class="menu-item active" data-tab="personal-info">
+                                        <a href="#" class="menu-link">
+                                            <i class="fas fa-user"></i>
+                                            <span>Thông tin cá nhân</span>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item" data-tab="change-password">
+                                        <a href="#" class="menu-link">
+                                            <i class="fas fa-key"></i>
+                                            <span>Đổi mật khẩu</span>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item" data-tab="booking-history">
+                                        <a href="#" class="menu-link">
+                                            <i class="fas fa-history"></i>
+                                            <span>Lịch sử đặt tour</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Content Area -->
+                    <div class="col-lg-9">
+                        <!-- Personal Info Tab -->
+                        <div class="tab-content active" id="personal-info">
+                            <div class="contact-form-wrap form-style-one wow fadeInUp delay-0-4s">
+                                <div class="section-title mb-40">
+                                    <h3>Thông tin cá nhân</h3>
+                                    <p>Quản lý thông tin hồ sơ của bạn</p>
+                                </div>
+
+                                @if (TempData["Error"] != null)
+                                {
+                                    <div class="alert alert-danger">
+                                        @TempData["Error"]
+                                    </div>
+                                }
+                                @if (TempData["Success"] != null)
+                                {
+                                    <div class="alert alert-success">
+                                        @TempData["Success"]
+                                    </div>
+                                }
+
+                                <div class="user-info-display" id="userInfoDisplay">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="info-item">
+                                                <label>Họ và tên</label>
+                                                <div class="info-value">@Model.FullName</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="info-item">
+                                                <label>Email</label>
+                                                <div class="info-value">@Model.Email</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="info-item">
+                                                <label>Số điện thoại</label>
+                                                <div class="info-value">@(Model.Phone ?? "Chưa cập nhật")</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="info-item">
+                                                <label>Giới tính</label>
+                                                <div class="info-value">@(Model.Sex == "Male" ? "Nam" : Model.Sex == "Female" ? "Nữ" : "Chưa cập nhật")</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="info-item">
+                                                <label>Địa chỉ</label>
+                                                <div class="info-value">@(Model.Address ?? "Chưa cập nhật")</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-center mt-40">
+                                        <button type="button" class="theme-btn style-two" id="editInfoBtn">
+                                            <span data-hover="Chỉnh sửa thông tin">Chỉnh sửa thông tin</span>
+                                            <i class="fal fa-edit"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Edit Form (Hidden by default) -->
+                                <form method="post" action="/profile/edit" id="editInfoForm" style="display: none;">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Họ và tên *</label>
+                                                <input type="text" name="fullName" class="form-control" value="@Model.FullName" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Email</label>
+                                                <input type="email" name="email" class="form-control" value="@Model.Email" readonly style="background:#f8f9fa;">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Số điện thoại *</label>
+                                                <input type="tel" name="phone" class="form-control" value="@Model.Phone" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Giới tính</label>
+                                                <select name="sex" class="form-control">
+                                                    <option value="">Chọn giới tính</option>
+                                                    <option value="Male" @(Model.Sex == "Male" ? "selected" : "")>Nam</option>
+                                                    <option value="Female" @(Model.Sex == "Female" ? "selected" : "")>Nữ</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Địa chỉ</label>
+                                                <input type="text" name="address" class="form-control" value="@Model.Address">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 text-center">
+                                            <button type="submit" class="theme-btn style-two mr-15">
+                                                <span data-hover="Lưu thay đổi">Lưu thay đổi</span>
+                                                <i class="fal fa-check"></i>
+                                            </button>
+                                            <button type="button" class="theme-btn style-three" id="cancelEditBtn">
+                                                <span data-hover="Hủy">Hủy</span>
+                                                <i class="fal fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Change Password Tab -->
+                        <div class="tab-content" id="change-password">
+                            <div class="contact-form-wrap form-style-one wow fadeInUp delay-0-4s">
+                                <div class="section-title mb-40">
+                                    <h3>Đổi mật khẩu</h3>
+                                    <p>Cập nhật mật khẩu để bảo mật tài khoản</p>
+                                </div>
+
+                                <form method="post" action="/profile/change-password">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Mật khẩu hiện tại *</label>
+                                                <input type="password" name="currentPassword" class="form-control" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Mật khẩu mới *</label>
+                                                <input type="password" name="newPassword" class="form-control" required>
+                                                <small class="form-text text-muted">Ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường và số</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Xác nhận mật khẩu mới *</label>
+                                                <input type="password" name="confirmPassword" class="form-control" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 text-center">
+                                            <button type="submit" class="theme-btn style-two">
+                                                <span data-hover="Đổi mật khẩu">Đổi mật khẩu</span>
+                                                <i class="fal fa-key"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Booking History Tab -->
+                        <div class="tab-content" id="booking-history">
+                            <div class="contact-form-wrap form-style-one wow fadeInUp delay-0-4s">
+                                <div class="section-title mb-40">
+                                    <h3>Lịch sử đặt tour</h3>
+                                    <p>Xem lại các chuyến du lịch của bạn</p>
+                                </div>
+                                
+                                <div id="bookingHistoryContainer">
+                                    <div class="text-center">
+                                        <div class="spinner-border" role="status">
+                                            <span class="visually-hidden">Đang tải...</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        @Html.Partial("~/Views/client/share/footer.cshtml")
+    </div>
+
+    @Html.Partial("~/Views/client/share/script.cshtml")
+    
+    <script>
+        $(document).ready(function() {
+            // Tab switching
+            $('.menu-item').click(function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all menu items and tabs
+                $('.menu-item').removeClass('active');
+                $('.tab-content').removeClass('active');
+                
+                // Add active class to clicked menu item
+                $(this).addClass('active');
+                
+                // Show corresponding tab content
+                var tabId = $(this).data('tab');
+                $('#' + tabId).addClass('active');
+                
+                // Load booking history when tab is clicked
+                if (tabId === 'booking-history') {
+                    loadBookingHistory();
+                }
+            });
+
+            // Edit info toggle
+            $('#editInfoBtn').click(function() {
+                $('#userInfoDisplay').hide();
+                $('#editInfoForm').show();
+            });
+
+            $('#cancelEditBtn').click(function() {
+                $('#editInfoForm').hide();
+                $('#userInfoDisplay').show();
+            });
+        });
+
+        function loadBookingHistory() {
+            $.ajax({
+                url: '/booking/history-data',
+                type: 'GET',
+                success: function(data) {
+                    if (data.length === 0) {
+                        $('#bookingHistoryContainer').html('<div class="alert alert-info text-center">Bạn chưa có booking nào.</div>');
+                    } else {
+                        let html = '<div class="booking-list">';
+                        data.forEach(function(booking, index) {
+                            html += `
+                                <div class="booking-card mb-4">
+                                    <div class="booking-header">
+                                        <div class="booking-id">#${booking.bookingId}</div>
+                                        <div class="booking-status">
+                                            <span class="badge ${booking.status ? 'badge-success' : 'badge-warning'}">
+                                                ${booking.status ? 'Đã xác nhận' : 'Chờ xác nhận'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="booking-body">
+                                        <h5 class="tour-name">${booking.tour?.tourName || 'N/A'}</h5>
+                                        <div class="booking-details">
+                                            <div class="detail-row">
+                                                <span class="label">Địa điểm:</span>
+                                                <span class="value">${booking.tour?.destination?.destinationName || 'N/A'}</span>
+                                            </div>
+                                            <div class="detail-row">
+                                                <span class="label">Ngày đặt:</span>
+                                                <span class="value">${new Date(booking.bookingDate).toLocaleDateString('vi-VN')}</span>
+                                            </div>
+                                            <div class="detail-row">
+                                                <span class="label">Ngày khởi hành:</span>
+                                                <span class="value">${booking.tour?.startDate ? new Date(booking.tour.startDate).toLocaleDateString('vi-VN') : 'N/A'}</span>
+                                            </div>
+                                            <div class="detail-row">
+                                                <span class="label">Số khách:</span>
+                                                <span class="value">Người lớn: ${booking.adultGuests}, Trẻ em: ${booking.childGuests}</span>
+                                            </div>
+                                            <div class="detail-row">
+                                                <span class="label">Tổng tiền:</span>
+                                                <span class="value price">${(booking.totalPrice || 0).toLocaleString()} đ</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        html += '</div>';
+                        $('#bookingHistoryContainer').html(html);
+                    }
+                },
+                error: function() {
+                    $('#bookingHistoryContainer').html('<div class="alert alert-danger text-center">Có lỗi xảy ra khi tải lịch sử booking.</div>');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

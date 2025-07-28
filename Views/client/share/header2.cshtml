@@ -7,7 +7,7 @@
             <div class="header-inner rel d-flex align-items-center">
                 <div class="logo-outer">
                     <div class="logo">
-                        <a href="index.html">
+                        <a href="home">
                             <img src="@Url.Content("~/assets/images/logos/logo-two.png")" alt="Logo"
                                  title="Logo">
                         </a>
@@ -19,7 +19,7 @@
                     <nav class="main-menu navbar-expand-lg">
                         <div class="navbar-header">
                             <div class="mobile-logo">
-                                <a href="index.html">
+                                <a href="home">
                                     <img src="@Url.Content("~/assets/images/logos/logo-two.png")" alt="Logo" title="Logo">
                                 </a>
                             </div>
@@ -38,60 +38,14 @@
                                 <li class="dropdown current">
                                     <a href="#">Home</a>
                                     <ul>
-                                        <li><a href="index.html">Travel Agency</a></li>
-                                        <li><a href="index2.html">City Tou</a></li>
-                                        <li><a href="index3.html">Tour Package</a></li>
+                                        <li><a href="home">Travel Agency</a></li>
+                                        <li><a href="#">City Tour</a></li>
+                                        <li><a href="#">Tour Package</a></li>
                                     </ul>
                                 </li>
-                                <li><a href="about.html">About</a></li>
-                                <li class="dropdown">
-                                    <a href="#">Tours</a>
-                                    <ul>
-                                        <li><a href="tour-list.html">Tour List</a></li>
-                                        <li><a href="tour-grid.html">Tour Grid</a></li>
-                                        <li><a href="tour-sidebar.html">Tour Sidebar</a></li>
-                                        <li><a href="tour-details.html">Tour Details</a></li>
-                                        <li><a href="tour-guide.html">Tour Guide</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown">
-                                    <a href="#">Destinations</a>
-                                    <ul>
-                                        <li><a href="destination1.html">Destination 01</a></li>
-                                        <li><a href="destination2.html">Destination 01</a></li>
-                                        <li><a href="destination-details.html">Destination Details</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown">
-                                    <a href="#">Pages</a>
-                                    <ul>
-                                        <li><a href="pricing.html">Pricing</a></li>
-                                        <li><a href="faqs.html">faqs</a></li>
-                                        <li class="dropdown">
-                                            <a href="#">Gallery</a>
-                                            <ul>
-                                                <li><a href="gellery-grid.html">Gallery Grid</a></li>
-                                                <li><a href="gellery-slider.html">Gallery Slider</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown">
-                                            <a href="#">products</a>
-                                            <ul>
-                                                <li><a href="shop.html">Our Products</a></li>
-                                                <li><a href="product-details.html">Product Details</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="contact.html">Contact Us</a></li>
-                                        <li><a href="404.html">404 Error</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown">
-                                    <a href="#">blog</a>
-                                    <ul>
-                                        <li><a href="blog.html">blog List</a></li>
-                                        <li><a href="blog-details.html">blog details</a></li>
-                                    </ul>
-                                </li>
+                                <li><a href="tour-list">Tour list</a></li>
+                                <li><a href="blog">Blog</a></li>
+                                <li><a href="/contact">Liên hệ</a></li>
                             </ul>
                         </div>
 
@@ -99,20 +53,135 @@
                     <!-- Main Menu End-->
                 </div>
 
+                <!-- Nav Search -->
+                <div class="nav-search">
+                    <button class="far fa-search"></button>
+                    <form action="#" class="hide">
+                        <input type="text" placeholder="Search" class="searchbox" required="">
+                        <button type="submit" class="searchbutton far fa-search"></button>
+                    </form>
+                </div>
+
                 <!-- Menu Button -->
-                <div class="menu-btns py-10">
-                    <a href="/Tour-list" class="theme-btn style-two"><span data-hover="Book Now">Book Now</span></a>
-                    <!-- menu sidbar -->
-                    <div class="menu-sidebar">
-                        <button class="bg-transparent">
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                    </div>
+                @{
+                    var isLoggedIn = Context.Session.GetInt32("UserId") != null;
+                    var userName = Context.Session.GetString("UserName") ?? "User";
+                    var userAvatar = "/assets/images/blog/comment-author1.jpg";
+                }
+                <div class="menu-btns py-10 d-flex align-items-center" style="gap:12px;">
+                    @if (!isLoggedIn)
+                    {
+                        <a href="/login" class="theme-btn style-two" id="loginBtn" style="display: inline-flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-sign-in-alt"></i> <span data-hover="Đăng nhập">Đăng nhập</span>
+                        </a>
+                    }
+                    else
+                    {
+                        <!-- Notification dropdown -->
+                        <div class="dropdown d-inline-block me-2" id="notificationDropdown">
+                            <a href="#" class="btn btn-light position-relative" id="notifBtn" data-bs-toggle="dropdown" aria-expanded="false" style="padding: 8px 16px;">
+                                <i class="fas fa-bell"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notifCount" style="display:none;">0</span>
+                            </a>
+                            <ul class="dropdown-menu notification-dropdown-menu dropdown-menu-end w-100" aria-labelledby="notifBtn" id="notifList" style="max-height: 350px; overflow-y: auto;">
+                                <li class="dropdown-item text-muted">Không có thông báo mới</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- User dropdown -->
+                        <div class="dropdown d-inline-block">
+                            <a href="#" class="d-inline-flex align-items-center dropdown-toggle theme-btn style-two" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="gap:8px;">
+                                <img src="@userAvatar" alt="Avatar" style="width:24px;height:24px;border-radius:50%;object-fit:cover;">
+                                <span data-hover="@userName">@userName</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="/profile"><i class="fas fa-user"></i> Hồ sơ cá nhân</a></li>
+                                <li><a class="dropdown-item" href="/booking/history"><i class="fas fa-history"></i> Lịch sử giao dịch</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form method="post" action="/login/logout" style="margin:0;">
+                                        <button class="dropdown-item" type="submit"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    }
+                    
+                    <!-- menu sidebar -->
+                    @if (!isLoggedIn)
+                    {
+                        <div class="menu-sidebar">
+                            <button class="bg-transparent">
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
     </div>
     <!--End Header Upper-->
 </header>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    @if (Context.Session.GetInt32("UserId") != null)
+    {
+        <text>
+        var notifList = document.getElementById('notifList');
+        var notifCount = document.getElementById('notifCount');
+        var notifBtn = document.getElementById('notifBtn');
+        var notifUnread = 0;
+        
+        if (!!window.EventSource) {
+            var source = new EventSource('/notification/stream');
+            source.onmessage = function(event) {
+                var n = JSON.parse(event.data);
+                notifUnread++;
+                notifCount.innerText = notifUnread;
+                notifCount.style.display = '';
+                
+                var li = document.createElement('li');
+                li.className = 'dropdown-item notification-item';
+                li.setAttribute('data-booking-id', n.RelatedId || '');
+                li.style.cursor = 'pointer';
+                li.innerHTML = `<b>${n.Title}</b><br><span>${n.Message}</span><br><small class="text-muted">${new Date(n.CreatedAt).toLocaleString()}</small>`;
+                li.addEventListener('click', function() {
+                    if (n.RelatedId) {
+                        window.location.href = '/booking/history?open=' + n.RelatedId;
+                    } else {
+                        window.location.href = '/booking/history';
+                    }
+                });
+                notifList.prepend(li);
+                
+                var empty = notifList.querySelector('.text-muted');
+                if (empty && notifList.children.length > 1) empty.remove();
+            };
+        }
+        
+        notifBtn.addEventListener('click', function() {
+            notifUnread = 0;
+            notifCount.style.display = 'none';
+        });
+        </text>
+    }
+});
+</script>
+
+<style>
+.notification-dropdown-menu {
+    min-width: 300px;
+    max-width: 400px;
+}
+.notification-item {
+    white-space: normal;
+    padding: 12px 16px;
+    border-bottom: 1px solid #eee;
+}
+.notification-item:hover {
+    background-color: #f8f9fa;
+}
+</style>

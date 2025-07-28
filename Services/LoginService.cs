@@ -80,10 +80,30 @@ namespace GoEASy.Services
             return (errors.Count == 0, errors);
         }
 
-        private bool VerifyPassword(string inputPassword, string storedPassword)
+        public bool VerifyPassword(string inputPassword, string storedPassword)
         {
             // So sánh bằng BCrypt
             return BCrypt.Net.BCrypt.Verify(inputPassword, storedPassword);
+        }
+
+        public async Task<User?> GetUserByUsernameAsync(string username)
+        {
+            return await _context.Users
+                .Include(u => u.Role)
+                .FirstOrDefaultAsync(u => u.Username == username && u.Status == true);
+        }
+
+        public async Task<User?> GetUserByEmailAsync(string email)
+        {
+            return await _context.Users
+                .Include(u => u.Role)
+                .FirstOrDefaultAsync(u => u.Email == email && u.Status == true);
+        }
+
+        public async Task UpdateUserAsync(User user)
+        {
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<bool> RegisterAsync(User user)
