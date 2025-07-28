@@ -8,6 +8,7 @@ namespace GoEASy.Services
     {
         Task<IEnumerable<Discount>> GetAllDiscountsAsync();
         Task<Discount> GetDiscountByIdAsync(int id);
+        Task<Discount> GetDiscountByCodeAsync(string code);
         Task CreateDiscountAsync(Discount discount);
         Task UpdateDiscountAsync(Discount discount);
         Task ToggleStatusAsync(int id);

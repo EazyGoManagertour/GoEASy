@@ -22,7 +22,9 @@ namespace GoEASy.Controllers
         public async Task<IActionResult> PostReview(int tourId, int rating, string comment)
         {
             int? userId = HttpContext.Session.GetInt32("UserID");
-            int? roleId = HttpContext.Session.GetInt32("RoleId");
+
+            int? roleId = HttpContext.Session.GetInt32("RoleID");
+
             if (userId == null || roleId != 1)
             {
                 if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")

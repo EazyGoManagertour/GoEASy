@@ -120,7 +120,9 @@
                                         <button class="action-btn delete"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal"
-                                                onclick="setDeleteDiscountID('@discount.DiscountID')">
+
+                                                onclick="setDeleteDiscountId('@discount.DiscountID')">
+
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
@@ -198,7 +200,9 @@
                 </div>
                 <div class="modal-body">
                     <form action="/admin/coupons/update" method="POST">
-                        <input type="hidden" name="DiscountID" id="editDiscountID">
+
+                        <input type="hidden" name="DiscountID" id="editDiscountId">
+
 
                         <div class="mb-3">
                             <label for="editCode" class="form-label">Code</label>

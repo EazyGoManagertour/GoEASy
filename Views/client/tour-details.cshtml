@@ -1,36 +1,37 @@
 ﻿@using GoEASy.Models
+@using System.Web
 @model GoEASy.Models.Tour
 <!DOCTYPE html>
 <html lang="zxx">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="/assets/images/logos/favicon.png" type="image/x-icon">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
 
     <!-- Flaticon -->
+    <link rel="stylesheet" href="/assets/css/jquery-ui.min.css">
+
+    <!-- Additional CSS for Tour List (not in shared) -->
     <link rel="stylesheet" href="/assets/css/flaticon.min.css">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="/assets/css/fontawesome-5.14.0.min.css">
-    <!-- Bootstrap -->
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
-    <!-- Magnific Popup -->
     <link rel="stylesheet" href="/assets/css/magnific-popup.min.css">
-    <!-- Nice Select -->
     <link rel="stylesheet" href="/assets/css/nice-select.min.css">
-    <!-- Animate -->
     <link rel="stylesheet" href="/assets/css/aos.css">
-    <!-- Slick -->
     <link rel="stylesheet" href="/assets/css/slick.min.css">
-    <!-- Main Style -->
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
     <div class="page-wrapper">
+
         <!-- Preloader -->
         <div class="preloader"><div class="custom-loader"></div></div>
+
         <!-- main header -->
-        <header class="main-header header-one white-menu menu-absolute">
-            @Html.Partial("~/Views/client/share/header.cshtml")
+        <header class="main-header header-one white-menu menu-absolute" id="tourlist-header">
+            @await Html.PartialAsync("~/Views/client/share/header.cshtml")
         </header>
 
         <!--Form Back Drop-->
@@ -147,21 +148,9 @@
                             <div class="section-title pb-5">
                                 <h2>@Model.TourName</h2>
                             </div>
-                            <div class="ratting">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                            </div>
                         </div>
                     </div>
-                    <div class="col-xl-4 col-lg-5 text-lg-end" data-aos="fade-right" data-aos-duration="1500" data-aos-offset="50">
-                        <div class="tour-header-social mb-10">
-                            <a href="#"><i class="far fa-share-alt"></i>Share tours</a>
-                            <a href="#"><i class="fas fa-heart bgc-secondary"></i>Wish list</a>
-                        </div>
-                    </div>
+
                 </div>
                 <hr class="mt-50 mb-70">
             </div>
@@ -173,12 +162,12 @@
                 <div class="row">
                     <div class="col-lg-8">
                         <div class="tour-details-content">
-                            <h3>Explore Tours</h3>
+                            <h3>Khám Phá Tour</h3>
                             <p>@Model.Description</p>
                             <div class="row pb-55">
                                 <div class="col-md-6">
                                     <div class="tour-include-exclude mt-30">
-                                        <h5>Included and Excluded</h5>
+                                        <h5>Bao Gồm Và Không Bao Gồm</h5>
                                         <ul class="list-style-one check mt-25">
                                             @foreach (var item in (List<string>)ViewBag.IncludedList)
                                             {
@@ -189,7 +178,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="tour-include-exclude mt-30">
-                                        <h5>Excluded</h5>
+                                        <h5>Không Bao Gồm</h5>
                                         <ul class="list-style-one mt-25">
                                             @foreach (var item in (List<string>)ViewBag.ExcludedList)
                                             {
@@ -231,11 +220,11 @@
                                 <button type="button" id="customCalcBtn" class="theme-btn style-two w-100 mb-2" style="border-radius:8px;">Tính tổng</button>
                                 <hr>
                                 <h6 style="font-weight:600;">Total: <span class="price" id="customTotal">0</span> đ</h6>
-                                <button type="submit" class="theme-btn style-two w-100 mt-2" style="border-radius:8px;">Đặt tour với VNPAY</button>
+                                <button type="submit" class="theme-btn style-two w-100 mt-2" style="border-radius:8px; background: #a50064; border-color: #a50064; color: #fff;">Đặt tour với MoMo <img src='/assets/images/momo-logo.png' alt='MoMo' style='height:20px;margin-left:8px;vertical-align:middle;' /></button>
                             </form>
                         </div>
 
-                        <h3>Activities</h3>
+                        <h3>Hoạt Động</h3>
                         <div class="tour-activities mt-30 mb-45">
                             @if (ViewBag.ActivitiesList != null && ((List<string>)ViewBag.ActivitiesList).Count > 0)
                             {
@@ -355,89 +344,9 @@
                             </iframe>
                         </div>
 
-                        <h3>Clients Reviews</h3>
-                        <div class="clients-reviews bgc-black mt-30 mb-60">
-                            <div class="left">
-                                <b>4.8</b>
-                                <span>(586 reviews)</span>
-                                <div class="ratting">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                </div>
-                            </div>
-                            <div class="right">
-                                <div class="ratting-item">
-                                    <span class="title">Services</span>
-                                    <span class="line"><span style="width: 80%;"></span></span>
-                                    <div class="ratting">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star-half-alt"></i>
-                                    </div>
-                                </div>
-                                <div class="ratting-item">
-                                    <span class="title">Guides</span>
-                                    <span class="line"><span style="width: 70%;"></span></span>
-                                    <div class="ratting">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star-half-alt"></i>
-                                    </div>
-                                </div>
-                                <div class="ratting-item">
-                                    <span class="title">Price</span>
-                                    <span class="line"><span style="width: 80%;"></span></span>
-                                    <div class="ratting">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star-half-alt"></i>
-                                    </div>
-                                </div>
-                                <div class="ratting-item">
-                                    <span class="title">Safety</span>
-                                    <span class="line"><span style="width: 80%;"></span></span>
-                                    <div class="ratting">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star-half-alt"></i>
-                                    </div>
-                                </div>
-                                <div class="ratting-item">
-                                    <span class="title">Foods</span>
-                                    <span class="line"><span style="width: 80%;"></span></span>
-                                    <div class="ratting">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star-half-alt"></i>
-                                    </div>
-                                </div>
-                                <div class="ratting-item">
-                                    <span class="title">Hotels</span>
-                                    <span class="line"><span style="width: 80%;"></span></span>
-                                    <div class="ratting">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star-half-alt"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
-                        <h3>Clients Comments</h3>
+
+                        <h3>Bình Luận Khách Hàng</h3>
                         <div class="comments mt-30 mb-60">
                             @if (ViewBag.ClientFeedbacks != null && ((List<GoEASy.Models.Review>)ViewBag.ClientFeedbacks).Count > 0)
                             {
@@ -501,77 +410,27 @@
                                 </div>
                             </form>
                             <script>
-                                document.addEventListener('DOMContentLoaded', function () {
-                                    var stars = document.querySelectorAll('#star-rating i');
-                                    var ratingInput = document.getElementById('rating');
-                                    var form = document.getElementById('comment-form');
-                                    var selected = 0;
-                                    stars.forEach(function (star, idx) {
-                                        star.addEventListener('click', function () {
-                                            var rating = idx + 1;
-                                            selected = rating;
-                                            ratingInput.value = rating;
-                                            stars.forEach(function (s, i) {
-                                                if (i < rating) {
-                                                    s.classList.remove('far');
-                                                    s.classList.add('fas');
-                                                } else {
-                                                    s.classList.remove('fas');
-                                                    s.classList.add('far');
-                                                }
-                                            });
-                                        });
-                                    });
-                                    form.addEventListener('submit', function (e) {
-                                        e.preventDefault();
-                                        if (!ratingInput.value || selected === 0) {
-                                            alert('Vui lòng chọn số sao đánh giá!');
-                                            return;
-                                        }
-                                        var formData = new FormData(form);
-                                        fetch('/review/post', {
-                                            method: 'POST',
-                                            body: formData,
-                                            headers: {
-                                                'X-Requested-With': 'XMLHttpRequest'
-                                            }
-                                        })
-                                        .then(response => response.json())
-                                        .then(data => {
-                                            if (data.success) {
-                                                // Thêm bình luận mới vào đầu danh sách
-                                                var commentsDiv = document.querySelector('.comments.mt-30.mb-60');
-                                                var html = `
-                                                <div class="comment-body" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                                                    <div class="author-thumb">
-                                                        <img src="/assets/images/blog/comment-author1.jpg" alt="Author">
-                                                    </div>
-                                                    <div class="content">
-                                                        <h6>${data.review.fullName}</h6>
-                                                        <div class="ratting">
-                                                            ${[1,2,3,4,5].map(i => i <= data.review.rating ? '<i class="fas fa-star"></i>' : '<i class="far fa-star"></i>').join('')}
-                                                        </div>
-                                                        <span class="time">${data.review.createdDate}</span>
-                                                        <p>${data.review.comment}</p>
-                                                    </div>
-                                                </div>`;
-                                                commentsDiv.insertAdjacentHTML('afterbegin', html);
-                                                form.reset();
-                                                // Reset sao
-                                                stars.forEach(function (s) {
-                                                    s.classList.remove('fas');
-                                                    s.classList.add('far');
-                                                });
-                                                selected = 0;
-                                                ratingInput.value = '';
-                                            } else {
-                                                alert(data.error || 'Có lỗi xảy ra!');
-                                            }
-                                        })
-                                        .catch(() => alert('Có lỗi xảy ra!'));
-                                    });
-                                });
-                            </script>
+    var policyData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.ChildPolicyData ?? new { MinAdultsPerChild = 1, MaxChildrenPerAdult = 3 }));
+    // Gắn event submit cho bookingForm ngay lập tức
+    var bookingForm = document.getElementById('booking-form');
+    if (bookingForm) {
+        bookingForm.addEventListener('submit', function(e) {
+            var adult = parseInt(document.getElementById('adultQty').value) || 0;
+            var child = parseInt(document.getElementById('childQty').value) || 0;
+            console.log('submit booking', { adult, child, policyData });
+            if (adult <= 0) {
+                showProfessionalNotification('Phải có ít nhất 1 người lớn trong tour.');
+                e.preventDefault();
+                return false;
+            }
+            if (child > adult * policyData.MaxChildrenPerAdult) {
+                showProfessionalNotification('Tối đa ' + policyData.MaxChildrenPerAdult + ' trẻ em cho mỗi người lớn. Vui lòng điều chỉnh lại số lượng.');
+                e.preventDefault();
+                return false;
+            }
+        });
+    }
+</script>
                         }
                         else
                         {
@@ -596,18 +455,9 @@
                                         <input type="text" value="@(((DateTime)Model.StartDate).ToString("yyyy-MM-dd"))" readonly style="background:#f9f9f9;cursor:not-allowed;">
                                     </div>
                                     <hr>
-                                    <div class="time py-5">
-                                        <b>Time :</b>
-                                        <ul class="radio-filter">
-                                            <li>
-                                                <input class="form-check-input" checked type="radio" name="time" id="time1" value="12:00">
-                                                <label for="time1">12:00</label>
-                                            </li>
-                                            <li>
-                                                <input class="form-check-input" type="radio" name="time" id="time2" value="08:00">
-                                                <label for="time2">08:00</label>
-                                            </li>
-                                        </ul>
+                                    <div class="date mb-25">
+                                        <b>End Date</b>
+                                        <input type="text" value="@(((DateTime)Model.EndDate).ToString("yyyy-MM-dd"))" readonly style="background:#f9f9f9;cursor:not-allowed;">
                                     </div>
                                     <hr class="mb-25">
                                     <h6>Mã giảm giá:</h6>
@@ -618,10 +468,11 @@
                                     <div id="discountMessage" style="color: #28a745; font-size: 0.95em; min-height: 22px;"></div>
                                     <input type="hidden" name="discountId" id="discountId" value="" />
                                     <input type="hidden" name="discountAmount" id="discountAmount" value="0" />
+                                    
                                     <h6>Tickets:</h6>
                                     <ul class="tickets clearfix">
                                         <li>
-                                            Adult (18+ years) <span class="price">@(((decimal)Model.AdultPrice).ToString("N0")) đ</span>
+                                            Adult (14+ years) <span class="price">@(((decimal)Model.AdultPrice).ToString("N0")) đ</span>
                                             <select name="adultQty" id="adultQty">
                                                 @for (int i = 0; i <= 10; i++)
                                                 {
@@ -630,11 +481,11 @@
                                             </select>
                                         </li>
                                         <li>
-                                            Children (<18 years) <span class="price">@(((decimal)Model.ChildPrice).ToString("N0")) đ</span>
+                                            Children (<14 years) <span class="price">@(((decimal)Model.ChildPrice).ToString("N0")) đ</span>
                                             <select name="childQty" id="childQty">
                                                     @for (int i = 0; i <= 10; i++)
                                                     {
-                                                        <option value="@i" @(i == 0 ? "selected" : "")>@i.ToString("D2")</option>
+                                                            <option value="@i" @(i == 0 ? "selected" : "")>@i.ToString("D2")</option>
                                                     }
                                             </select>
                                         </li>
@@ -645,16 +496,18 @@
                                         <span data-hover="Calculate Total">Calculate Total</span>
                                         <i class="fal fa-calculator"></i>
                                     </button>
-                                    <button type="submit" class="theme-btn style-two w-100 mt-15 mb-5">
-                                        <span data-hover="Book Now">Book Now</span>
-                                        <i class="fal fa-arrow-right"></i>
+                                    
+                                    <button type="submit" class="theme-btn style-two w-100 mt-15 mb-5" style="background: #a50064; border-color: #a50064; color: #fff;">
+                                        <span data-hover="Thanh toán MoMo">Thanh toán MoMo</span>
+                                        <img src='/assets/images/momo-logo.png' alt='MoMo' style='height:20px;margin-left:8px;vertical-align:middle;' />
                                     </button>
                                     <div class="text-center">
-                                        <a href="contact.html">Need some help?</a>
+                                        <a href="contact.html">Cần trợ giúp?</a>
                                     </div>
                                 </form>
                             </div>
                             <script>
+                                var policyData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.ChildPolicyData ?? new { MinAdultsPerChild = 1, MaxChildrenPerAdult = 3 }));
                                 document.addEventListener('DOMContentLoaded', function() {
                                     var calculateBtn = document.getElementById('calculateBtn');
                                     var adultQty = document.getElementById('adultQty');
@@ -663,10 +516,141 @@
                                     var totalPriceInput = document.getElementById('totalPriceInput');
                                     var adultGuestsInput = document.getElementById('adultGuests');
                                     var childGuestsInput = document.getElementById('childGuests');
+                                    var bookingForm = document.getElementById('booking-form');
+                                    // Thêm event cho nút Calculate Total
+                                    if (calculateBtn) {
+                                        calculateBtn.addEventListener('click', function() {
+                                            updateBookingInputs();
+                                        });
+                                    }
+                                    
+                                    // Thêm event listeners cho select boxes để kiểm tra validation
+                                    if (adultQty) {
+                                        adultQty.addEventListener('change', function() {
+                                            var adult = parseInt(adultQty.value) || 0;
+                                            var child = parseInt(childQty.value) || 0;
+                                            validateAndAutoAdjust(adult, child);
+                                        });
+                                    }
+                                    
+                                    if (childQty) {
+                                        childQty.addEventListener('change', function() {
+                                            var adult = parseInt(adultQty.value) || 0;
+                                            var child = parseInt(childQty.value) || 0;
+                                            validateAndAutoAdjust(adult, child);
+                                        });
+                                    }
+                                    
+                                    // Thêm event cho nút Áp dụng mã giảm giá
+                                    var checkDiscountBtn = document.getElementById('checkDiscountBtn');
+                                    var discountCode = document.getElementById('discountCode');
+                                    var discountMessage = document.getElementById('discountMessage');
+                                    var discountId = document.getElementById('discountId');
+                                    var discountAmount = document.getElementById('discountAmount');
+
+                                    if (checkDiscountBtn) {
+                                        checkDiscountBtn.addEventListener('click', function() {
+                                            var code = discountCode.value.trim();
+                                            console.log('Checking discount code:', code);
+                                            if (!code) {
+                                                discountMessage.innerHTML = '<span style="color: #dc3545;">Vui lòng nhập mã giảm giá!</span>';
+                                                return;
+                                            }
+                                            
+                                            var totalPrice = parseFloat(totalPriceInput.value) || 0;
+                                            console.log('Total price:', totalPrice);
+                                            
+                                            // Gọi API kiểm tra mã giảm giá
+                                            console.log('Calling API...');
+                                            fetch('/coupons/check', {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type': 'application/json',
+                                                    'X-Requested-With': 'XMLHttpRequest'
+                                                },
+                                                body: JSON.stringify({
+                                                    code: code,
+                                                    tourId: @Model.TourID,
+                                                    totalPrice: totalPrice
+                                                })
+                                            })
+                                            .then(response => {
+                                                console.log('Response status:', response.status);
+                                                return response.json();
+                                            })
+                                            .then(data => {
+                                                console.log('Response data:', data);
+                                                if (data.success) {
+                                                    discountMessage.innerHTML = '<span style="color: #28a745;">✓ Mã giảm giá hợp lệ! Giảm ' + data.discountAmount.toLocaleString() + ' đ</span>';
+                                                    discountId.value = data.discountId;
+                                                    discountAmount.value = data.discountAmount;
+                                                    
+                                                    // Cập nhật tổng tiền sau khi áp dụng mã giảm giá
+                                                    var currentTotal = parseFloat(totalPriceInput.value) || 0;
+                                                    var newTotal = currentTotal - data.discountAmount;
+                                                    if (newTotal < 0) newTotal = 0;
+                                                    
+                                                    totalPriceSpan.innerText = newTotal.toLocaleString();
+                                                    totalPriceInput.value = newTotal;
+                                                } else {
+                                                    discountMessage.innerHTML = '<span style="color: #dc3545;">✗ ' + data.message + '</span>';
+                                                    discountId.value = '';
+                                                    discountAmount.value = 0;
+                                                    
+
+                                                }
+                                            })
+                                            .catch(error => {
+                                                console.error('Fetch error:', error);
+                                                discountMessage.innerHTML = '<span style="color: #dc3545;">✗ Có lỗi xảy ra, vui lòng thử lại!</span>';
+                                                discountId.value = '';
+                                                discountAmount.value = 0;
+                                            });
+                                        });
+                                    }
+    if (bookingForm) {
+        bookingForm.addEventListener('submit', function(e) {
+            var adult = parseInt(adultQty.value) || 0;
+            var child = parseInt(childQty.value) || 0;
+            
+            // Kiểm tra validation trước khi submit
+            if (!validateAndAutoAdjust(adult, child)) {
+                e.preventDefault();
+                return false;
+            }
+            
+            if (adult <= 0) {
+                showProfessionalNotification('Phải có ít nhất 1 người lớn trong tour.');
+                e.preventDefault();
+                return false;
+            }
+            if (child > adult * policyData.MaxChildrenPerAdult) {
+                showProfessionalNotification('Tối đa ' + policyData.MaxChildrenPerAdult + ' trẻ em cho mỗi người lớn. Vui lòng điều chỉnh lại số lượng.');
+                e.preventDefault();
+                return false;
+            }
+        });
+    }
 
                                     function updateBookingInputs() {
                                         var adult = parseInt(adultQty.value) || 0;
                                         var child = parseInt(childQty.value) || 0;
+                                        
+                                        // Kiểm tra validation trước khi tính tổng
+                                        if (!validateAndAutoAdjust(adult, child)) {
+                                            // Reset về 0 nếu vi phạm quy tắc
+                                            totalPriceSpan.innerText = '0';
+                                            totalPriceInput.value = 0;
+                                            adultGuestsInput.value = 0;
+                                            childGuestsInput.value = 0;
+                                            
+                                            // Reset mã giảm giá
+                                            discountId.value = '';
+                                            discountAmount.value = 0;
+                                            discountMessage.innerHTML = '';
+                                            return false;
+                                        }
+                                        
                                         var adultPrice = @(((decimal)Model.AdultPrice).ToString(System.Globalization.CultureInfo.InvariantCulture));
                                         var childPrice = @(((decimal)Model.ChildPrice).ToString(System.Globalization.CultureInfo.InvariantCulture));
                                         var total = (adult * adultPrice) + (child * childPrice);
@@ -674,21 +658,68 @@
                                         totalPriceInput.value = total;
                                         adultGuestsInput.value = adult;
                                         childGuestsInput.value = child;
+                                        
+                                        // Reset mã giảm giá
+                                        discountId.value = '';
+                                        discountAmount.value = 0;
+                                        discountMessage.innerHTML = '';
+                                        
+                                        return true;
                                     }
-
-                                    calculateBtn.addEventListener('click', function() {
-                                        updateBookingInputs();
-                                    });
-
-                                    // Tự động cập nhật khi submit (phòng trường hợp user không bấm Calculate)
-                                    document.getElementById('booking-form').addEventListener('submit', function(e) {
-                                        updateBookingInputs();
-                                    });
+                                    
+                                    // Function hiển thị thông báo chuyên nghiệp
+                                    function showProfessionalNotification(message) {
+                                        // Tạo notification element
+                                        var notification = document.createElement('div');
+                                        notification.style.cssText = `
+                                            position: fixed;
+                                            top: 20px;
+                                            right: 20px;
+                                            background: #dc3545;
+                                            color: white;
+                                            padding: 15px 20px;
+                                            border-radius: 8px;
+                                            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                                            z-index: 9999;
+                                            font-size: 14px;
+                                            font-weight: 500;
+                                            max-width: 300px;
+                                            word-wrap: break-word;
+                                        `;
+                                        notification.textContent = message;
+                                        
+                                        // Thêm vào body
+                                        document.body.appendChild(notification);
+                                        
+                                        // Tự động xóa sau 4 giây
+                                        setTimeout(function() {
+                                            if (notification.parentNode) {
+                                                notification.parentNode.removeChild(notification);
+                                            }
+                                        }, 4000);
+                                    }
+                                    
+                                    // Function kiểm tra validation khi thay đổi số lượng
+                                    function validateAndAutoAdjust(adult, child) {
+                                        // 1. Không cho phép đặt chỉ vé trẻ em (child > 0 && adult == 0)
+                                        if (child > 0 && adult == 0) {
+                                            showProfessionalNotification('Theo chính sách tour, phải có ít nhất 1 người lớn đi kèm trẻ em. Vui lòng chọn ít nhất 1 vé người lớn.');
+                                            return false;
+                                        }
+                                        
+                                        // 2. Không cho phép đặt vé nếu tổng số người = 0
+                                        if (adult == 0 && child == 0) {
+                                            showProfessionalNotification('Vui lòng chọn ít nhất 1 vé để tiếp tục đặt tour.');
+                                            return false;
+                                        }
+                                        
+                                        return true;
+                                    }
                                 });
                             </script>
 
                             <div class="widget widget-contact" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                                <h5 class="widget-title">Need Help?</h5>
+                                <h5 class="widget-title">Cần Trợ Giúp?</h5>
                                 <ul class="list-style-one">
                                     <li><i class="far fa-envelope"></i> <a href="emilto:helpxample@gmail.com">helpxample@gmail.com</a></li>
                                     <li><i class="far fa-phone-volume"></i> <a href="callto:+000(123)45688">+000 (123) 456 88</a></li>
@@ -697,10 +728,10 @@
 
                             <div class="widget widget-cta" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
                                 <div class="content text-white">
-                                    <span class="h6">Explore The World</span>
-                                    <h3>Best Tourist Place</h3>
+                                    <span class="h6">Khám Phá Thế Giới</span>
+                                    <h3>Điểm Du Lịch Tốt Nhất</h3>
                                     <a href="tour-grid.html" class="theme-btn style-two bgc-secondary">
-                                        <span data-hover="Explore Now">Explore Now</span>
+                                        <span data-hover="Khám Phá Ngay">Khám Phá Ngay</span>
                                         <i class="fal fa-arrow-right"></i>
                                     </a>
                                 </div>
@@ -723,17 +754,17 @@
                     <div class="col-lg-6">
                         <div class="newsletter-content-part text-white rmb-55" data-aos="zoom-in-right" data-aos-duration="1500" data-aos-offset="50">
                             <div class="section-title counter-text-wrap mb-45">
-                                <h2>Subscribe Our Newsletter to Get more offer & Tips</h2>
+                                <h2>Đăng Ký Newsletter Để Nhận Ưu Đãi & Mẹo</h2>
                                 <p>One site <span class="count-text plus" data-speed="3000" data-stop="34500">0</span> most popular experience you’ll remember</p>
                             </div>
                             <form class="newsletter-form mb-15" action="#">
-                                <input id="news-email" type="email" placeholder="Email Address" required>
+                                <input id="news-email" type="email" placeholder="Địa chỉ Email" required>
                                 <button type="submit" class="theme-btn bgc-secondary style-two">
-                                    <span data-hover="Subscribe">Subscribe</span>
+                                    <span data-hover="Đăng Ký">Đăng Ký</span>
                                     <i class="fal fa-arrow-right"></i>
                                 </button>
                             </form>
-                            <p>No credit card requirement. No commitments</p>
+                            <p>Không yêu cầu thẻ tín dụng. Không cam kết</p>
                         </div>
                         <div class="newsletter-bg-image" data-aos="zoom-in-up" data-aos-delay="100" data-aos-duration="1500" data-aos-offset="50">
                             <img src="@Url.Content("~/assets/images/newsletter/newsletter-bg-image.png")" alt="Newsletter">
@@ -888,82 +919,12 @@
             }
         });
     </script>
+    
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var checkDiscountBtn = document.getElementById('checkDiscountBtn');
-            var discountCodeInput = document.getElementById('discountCode');
-            var discountMessage = document.getElementById('discountMessage');
-            var discountIdInput = document.getElementById('discountId');
-            var discountAmountInput = document.getElementById('discountAmount');
-            var totalPriceSpan = document.getElementById('totalPrice');
-            var totalPriceInput = document.getElementById('totalPriceInput');
-            var adultQty = document.getElementById('adultQty');
-            var childQty = document.getElementById('childQty');
-
-            function getBaseTotal() {
-                var adult = parseInt(adultQty.value) || 0;
-                var child = parseInt(childQty.value) || 0;
-                var adultPrice = @(((decimal)Model.AdultPrice).ToString(System.Globalization.CultureInfo.InvariantCulture));
-                var childPrice = @(((decimal)Model.ChildPrice).ToString(System.Globalization.CultureInfo.InvariantCulture));
-                return (adult * adultPrice) + (child * childPrice);
-            }
-
-            function updateTotalWithDiscount(discountAmount, discountText) {
-                var baseTotal = getBaseTotal();
-                var finalTotal = Math.max(0, baseTotal - discountAmount);
-                totalPriceSpan.innerText = finalTotal.toLocaleString();
-                totalPriceInput.value = finalTotal;
-                discountAmountInput.value = discountAmount;
-                if (discountText) {
-                    discountMessage.innerText = discountText;
-                }
-            }
-
-            if (checkDiscountBtn) {
-                checkDiscountBtn.addEventListener('click', function() {
-                    var code = discountCodeInput.value.trim();
-                    var baseTotal = getBaseTotal();
-                    if (!code) {
-                        discountMessage.innerText = 'Vui lòng nhập mã giảm giá.';
-                        discountIdInput.value = '';
-                        updateTotalWithDiscount(0, '');
-                        return;
-                    }
-                    discountMessage.innerText = 'Đang kiểm tra...';
-                    fetch('/booking/check-discount?code=' + encodeURIComponent(code) + '&total=' + baseTotal)
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data.success) {
-                                let percent = data.percentage ? `Được giảm ${data.percentage}%` : '';
-                                let max = data.maxAmount ? ` (tối đa ${parseInt(data.maxAmount).toLocaleString()} đ)` : '';
-                                let text = percent + max;
-                                discountIdInput.value = data.discountId;
-                                updateTotalWithDiscount(data.discountAmount, text);
-                            } else {
-                                discountMessage.innerText = data.message || 'Mã không hợp lệ.';
-                                discountIdInput.value = '';
-                                updateTotalWithDiscount(0, '');
-                            }
-                        })
-                        .catch(() => {
-                            discountMessage.innerText = 'Lỗi kiểm tra mã.';
-                            discountIdInput.value = '';
-                            updateTotalWithDiscount(0, '');
-                        });
-                });
-            }
-
-            // Khi thay đổi số lượng vé, reset discount
-            [adultQty, childQty].forEach(function(el) {
-                if (el) {
-                    el.addEventListener('change', function() {
-                        discountIdInput.value = '';
-                        discountCodeInput.value = '';
-                        discountMessage.innerText = '';
-                        updateTotalWithDiscount(0, '');
-                    });
-                }
-            });
+        // Kiểm tra và hiển thị thông báo lỗi sau khi reload trang
+        window.addEventListener('load', function() {
+            // XÓA: var policyError = sessionStorage.getItem('policyError');
+            // XÓA: if (policyError) { ... }
         });
     </script>
 </body>

@@ -390,5 +390,11 @@ namespace GoEASy.Services
         {
             return _context.Destinations.FirstOrDefault(d => d.DestinationID == DestinationID);
         }
+
+        public async Task<TourDetail?> GetTourDetailAsync(int TourID)
+        {
+            return await _context.TourDetails
+                .FirstOrDefaultAsync(td => td.TourID == TourID);
+        }
     }
 }

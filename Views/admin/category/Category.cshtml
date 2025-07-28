@@ -115,7 +115,9 @@
                                         <button class="action-btn delete"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal"
-                                                onclick="setDeleteCategoryID('@category.CategoryID')">
+
+                                                onclick="setDeleteCategoryId('@category.CategoryID')">
+
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
@@ -173,7 +175,9 @@
                 </div>
                 <div class="modal-body">
                     <form action="/admin/category/update" method="POST">
-                        <input type="hidden" name="CategoryID" id="editCategoryID" />
+
+                        <input type="hidden" name="CategoryID" id="editCategoryId" />
+
 
                         <div class="mb-3">
                             <label for="editCategoryName" class="form-label">Category Name</label>

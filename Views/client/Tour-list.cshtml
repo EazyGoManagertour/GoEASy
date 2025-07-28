@@ -205,12 +205,12 @@
                 </div>
                 <div class="filter-item clearfix">
                     <div class="icon"><i class="fal fa-calendar-alt"></i></div>
-                    <span class="title">Departure Date</span>
+                    <span class="title">Ngày Khởi Hành</span>
                     <input type="date" name="startDate" id="startDate" class="form-control filter-input" value="@(ViewBag.StartDate?.ToString("yyyy-MM-dd"))">
                 </div>
                 <div class="search-button">
                     <button class="theme-btn" onclick="performSearch()">
-                        <span data-hover="Search">Search</span>
+                        <span data-hover="Tìm Kiếm">Tìm Kiếm</span>
                         <i class="far fa-search"></i>
                     </button>
                 </div>
@@ -224,7 +224,7 @@
                     <div class="col-lg-3 col-md-6 col-sm-10 rmb-75">
                         <div class="shop-sidebar mb-30">
                             <div class="widget widget-activity" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                                <h6 class="widget-title">By Categories</h6>
+                                <h6 class="widget-title">Theo Danh Mục</h6>
                                 <ul class="radio-filter">
                                     <li>
                                         <input class="form-check-input" type="radio" checked name="ByCategories" id="category-all" value="">
@@ -246,10 +246,10 @@
 
                         <div class="widget widget-cta" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
                             <div class="content text-white">
-                                <span class="h6">Explore The World</span>
-                                <h3>Best Tourist Place</h3>
+                                <span class="h6">Khám Phá Thế Giới</span>
+                                <h3>Điểm Du Lịch Tốt Nhất</h3>
                                 <a href="tour-grid.html" class="theme-btn style-two bgc-secondary">
-                                    <span data-hover="Explore Now">Explore Now</span>
+                                    <span data-hover="Khám Phá Ngay">Khám Phá Ngay</span>
                                     <i class="fal fa-arrow-right"></i>
                                 </a>
                             </div>
@@ -267,21 +267,21 @@
                                 <li><a href="#"><i class="far fa-list"></i></a></li>
                             </ul>
                             <div class="sort-text mb-15 me-4 me-xl-auto">
-                                @(ViewBag.TotalTours) Tours found
+                                Tìm thấy @(ViewBag.TotalTours) tour
                             </div>
                             <div class="sort-text mb-15 me-4">
-                                Sort By
+                                Sắp Xếp Theo
                             </div>
                             <select class="nice-select sort-select">
-                                <option value="default" @(ViewBag.SortBy == null ? "selected" : "")>Sort By</option>
+                                <option value="default" @(ViewBag.SortBy == null ? "selected" : "")>Sắp Xếp Theo</option>
                                 <option value="name" @(ViewBag.SortBy?.ToString() == "name" ? "selected" : "")>Tên tour</option>
                                 <option value="price" @(ViewBag.SortBy?.ToString() == "price" ? "selected" : "")>Giá</option>
                                 <option value="startdate" @(ViewBag.SortBy?.ToString() == "startdate" ? "selected" : "")>Ngày khởi hành</option>
                             </select>
-                            <button class="theme-btn style-two clear-filters ms-3">
-                                <span data-hover="Clear">Clear</span>
-                                <i class="fal fa-times"></i>
-                            </button>
+                                                            <button class="theme-btn style-two clear-filters ms-3">
+                                    <span data-hover="Xóa Bộ Lọc">Xóa Bộ Lọc</span>
+                                    <i class="fal fa-times"></i>
+                                </button>
                         </div>
 
                         @if (Model != null && Model.Count > 0)
@@ -308,15 +308,15 @@
                                     <div class="image">
                                         @if (isFeatured)
                                         {
-                                            <span class="badge bgc-pink">Featured</span>
+                                            <span class="badge bgc-pink">Nổi Bật</span>
                                         }
                                         else if (hasDiscount)
                                         {
-                                            <span class="badge">10% Off</span>
+                                            <span class="badge">Giảm 10%</span>
                                         }
                                         else if (isPopular)
                                         {
-                                            <span class="badge bgc-primary">Popular</span>
+                                            <span class="badge bgc-primary">Phổ Biến</span>
                                         }
                                         @{
                                             var isFavorite = ViewBag.FavoriteTourIDs != null && ((List<int>)ViewBag.FavoriteTourIDs).Contains(tour.TourID);
@@ -337,7 +337,7 @@
                                                 <i class="fas fa-star"></i>
                                             </div>
                                         </div>
-                                        <h5><a href="tour-details.html">@tour.TourName</a></h5>
+                                        <h5><a href="/tour-details/@tour.TourID">@tour.TourName</a></h5>
                                         <p>
                                             @{
                                                 var description = tour.Description ?? "Khám phá điểm đến tuyệt vời với tour du lịch chất lượng cao";
@@ -369,7 +369,7 @@
                                                 }
                                             </span>
                                             <a href="/tour-details/@tour.TourID" class="theme-btn style-two style-three">
-                                                <span data-hover="Book Now">Book Now</span>
+                                                <span data-hover="Đặt Ngay">Đặt Ngay</span>
                                                 <i class="fal fa-arrow-right"></i>
                                             </a>
                                         </div>
@@ -442,17 +442,17 @@
                     <div class="col-lg-6">
                         <div class="newsletter-content-part text-white rmb-55" data-aos="zoom-in-right" data-aos-duration="1500" data-aos-offset="50">
                             <div class="section-title counter-text-wrap mb-45">
-                                <h2>Subscribe Our Newsletter to Get more offer & Tips</h2>
-                                <p>One site <span class="count-text plus" data-speed="3000" data-stop="34500">0</span> most popular experience you'll remember</p>
+                                <h2>Đăng Ký Newsletter Để Nhận Ưu Đãi & Mẹo</h2>
+                                <p>Một trang web <span class="count-text plus" data-speed="3000" data-stop="34500">0</span> trải nghiệm phổ biến nhất bạn sẽ nhớ</p>
                             </div>
                             <form class="newsletter-form mb-15" action="#">
-                                <input id="news-email" type="email" placeholder="Email Address" required>
+                                <input id="news-email" type="email" placeholder="Địa chỉ Email" required>
                                 <button type="submit" class="theme-btn bgc-secondary style-two">
-                                    <span data-hover="Subscribe">Subscribe</span>
+                                    <span data-hover="Đăng Ký">Đăng Ký</span>
                                     <i class="fal fa-arrow-right"></i>
                                 </button>
                             </form>
-                            <p>No credit card requirement. No commitments</p>
+                            <p>Không yêu cầu thẻ tín dụng. Không cam kết</p>
                         </div>
                         <div class="newsletter-bg-image" data-aos="zoom-in-up" data-aos-delay="100" data-aos-duration="1500" data-aos-offset="50">
                             <img src="/assets/images/newsletter/newsletter-bg-image.png" alt="Newsletter">

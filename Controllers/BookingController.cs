@@ -8,171 +8,124 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace GoEASy.Controllers
 {
-    //[AdminAuthorize]
+
+    public class CancelBookingRequest
+    {
+        public int BookingId { get; set; }
+    }
+
+
     [Route("booking")]
     public class BookingController : Controller
     {
         private readonly GoEasyContext _context;
-        private readonly VnPayLibrary _vnPay;
-        private const string Vnp_TmnCode = "ZK3P8DST";
-        private const string Vnp_HashSecret = "DB0EM555MQPM0Y6OATBT2768HZJQMCRR";
-        private const string Vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-        private const string Vnp_ReturnUrl = "https://localhost:7034/booking/vnpay-return";
-
-        public BookingController(GoEasyContext context)
+        private readonly IMomoService _momoService;
+        private readonly IPolicyService _policyService;
+        
+        public BookingController(GoEasyContext context, IMomoService momoService, IPolicyService policyService)
         {
             _context = context;
-            _vnPay = new VnPayLibrary();
+            _momoService = momoService;
+            _policyService = policyService;
         }
 
         // POST: /booking/create
         [HttpPost("create")]
-        public async Task<IActionResult> Create(int tourId, int adultGuests, int childGuests, decimal totalPrice, bool isCustom = false)
+        public async Task<IActionResult> Create(int tourID, int adultGuests, int childGuests, decimal totalPrice, bool isCustom = false)
         {
-            int? userId = HttpContext.Session.GetInt32("UserID");
-            if (userId == null)
+
+            int? userID = HttpContext.Session.GetInt32("UserID");
+            if (userID == null)
+
             {
                 TempData["Error"] = "Bạn cần đăng nhập để đặt tour.";
                 return RedirectToAction("Index", "Login");
             }
 
+            // Kiểm tra chính sách: phải có ít nhất 1 người lớn
+            if (adultGuests <= 0)
+            {
+                TempData["Error"] = "Phải có ít nhất 1 người lớn trong tour.";
+                return RedirectToAction("Index", "TourDetail", new { id = tourID });
+            }
+
             // Tạo booking mới
             var booking = new Booking
             {
-                UserID = userId,
-                TourID = tourId,
+                UserID = userID,
+                TourID = tourID,
                 AdultGuests = adultGuests,
                 ChildGuests = childGuests,
                 TotalPrice = totalPrice,
                 BookingDate = DateTime.Now,
                 Status = isCustom ? false : true, // custom: đang duyệt, thường: hoạt động
-                PaymentStatus = "Pending",
+                PaymentStatus = "Pending", // Đang chờ thanh toán MoMo
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now
             };
             _context.Bookings.Add(booking);
             await _context.SaveChangesAsync();
 
-            // Tạo request VNPAY
-            var orderId = booking.BookingID.ToString();
-            var amount = ((long)totalPrice * 100).ToString(); // VNPAY yêu cầu x100
-            var ipAddress = Utils.GetIpAddress(HttpContext);
-            var createDate = DateTime.Now.ToString("yyyyMMddHHmmss");
-
-            _vnPay.AddRequestData("vnp_Version", VnPayLibrary.VERSION);
-            _vnPay.AddRequestData("vnp_Command", "pay");
-            _vnPay.AddRequestData("vnp_TmnCode", Vnp_TmnCode);
-            _vnPay.AddRequestData("vnp_Amount", amount);
-            _vnPay.AddRequestData("vnp_CreateDate", createDate);
-            _vnPay.AddRequestData("vnp_CurrCode", "VND");
-            _vnPay.AddRequestData("vnp_IpAddr", ipAddress);
-            _vnPay.AddRequestData("vnp_Locale", "vn");
-            _vnPay.AddRequestData("vnp_OrderInfo", $"Thanh toan booking #{orderId}");
-            _vnPay.AddRequestData("vnp_OrderType", "other");
-            _vnPay.AddRequestData("vnp_ReturnUrl", Vnp_ReturnUrl);
-            _vnPay.AddRequestData("vnp_TxnRef", orderId);
-
-            var paymentUrl = _vnPay.CreateRequestUrl(Vnp_Url, Vnp_HashSecret);
-            return Redirect(paymentUrl);
-        }
-
-        // GET: /booking/vnpay-return
-        [HttpGet("vnpay-return")]
-        public async Task<IActionResult> VnPayReturn()
-        {
-            var vnp_ResponseCode = Request.Query["vnp_ResponseCode"].ToString();
-            var vnp_TxnRef = Request.Query["vnp_TxnRef"].ToString();
-            var vnp_SecureHash = Request.Query["vnp_SecureHash"].ToString();
-
-            var vnPay = new VnPayLibrary();
-            foreach (var key in Request.Query.Keys)
+            // Tạo request MoMo
+            var ticks = DateTime.UtcNow.Ticks;
+            var orderID = $"booking_{booking.BookingID}_{ticks}";
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserID == userID);
+            var orderInfo = new OrderInfoModel
             {
-                if (key.StartsWith("vnp_"))
-                {
-                    vnPay.AddResponseData(key, Request.Query[key]);
-                }
-            }
-            bool valid = vnPay.ValidateSignature(vnp_SecureHash, Vnp_HashSecret);
-            if (!valid)
+                FullName = user?.FullName ?? "Khách hàng",
+                OrderInfo = $"Thanh toán booking #{booking.BookingID}",
+                Amount = totalPrice,
+                OrderId = orderID // Đảm bảo duy nhất
+            };
+            var momoResponse = await _momoService.CreatePaymentAsync(orderInfo);
+            if (momoResponse != null && !string.IsNullOrEmpty(momoResponse.PayUrl))
             {
-                TempData["Error"] = "Sai checksum! Giao dịch không hợp lệ.";
-                return RedirectToAction("Index", "Home");
-            }
-
-            // Xử lý kết quả giao dịch
-            int bookingId = int.Parse(vnp_TxnRef);
-            var booking = await _context.Bookings.FirstOrDefaultAsync(b => b.BookingID == bookingId);
-            if (booking == null)
-            {
-                TempData["Error"] = "Không tìm thấy booking!";
-                return RedirectToAction("Index", "Home");
-            }
-
-            if (vnp_ResponseCode == "00")
-            {
-                booking.PaymentStatus = "Paid";
-                await _context.SaveChangesAsync();
-                // Thêm thông báo cho user
-                if (booking.UserID != null)
-                {
-                    // Lấy thông tin tour
-                    var tour = await _context.Tours.FirstOrDefaultAsync(t => t.TourID == booking.TourID);
-                    string tourName = tour?.TourName ?? "[Tour]";
-                    string startDate = tour?.StartDate?.ToString("dd/MM/yyyy") ?? "?";
-                    string title, message;
-                    if (booking.Status == false) // custom booking, chờ duyệt
-                    {
-                        title = "Thanh toán thành công & chờ duyệt";
-                        message = $"Bạn đã thanh toán thành công tour '{tourName}' khởi hành ngày {startDate}. Booking của bạn đang chờ duyệt. Mã booking: #{booking.BookingID}";
-                    }
-                    else // booking thường
-                    {
-                        title = "Thanh toán thành công";
-                        message = $"Bạn đã thanh toán thành công tour '{tourName}' khởi hành ngày {startDate}. Mã booking: #{booking.BookingID}";
-                    }
-                    var notification = new Notification
-                    {
-                        UserId = booking.UserID.Value,
-                        Title = title,
-                        Message = message,
-                        Type = "PaymentSuccess",
-                        RelatedId = booking.BookingID,
-                        CreatedAt = DateTime.Now,
-                        IsRead = false
-                    };
-                    _context.Notifications.Add(notification);
-                    await _context.SaveChangesAsync();
-                }
-                TempData["Success"] = "Thanh toán thành công!";
+                return Redirect(momoResponse.PayUrl);
             }
             else
             {
-                booking.PaymentStatus = "Failed";
-                await _context.SaveChangesAsync();
-                TempData["Error"] = "Thanh toán thất bại hoặc bị hủy.";
+                TempData["Error"] = "Không thể tạo thanh toán MoMo. Vui lòng thử lại.";
+                return RedirectToAction("Index", "Home");
             }
-            return RedirectToAction("Index", "Home");
         }
 
         // GET: /booking/history
         [HttpGet("history")]
-        public async Task<IActionResult> BookingHistory()
+        public async Task<IActionResult> BookingHistory(int page = 1)
         {
-            int? userId = HttpContext.Session.GetInt32("UserID");
-            if (userId == null)
+
+            int? userID = HttpContext.Session.GetInt32("UserID");
+            if (userID == null)
+
             {
                 TempData["Error"] = "Bạn cần đăng nhập để xem lịch sử đặt tour.";
                 return RedirectToAction("Index", "Login");
             }
-            var bookings = await _context.Bookings
+
+            int pageSize = 8;
+            var query = _context.Bookings
                 .Include(b => b.Tour)
                 .Include(b => b.Discount)
-                .Where(b => b.UserID == userId)
-                .OrderByDescending(b => b.BookingDate)
+                .Where(b => b.UserID == userID)
+                .OrderByDescending(b => b.BookingDate);
+
+            var totalBookings = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling((double)totalBookings / pageSize);
+
+            var bookings = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.TotalBookings = totalBookings;
+            ViewBag.PageSize = pageSize;
+
             return View("~/Views/client/BookingHistory.cshtml", bookings);
         }
 
@@ -213,5 +166,172 @@ namespace GoEASy.Controllers
                 minTotalPrice = discount.MinTotalPrice
             });
         }
+
+        [HttpGet("momo-return")]
+        public async Task<IActionResult> MomoReturn(string orderId, string resultCode, string message)
+        {
+            // orderId: mã booking bạn đã gửi cho MoMo (BookingID)
+            // resultCode: mã kết quả thanh toán (0 = thành công)
+            // message: thông báo từ MoMo
+
+            // Tách BookingID từ orderId nếu cần
+            int bookingID = 0;
+            if (!string.IsNullOrEmpty(orderId))
+            {
+                var parts = orderId.Split('_');
+                if (parts.Length >= 3 && int.TryParse(parts[1], out int parsedId))
+                {
+                    bookingID = parsedId;
+                }
+            }
+            if (bookingID == 0)
+            {
+                TempData["Error"] = "Không xác định được booking.";
+                return RedirectToAction("Index", "Home");
+            }
+
+            var booking = await _context.Bookings.FirstOrDefaultAsync(b => b.BookingID == bookingID);
+            if (booking == null)
+            {
+                TempData["Error"] = "Không tìm thấy booking.";
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (resultCode == "0")
+            {
+                // Thành công
+                booking.PaymentStatus = "Paid";
+                booking.UpdatedAt = DateTime.Now;
+                await _context.SaveChangesAsync();
+
+                TempData["Success"] = "Thanh toán MoMo thành công! Cảm ơn bạn đã đặt tour.";
+            }
+            else
+            {
+                // Thất bại hoặc bị hủy
+                booking.PaymentStatus = "Failed";
+                booking.UpdatedAt = DateTime.Now;
+                await _context.SaveChangesAsync();
+
+                TempData["Error"] = "Thanh toán MoMo thất bại hoặc bị hủy.";
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        // POST: /booking/cancel
+        [HttpPost("cancel")]
+        public async Task<IActionResult> CancelBooking([FromBody] CancelBookingRequest request)
+        {
+            int? userID = HttpContext.Session.GetInt32("UserID");
+            if (userID == null)
+            {
+                return Json(new { success = false, message = "Bạn cần đăng nhập để hủy tour." });
+            }
+
+            var booking = await _context.Bookings
+                .Include(b => b.Tour)
+                .FirstOrDefaultAsync(b => b.BookingID == request.BookingId && b.UserID == userID);
+
+            if (booking == null)
+            {
+                return Json(new { success = false, message = "Không tìm thấy booking." });
+            }
+
+            // Kiểm tra xem booking có thể hủy không
+            if (booking.PaymentStatus == "Cancelled" || booking.PaymentStatus == "Refunded")
+            {
+                return Json(new { success = false, message = "Tour này đã được hủy hoặc hoàn tiền." });
+            }
+            
+            if (booking.PaymentStatus == "Processing")
+            {
+                return Json(new { success = false, message = "Tour đang trong quá trình thanh toán. Vui lòng đợi hoàn tất thanh toán." });
+            }
+            
+            if (booking.PaymentStatus != "Paid")
+            {
+                return Json(new { success = false, message = "Chỉ có thể hủy tour đã thanh toán." });
+            }
+
+            // Kiểm tra ngày khởi hành
+            if (booking.Tour?.StartDate == null)
+            {
+                return Json(new { success = false, message = "Không tìm thấy ngày khởi hành." });
+            }
+
+            var daysUntilStart = (booking.Tour.StartDate.Value - DateTime.Now).Days;
+
+            // Lấy policy hủy tour của tour này
+            var cancellationPolicy = await _policyService.GetCancellationPolicyAsync(booking.TourID.Value);
+            if (cancellationPolicy == null)
+            {
+                return Json(new { success = false, message = "Không tìm thấy chính sách hủy tour cho tour này." });
+            }
+
+            // Kiểm tra xem có thể hủy hoàn tiền không
+            if (daysUntilStart < cancellationPolicy.RefundDays)
+            {
+                return Json(new { 
+                    success = false, 
+                    message = $"Không thể hủy tour hoàn tiền. Theo chính sách tour này, cần hủy trước {cancellationPolicy.RefundDays} ngày khởi hành để được hoàn tiền. Hiện tại còn {daysUntilStart} ngày." 
+                });
+            }
+
+            // Tính số tiền hoàn
+            var refundAmount = await _policyService.CalculateCancellationRefundAsync(booking.BookingID);
+
+            // Cập nhật trạng thái booking
+            booking.PaymentStatus = "Refunded"; // Đã hoàn tiền
+            booking.Status = false; // Đánh dấu booking đã hủy
+            booking.UpdatedAt = DateTime.Now;
+            await _context.SaveChangesAsync();
+
+            // Tạo thông báo cho user
+            var notification = new Notification
+            {
+                UserId = userID.Value,
+                Title = "Tour đã được hủy hoàn tiền",
+                Message = $"Tour '{booking.Tour.TourName}' đã được hủy thành công. Số tiền hoàn: {refundAmount:N0} đ (theo chính sách hủy tour)",
+                IsRead = false,
+                CreatedAt = DateTime.Now,
+                Type = "booking_cancelled",
+                RelatedId = booking.BookingID
+            };
+            _context.Notifications.Add(notification);
+            await _context.SaveChangesAsync();
+
+            return Json(new { 
+                success = true, 
+                message = $"Hủy tour thành công! Số tiền hoàn: {refundAmount:N0} đ (theo chính sách hủy tour của tour này)",
+                refundAmount = refundAmount
+            });
+        }
+
+        // POST: /booking/cancel-expired-momo
+        [HttpPost("cancel-expired-momo")]
+        public async Task<IActionResult> CancelExpiredMomoBookings()
+        {
+            // Tìm các booking đang Processing và đã quá 15 phút (thời gian MoMo)
+            var expiredBookings = await _context.Bookings
+                .Where(b => b.PaymentStatus == "Processing" && 
+                           b.CreatedAt < DateTime.Now.AddMinutes(-15))
+                .ToListAsync();
+
+            foreach (var booking in expiredBookings)
+            {
+                booking.PaymentStatus = "Cancelled";
+                booking.Status = false;
+                booking.UpdatedAt = DateTime.Now;
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Json(new { 
+                success = true, 
+                message = $"Đã hủy {expiredBookings.Count} booking hết thời gian thanh toán",
+                cancelledCount = expiredBookings.Count
+            });
+        }
     }
-} 
+}

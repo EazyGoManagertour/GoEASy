@@ -85,7 +85,9 @@
                             <th>Sex</th>
                             <th>Role</th>
                             <th>VIP</th>
-                            <th>VIPPoints</th>
+
+                            <th>VIP Points</th>
+
                             <th>Status</th>
                             <th>Created At</th>
                             <th>Action</th>
@@ -127,7 +129,9 @@
                                                 '@user.Phone',
                                                 '@user.Address',
                                                 '@user.Sex',
-                                                '@user.RoleID',
+
+                                                '@user.RoleId',
+
                                                 '@(user.IsVIP == true ? "true" : "false")',
                                                 '@user.VIPPoints',
                                                 '@(user.Status == true ? "true" : "false")')">
@@ -137,7 +141,9 @@
                                         <button class="action-btn delete"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal"
-                                                onclick="setDeleteUserID('@user.UserID')">
+
+                                                onclick="setDeleteUserId('@user.UserID')">
+
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
@@ -205,15 +211,19 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="addIsVIP" class="form-label">VIP Status</label>
-                            <select class="form-control" id="addIsVIP" name="IsVIP" required>
+
+                            <label for="addIsVip" class="form-label">VIP Status</label>
+                            <select class="form-control" id="addIsVip" name="IsVIP" required>
+
                                 <option value="false">Regular</option>
                                 <option value="true">VIP</option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="addVIPPoints" class="form-label">VIPPoints</label>
-                            <input type="number" class="form-control" id="addVIPPoints" name="VIPPoints" value="0" required>
+
+                            <label for="addVippoints" class="form-label">VIP Points</label>
+                            <input type="number" class="form-control" id="addVippoints" name="VIPPoints" value="0" required>
+
                         </div>
                         <button type="submit" class="btn btn-success">Add User</button>
                     </form>
@@ -272,15 +282,19 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="editIsVIP" class="form-label">VIP Status</label>
-                            <select class="form-control" id="editIsVIP" name="IsVIP" required>
+
+                            <label for="editIsVip" class="form-label">VIP Status</label>
+                            <select class="form-control" id="editIsVip" name="IsVIP" required>
+
                                 <option value="false">Regular</option>
                                 <option value="true">VIP</option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="editVIPPoints" class="form-label">VIPPoints</label>
-                            <input type="number" class="form-control" id="editVIPPoints" name="VIPPoints" required>
+
+                            <label for="editVippoints" class="form-label">VIP Points</label>
+                            <input type="number" class="form-control" id="editVippoints" name="VIPPoints" required>
+
                         </div>
                         <div class="mb-3">
                             <label for="editStatus" class="form-label">Status</label>

@@ -138,7 +138,9 @@
                                         <button class="action-btn delete"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal"
-                                                onclick="setDeleteDestinationID('@destination.DestinationID')">
+
+                                                onclick="setDeleteDestinationId('@destination.DestinationID')">
+
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
@@ -243,7 +245,9 @@
                 </div>
                 <div class="modal-body">
                     <form action="/admin/destination-admin/update" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" name="DestinationID" id="editDestinationID">
+
+                        <input type="hidden" name="DestinationID" id="editDestinationId">
+
 
                         <div class="row">
                             <div class="col-md-6">

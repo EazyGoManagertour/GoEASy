@@ -102,9 +102,11 @@
 
                                         foreach (var img in blog.BlogImages)
                                         {
-                                            if (img.IsMain == true && !string.IsNullOrEmpty(img.ImageURL))
-                                            {
-                                                avatar = "/" + img.ImageURL.TrimStart('/'); // đảm bảo format đúng
+
+                                                            if (img.IsMain == true && !string.IsNullOrEmpty(img.ImageURL))
+                {
+                    avatar = "/" + img.ImageURL.TrimStart('/'); // đảm bảo format đúng
+
                                                 break;
                                             }
                                         }
@@ -147,7 +149,9 @@
                             <td>
                                 <button class="status admit"
                                         style="border: none; outline: none; background-color:@(blog.Status == true ? "" : "#dc3545")"
-                                        onclick="toggleStatus(this, '@blog.BlogID', @(blog.Status.ToString().ToLower()))">
+
+                                                                                    onclick="toggleStatus(this, '@blog.BlogID', @(blog.Status.ToString().ToLower()))">
+
                                     @(blog.Status == true ? "Active" : "Disabled")
                                 </button>
                             </td>
@@ -155,14 +159,17 @@
                                 <div class="action-btns">
                                     <button class="action-btn edit"
                                             data-bs-toggle="modal"
-                                            data-bs-target="#editModal"
-                                            onclick="fillEditModal('@blog.BlogID', '@blog.Title', '@blog.ShortDescription', '@blog.CategoryID')">
+
+                                                                                            onclick="fillEditModal('@blog.BlogID', '@blog.Title', '@blog.ShortDescription', '@blog.CategoryID')">
+
                                         <i class="fas fa-edit"></i>
                                     </button>
                                     <button class="action-btn delete"
                                             data-bs-toggle="modal"
                                             data-bs-target="#deleteModal"
-                                            onclick="setDeleteBlogID('@blog.BlogID')">
+
+                                                                                            onclick="setDeleteBlogId('@blog.BlogID')">
+
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
@@ -233,7 +240,9 @@
                     </div>
 
                     <div class="modal-body">
-                        <input type="hidden" name="BlogID" id="editBlogID" />
+
+                        <input type="hidden" name="BlogID" id="editBlogId" />
+
 
                         <div class="mb-3">
                             <label>Title</label>

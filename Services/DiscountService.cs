@@ -3,6 +3,7 @@ using GoEASy.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace GoEASy.Services
 {
@@ -23,6 +24,12 @@ namespace GoEASy.Services
         public async Task<Discount> GetDiscountByIdAsync(int id)
         {
             return await _discountRepository.GetByIdAsync(id);
+        }
+
+        public async Task<Discount> GetDiscountByCodeAsync(string code)
+        {
+            var allDiscounts = await _discountRepository.GetAllAsync();
+            return allDiscounts.FirstOrDefault(d => d.Code == code);
         }
 
         public async Task CreateDiscountAsync(Discount discount)
