@@ -1,0 +1,74 @@
+@{
+    ViewBag.Title = "Hoàn thiện thông tin";
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoàn thiện thông tin - EasyGo Travel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/register.css" />
+</head>
+<body>
+    <div class="floating-icon">✈️</div>
+    <div class="floating-icon">🌴</div>
+    <div class="floating-icon">🗺️</div>
+    
+    <form class="login-container" method="POST" action="/complete-profile">
+        <div class="logo">
+            <img src="https://cdn-icons-png.flaticon.com/512/201/201623.png" alt="EasyGo Logo"/>
+            <h1>EasyGo</h1>
+        </div>
+        <div class="login-title">Hoàn thiện thông tin</div>
+        <div class="login-desc">Vui lòng bổ sung thông tin để hoàn tất quá trình đăng ký.</div>
+        
+        @if (TempData["Error"] != null)
+        {
+            <div style="background: #fee; color: #c33; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center;">
+                @TempData["Error"]
+            </div>
+        }
+        @if (TempData["Success"] != null)
+        {
+            <div style="background: #efe; color: #363; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center;">
+                @TempData["Success"]
+            </div>
+        }
+
+        <div class="form-group">
+            <label for="phone">Số điện thoại</label>
+            <div class="input-wrapper">
+                <span class="input-icon">📱</span>
+                <input type="tel" id="phone" name="phone" placeholder="Nhập số điện thoại" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="address">Địa chỉ</label>
+            <div class="input-wrapper">
+                <span class="input-icon">🏠</span>
+                <input type="text" id="address" name="address" placeholder="Nhập địa chỉ">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="sex">Giới tính</label>
+            <div class="input-wrapper">
+                <span class="input-icon">👤</span>
+                <select id="sex" name="sex">
+                    <option value="">Chọn giới tính</option>
+                    <option value="Male">Nam</option>
+                    <option value="Female">Nữ</option>
+                    <option value="Other">Khác</option>
+                </select>
+            </div>
+        </div>
+
+        <button class="login-btn" type="submit">Hoàn thành</button>
+        <div class="login-links">
+            <a href="/">Bỏ qua và về trang chủ</a>
+        </div>
+    </form>
+</body>
+</html>

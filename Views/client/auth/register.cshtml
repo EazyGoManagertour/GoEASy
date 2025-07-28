@@ -1,0 +1,77 @@
+@{
+    ViewBag.Title = "Đăng ký tài khoản";
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký - EasyGo Travel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/register.css" />
+</head>
+<body>
+    <div class="floating-icon">✈️</div>
+    <div class="floating-icon">🌴</div>
+    <div class="floating-icon">🗺️</div>
+    <form class="login-container" method="POST" action="/login/register">
+        <div class="logo">
+            <img src="https://cdn-icons-png.flaticon.com/512/201/201623.png" alt="EasyGo Logo"/>
+            <h1>EasyGo</h1>
+        </div>
+        <div class="login-title">Đăng ký tài khoản</div>
+        <div class="login-desc">Tạo tài khoản để trải nghiệm dịch vụ tốt nhất.</div>
+        @if (TempData["Error"] != null)
+        {
+            <div style="background: #fee; color: #c33; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center;">
+                @TempData["Error"]
+            </div>
+        }
+        @if (TempData["Success"] != null)
+        {
+            <div style="background: #efe; color: #363; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center;">
+                @TempData["Success"]
+            </div>
+        }
+        <div class="form-group">
+            <label for="regFullName">Họ và tên</label>
+            <div class="input-wrapper">
+                <span class="input-icon">👤</span>
+                <input type="text" id="regFullName" name="fullName" placeholder="Nhập họ và tên" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="regEmail">Email</label>
+            <div class="input-wrapper">
+                <span class="input-icon">📧</span>
+                <input type="email" id="regEmail" name="email" placeholder="Nhập email" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="regPassword">Mật khẩu</label>
+            <div class="input-wrapper">
+                <span class="input-icon">🔒</span>
+                <input type="password" id="regPassword" name="password" placeholder="Nhập mật khẩu" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="regPhone">Số điện thoại (tùy chọn)</label>
+            <div class="input-wrapper">
+                <span class="input-icon">📱</span>
+                <input type="tel" id="regPhone" name="phone" placeholder="Nhập số điện thoại">
+            </div>
+        </div>
+        <!-- Google Login Button -->
+        <div style="margin: 1.5rem 0; text-align: center;">
+            <a href="/signin-google" class="login-btn google-btn">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" style="height: 22px; vertical-align: middle; margin-right: 8px;"> 
+                Đăng ký với Google
+            </a>
+        </div>
+        <button class="login-btn" type="submit">Đăng ký</button>
+        <div class="login-links">
+            <a href="/login">Đã có tài khoản? Đăng nhập</a>
+        </div>
+    </form>
+</body>
+</html> 
