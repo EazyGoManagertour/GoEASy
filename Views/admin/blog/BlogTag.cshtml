@@ -108,7 +108,9 @@
                                         <button class="action-btn delete"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal"
+
                                                 onclick="setDeleteTagId('@tag.TagID')">
+
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
@@ -193,7 +195,7 @@
                     </div>
                     <div class="modal-body">
                         <p>Are you sure you want to delete this blog tag?</p>
-                        <input type="hidden" name="id" id="deleteTagId" />
+                        <input type="hidden" name="id" id="deleteTagID" />
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -212,12 +214,12 @@
             document.getElementById('editStatus').value = status;
         }
 
-        function setDeleteTagId(id) {
-            document.getElementById('deleteTagId').value = id;
+        function setDeleteTagID(id) {
+            document.getElementById('deleteTagID').value = id;
         }
 
-        function toggleStatus(button, tagId, currentStatus) {
-            fetch(`/admin/blog-tag/toggle-status?id=${tagId}`, {
+        function toggleStatus(button, tagID, currentStatus) {
+            fetch(`/admin/blog-tag/toggle-status?id=${tagID}`, {
                 method: 'POST'
             })
             .then(response => {
@@ -225,7 +227,7 @@
                     const newStatus = !(currentStatus === true || currentStatus === "true");
                     button.textContent = newStatus ? "Active" : "Disable";
                     button.style.backgroundColor = newStatus ? "" : "#dc3545";
-                    button.setAttribute("onclick", `toggleStatus(this, '${tagId}', ${newStatus})`);
+                    button.setAttribute("onclick", `toggleStatus(this, '${tagID}', ${newStatus})`);
 
                     const msg = "Status updated successfully!";
                     document.getElementById("toast-success-msg").value = msg;

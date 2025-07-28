@@ -224,7 +224,9 @@
                                         <button class="action-btn delete"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal"
+
                                                 onclick="setDeleteDetailId('@detail.BlogDetailID')">
+
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
@@ -337,7 +339,9 @@
                     </div>
 
                     <div class="modal-body row g-3">
+
                         <input type="hidden" name="BlogDetailID" id="editDetailId" />
+
 
                         <div class="col-md-12">
                             <label>Introduction</label>
@@ -415,7 +419,7 @@
                     </div>
                     <div class="modal-body">
                         <p>Are you sure you want to delete this blog detail?</p>
-                        <input type="hidden" name="id" id="deleteDetailId" />
+                        <input type="hidden" name="id" id="deleteDetailID" />
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -449,7 +453,7 @@
 
         async function fillEditDetail(btn) {
             // Gán giá trị như cũ
-            document.getElementById('editDetailId').value    = btn.dataset.id;
+            document.getElementById('editDetailID').value    = btn.dataset.id;
             document.getElementById('editIntro').value       = decodeURIComponent(btn.dataset.intro);
             document.getElementById('editS1Title').value     = decodeURIComponent(btn.dataset.s1title);
             document.getElementById('editS2Title').value     = decodeURIComponent(btn.dataset.s2title);

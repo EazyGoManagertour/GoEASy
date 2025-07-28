@@ -19,7 +19,7 @@ builder.Services.AddSession(options =>
     options.Cookie.SameSite = SameSiteMode.Lax; // hoặc thử None nếu vẫn bị mất session
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Bắt buộc dùng HTTPS
 });
-
+ 
 // Đăng ký GoEasyContext
 builder.Services.AddDbContext<GoEasyContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

@@ -12,10 +12,12 @@ using System.Text.Json;
 
 namespace GoEASy.Controllers
 {
+
     public class CancelBookingRequest
     {
         public int BookingId { get; set; }
     }
+
 
     [Route("booking")]
     public class BookingController : Controller
@@ -35,8 +37,10 @@ namespace GoEASy.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> Create(int tourID, int adultGuests, int childGuests, decimal totalPrice, bool isCustom = false)
         {
+
             int? userID = HttpContext.Session.GetInt32("UserID");
             if (userID == null)
+
             {
                 TempData["Error"] = "Bạn cần đăng nhập để đặt tour.";
                 return RedirectToAction("Index", "Login");
@@ -93,8 +97,10 @@ namespace GoEASy.Controllers
         [HttpGet("history")]
         public async Task<IActionResult> BookingHistory(int page = 1)
         {
+
             int? userID = HttpContext.Session.GetInt32("UserID");
             if (userID == null)
+
             {
                 TempData["Error"] = "Bạn cần đăng nhập để xem lịch sử đặt tour.";
                 return RedirectToAction("Index", "Login");

@@ -19,7 +19,7 @@ namespace GoEASy.Controllers
         public async Task<IActionResult> Index()
         {
             // Lấy userId từ session
-            var userId = HttpContext.Session.GetInt32("UserId");
+            var userId = HttpContext.Session.GetInt32("UserID");
             List<int> favoriteTourIds = new List<int>();
             if (userId != null)
             {
@@ -47,7 +47,7 @@ namespace GoEASy.Controllers
         [HttpPost("remove")]
         public async Task<IActionResult> Remove(int tourId)
         {
-            var userId = HttpContext.Session.GetInt32("UserId");
+            var userId = HttpContext.Session.GetInt32("UserID");
             
             if (userId == null)
             {
@@ -68,7 +68,7 @@ namespace GoEASy.Controllers
         [HttpPost("add")]
         public async Task<IActionResult> Add(int tourId)
         {
-            var userId = HttpContext.Session.GetInt32("UserId");
+            var userId = HttpContext.Session.GetInt32("UserID");
             if (userId == null)
                 return Json(new { success = false, message = "Vui lòng đăng nhập" });
 

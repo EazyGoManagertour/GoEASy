@@ -102,9 +102,11 @@
 
                                         foreach (var img in blog.BlogImages)
                                         {
+
                                                             if (img.IsMain == true && !string.IsNullOrEmpty(img.ImageURL))
                 {
                     avatar = "/" + img.ImageURL.TrimStart('/'); // đảm bảo format đúng
+
                                                 break;
                                             }
                                         }
@@ -147,7 +149,9 @@
                             <td>
                                 <button class="status admit"
                                         style="border: none; outline: none; background-color:@(blog.Status == true ? "" : "#dc3545")"
+
                                                                                     onclick="toggleStatus(this, '@blog.BlogID', @(blog.Status.ToString().ToLower()))">
+
                                     @(blog.Status == true ? "Active" : "Disabled")
                                 </button>
                             </td>
@@ -155,14 +159,17 @@
                                 <div class="action-btns">
                                     <button class="action-btn edit"
                                             data-bs-toggle="modal"
-                                            data-bs-target="#editModal"
+
                                                                                             onclick="fillEditModal('@blog.BlogID', '@blog.Title', '@blog.ShortDescription', '@blog.CategoryID')">
+
                                         <i class="fas fa-edit"></i>
                                     </button>
                                     <button class="action-btn delete"
                                             data-bs-toggle="modal"
                                             data-bs-target="#deleteModal"
+
                                                                                             onclick="setDeleteBlogId('@blog.BlogID')">
+
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
@@ -233,7 +240,9 @@
                     </div>
 
                     <div class="modal-body">
+
                         <input type="hidden" name="BlogID" id="editBlogId" />
+
 
                         <div class="mb-3">
                             <label>Title</label>
@@ -278,7 +287,7 @@
                     </div>
                     <div class="modal-body">
                         <p>Are you sure you want to delete this blog?</p>
-                        <input type="hidden" name="id" id="deleteBlogId" />
+                        <input type="hidden" name="id" id="deleteBlogID" />
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -292,22 +301,22 @@
 
     <script>
         function fillEditModal(id, title, desc, CategoryID) {
-            document.getElementById('editBlogId').value = id;
+            document.getElementById('editBlogID').value = id;
             document.getElementById('editTitle').value = title;
             document.getElementById('editDesc').value = desc;
             document.getElementById('editCategory').value = CategoryID;
         }
 
-        function setDeleteBlogId(id) {
-            document.getElementById('deleteBlogId').value = id;
+        function setDeleteBlogID(id) {
+            document.getElementById('deleteBlogID').value = id;
         }
 
     </script>
 
 
     <script>
-        function toggleStatus(button, blogId, currentStatus) {
-            fetch(`/admin/blog/toggle-status?id=${blogId}`, {
+        function toggleStatus(button, blogID, currentStatus) {
+            fetch(`/admin/blog/toggle-status?id=${blogID}`, {
                 method: 'POST'
             })
             .then(response => {
@@ -316,7 +325,7 @@
                     const newStatus = !(currentStatus === true || currentStatus === "true");
                     button.textContent = newStatus ? "Active" : "Disable";
                     button.style.backgroundColor = newStatus ? "" : "#dc3545";
-                    button.setAttribute("onclick", `toggleStatus(this, '${blogId}', ${newStatus})`);
+                    button.setAttribute("onclick", `toggleStatus(this, '${blogID}', ${newStatus})`);
 
                     // Show success toast
                     const msg = "Status updated successfully!";

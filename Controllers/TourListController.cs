@@ -51,7 +51,7 @@ namespace GoEASy.Controllers
                 var categories = await _tourService.GetAllCategoriesAsync();
 
                 // Lấy danh sách favorite tour id của user
-                var userId = HttpContext.Session.GetInt32("UserId");
+                var userId = HttpContext.Session.GetInt32("UserID");
                 List<int> favoriteTourIds = new List<int>();
                 if (userId != null)
                 {

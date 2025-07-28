@@ -24,7 +24,7 @@ namespace GoEASy.Controllers
         [HttpGet("")]
         public async Task<IActionResult> Index()
         {
-            int? providerId = HttpContext.Session.GetInt32("UserId");
+            int? providerId = HttpContext.Session.GetInt32("UserID");
             if (providerId == null)
                 return RedirectToAction("Index", "LoginAdmin");
 
@@ -59,7 +59,7 @@ namespace GoEASy.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> Create(Tour tour, List<IFormFile> images, string selectedImages)
         {
-            int? providerId = HttpContext.Session.GetInt32("UserId");
+            int? providerId = HttpContext.Session.GetInt32("UserID");
             if (providerId == null)
                 return RedirectToAction("Index", "LoginAdmin");
             tour.CreatedBy = providerId;
@@ -151,7 +151,7 @@ namespace GoEASy.Controllers
         [HttpPost("update")]
         public async Task<IActionResult> Update(Tour tour, List<IFormFile> images, string selectedImages)
         {
-            int? providerId = HttpContext.Session.GetInt32("UserId");
+            int? providerId = HttpContext.Session.GetInt32("UserID");
             if (providerId == null)
                 return RedirectToAction("Index", "LoginAdmin");
             if (tour.TourID == 0)
@@ -234,7 +234,7 @@ namespace GoEASy.Controllers
         [HttpPost("toggle-status")]
         public async Task<IActionResult> ToggleStatus(int id)
         {
-            int? providerId = HttpContext.Session.GetInt32("UserId");
+            int? providerId = HttpContext.Session.GetInt32("UserID");
             if (providerId == null)
                 return RedirectToAction("Index", "LoginAdmin");
             var tour = (await _tourService.GetToursByProviderAsync(providerId.Value)).FirstOrDefault(t => t.TourID == id);
@@ -251,7 +251,7 @@ namespace GoEASy.Controllers
         [HttpPost("delete-confirm")]
         public async Task<IActionResult> DeleteConfirm(int id)
         {
-            int? providerId = HttpContext.Session.GetInt32("UserId");
+            int? providerId = HttpContext.Session.GetInt32("UserID");
             if (providerId == null)
                 return RedirectToAction("Index", "LoginAdmin");
             var tour = (await _tourService.GetToursByProviderAsync(providerId.Value)).FirstOrDefault(t => t.TourID == id);
