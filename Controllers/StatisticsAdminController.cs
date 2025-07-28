@@ -39,6 +39,8 @@ namespace GoEASy.Controllers
                     TotalBookings = g.Sum(x => x.TotalBookings)
                 })
                 .OrderBy(x => x.Year)
+                .Take(6)                         // lấy 6 năm mới nhất
+                .OrderBy(x => x.Year)
                 .ToList();
 
             return Json(stats);
@@ -75,26 +77,53 @@ namespace GoEASy.Controllers
         }
 
         [HttpGet("chart-revenue")]
-        public IActionResult ChartDataRevenue()
+        public IActionResult ChartDataRevenue(int year)
         {
             var stats = _statService.GetAllSnapshots();
 
-            var result = stats
-                .Where(s => s.SnapshotAt.HasValue)
-                .GroupBy(s => new { s.SnapshotAt.Value.Year, s.SnapshotAt.Value.Month })
-                .OrderBy(g => g.Key.Year).ThenBy(g => g.Key.Month)
+            // Lọc theo năm
+            var filtered = stats
+                .Where(s => s.SnapshotAt.HasValue && s.SnapshotAt.Value.Year == year)
+                .GroupBy(s => s.SnapshotAt.Value.Month)
                 .Select(g =>
                 {
-                    // lấy bản ghi có SnapshotAt lớn nhất trong tháng
                     var latest = g.OrderByDescending(x => x.SnapshotAt).First();
                     return new
                     {
-                        snapshotAt = new DateTime(g.Key.Year, g.Key.Month, 1),
+                        month = g.Key,
                         totalRevenue = latest.TotalRevenue
+                    };
+                })
+                .ToList();
+
+            // Bổ sung đủ 12 tháng nếu thiếu
+            var fullYear = Enumerable.Range(1, 12)
+                .Select(m =>
+                {
+                    var monthData = filtered.FirstOrDefault(x => x.month == m);
+                    return new
+                    {
+                        snapshotAt = new DateTime(year, m, 1),
+                        totalRevenue = monthData?.totalRevenue ?? 0
                     };
                 });
 
-            return Json(result);
+            return Json(fullYear);
+        }
+
+        [HttpGet("available-years")]
+        public IActionResult GetAvailableYears()
+        {
+            var stats = _statService.GetAllSnapshots();
+
+            var years = stats
+                .Where(s => s.SnapshotAt.HasValue)
+                .Select(s => s.SnapshotAt.Value.Year)
+                .Distinct()
+                .OrderByDescending(y => y)
+                .ToList();
+
+            return Json(years);
         }
 
 
