@@ -183,7 +183,7 @@ namespace GoEASy.Controllers
 
         private void SignInUser(User user)
         {
-            HttpContext.Session.SetInt32("UserId", user.UserID);
+            HttpContext.Session.SetInt32("UserID", user.UserID); // Đổi từ "UserId" thành "UserID"
             HttpContext.Session.SetString("UserEmail", user.Email ?? "");
             HttpContext.Session.SetString("UserName", user.FullName);
             HttpContext.Session.SetString("UserRole", user.Role?.RoleName ?? "User");
@@ -193,7 +193,7 @@ namespace GoEASy.Controllers
         [HttpGet("/complete-profile")]
         public IActionResult CompleteProfile()
         {
-            var userId = HttpContext.Session.GetInt32("UserId");
+            var userId = HttpContext.Session.GetInt32("UserID"); // Đổi từ "UserId" thành "UserID"
             if (userId == null)
             {
                 return RedirectToAction("Index", "Login");
