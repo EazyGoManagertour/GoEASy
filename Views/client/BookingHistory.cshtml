@@ -5,9 +5,34 @@
     var openId = Context.Request.Query["open"].ToString();
 }
 @Html.Partial("~/Views/client/share/head.cshtml")
-@Html.Partial("~/Views/client/share/header.cshtml")
+<link rel="stylesheet" href="~/css/booking-history.css" />
+<header class="main-header header-one white-menu menu-absolute" id="tourlist-header">
+    @await Html.PartialAsync("~/Views/client/share/header.cshtml")
+</header>
+<section class="page-banner-area pt-50 pb-35 rel z-1 bgs-cover" style="background-image: url(/assets/images/banner/banner.jpg);">
+    <div class="container">
+        <div class="banner-inner text-white mb-50">
+            <h2 class="page-title mb-10" data-aos="fade-left" data-aos-duration="1500" data-aos-offset="50">Lịch sử đặt tour</h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb justify-content-center mb-20" data-aos="fade-right" data-aos-delay="200" data-aos-duration="1500" data-aos-offset="50">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item active">Lịch sử</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</section>
 <div class="container" style="max-width: 800px; margin-top: 48px; margin-bottom: 48px;">
     <h2 class="mb-4" style="font-weight: 700; color: #1a2a36;">Lịch sử đặt tour của bạn</h2>
+    
+    @if (ViewBag.TotalBookings > 0)
+    {
+        <div class="mb-3" style="color: #666; font-size: 0.9em;">
+            Hiển thị @(((ViewBag.CurrentPage - 1) * ViewBag.PageSize) + 1) - @Math.Min(ViewBag.CurrentPage * ViewBag.PageSize, ViewBag.TotalBookings) 
+            trong tổng số @ViewBag.TotalBookings booking
+        </div>
+    }
+    
     @if (!Model.Any())
     {
         <div class="alert alert-info" style="border-radius: 12px;">Bạn chưa có booking nào.</div>
@@ -27,7 +52,19 @@
                             <span style="min-width: 90px; display: inline-block;">#@booking.BookingID</span>
                             <span style="flex:1;">@booking.Tour?.TourName</span>
                             <span style="margin-left: 12px;">
-                                @if (booking.Status == true)
+                                @if (booking.PaymentStatus == "Cancelled")
+                                {
+                                    <span class="badge" style="background: #ffebee; color: #c62828; border-radius: 8px;">Đã hủy</span>
+                                }
+                                else if (booking.PaymentStatus == "Refunded")
+                                {
+                                    <span class="badge" style="background: #e8f5e8; color: #2e7d32; border-radius: 8px;">Đã hoàn tiền</span>
+                                }
+                                else if (booking.PaymentStatus == "Processing")
+                                {
+                                    <span class="badge" style="background: #fff3e0; color: #f57c00; border-radius: 8px;">Đang thanh toán</span>
+                                }
+                                else if (booking.Status == true)
                                 {
                                     <span class="badge" style="background: #e6f4ea; color: #1a8917; border-radius: 8px;">Đã xác nhận</span>
                                 }
@@ -50,7 +87,19 @@
                             </div>
                             <div class="row mb-2">
                                 <div class="col-6"><b>Thanh toán:</b>
-                                    @if (booking.PaymentStatus == "Paid")
+                                    @if (booking.PaymentStatus == "Cancelled")
+                                    {
+                                        <span class="badge" style="background: #ffebee; color: #c62828; border-radius: 8px;">Đã hủy</span>
+                                    }
+                                    else if (booking.PaymentStatus == "Refunded")
+                                    {
+                                        <span class="badge" style="background: #e8f5e8; color: #2e7d32; border-radius: 8px;">Đã hoàn tiền</span>
+                                    }
+                                    else if (booking.PaymentStatus == "Processing")
+                                    {
+                                        <span class="badge" style="background: #fff3e0; color: #f57c00; border-radius: 8px;">Đang thanh toán</span>
+                                    }
+                                    else if (booking.PaymentStatus == "Paid")
                                     {
                                         <span class="badge" style="background: #e0f7fa; color: #00796b; border-radius: 8px;">Đã thanh toán</span>
                                     }
@@ -71,12 +120,258 @@
                             <div class="row mb-2">
                                 <div class="col-12"><b>Địa điểm:</b> @booking.Tour?.Destination?.DestinationName</div>
                             </div>
+                            @if (booking.PaymentStatus == "Paid")
+                            {
+                                <div class="row mb-2">
+                                    <div class="col-12">
+                                        <button class="btn btn-danger btn-sm cancel-booking-btn" 
+                                                data-booking-id="@booking.BookingID" 
+                                                data-tour-name="@booking.Tour?.TourName"
+                                                style="border-radius: 8px; font-weight: 500;">
+                                            <i class="fas fa-times"></i> Hủy tour hoàn tiền
+                                        </button>
+                                    </div>
+                                </div>
+                            }
+                            else if (booking.PaymentStatus == "Cancelled" || booking.PaymentStatus == "Refunded")
+                            {
+                                <div class="row mb-2">
+                                    <div class="col-12">
+                                        <div class="alert alert-info" style="border-radius: 8px; margin: 0;">
+                                            <i class="fas fa-info-circle"></i> 
+                                            @if (booking.PaymentStatus == "Cancelled")
+                                            {
+                                                <span>Tour này đã được hủy</span>
+                                            }
+                                            else
+                                            {
+                                                <span>Tour này đã được hoàn tiền</span>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else if (booking.PaymentStatus == "Processing")
+                            {
+                                <div class="row mb-2">
+                                    <div class="col-12">
+                                        <div class="alert alert-warning" style="border-radius: 8px; margin: 0;">
+                                            <i class="fas fa-clock"></i> Tour đang trong quá trình thanh toán
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
             }
         </div>
     }
+    
+    @if (ViewBag.TotalPages > 1)
+    {
+        <nav aria-label="Phân trang booking" class="mt-4">
+            <ul class="pagination justify-content-center">
+                @if (ViewBag.CurrentPage > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("BookingHistory", "Booking", new { page = ViewBag.CurrentPage - 1, open = openId })" aria-label="Trang trước">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    </li>
+                }
+                
+                @{
+                    int startPage = Math.Max(1, ViewBag.CurrentPage - 2);
+                    int endPage = Math.Min(ViewBag.TotalPages, ViewBag.CurrentPage + 2);
+                }
+                
+                @if (startPage > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("BookingHistory", "Booking", new { page = 1, open = openId })">1</a>
+                    </li>
+                    @if (startPage > 2)
+                    {
+                        <li class="page-item disabled">
+                            <span class="page-link">...</span>
+                        </li>
+                    }
+                }
+                
+                @for (int i = startPage; i <= endPage; i++)
+                {
+                    <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                        <a class="page-link" href="@Url.Action("BookingHistory", "Booking", new { page = i, open = openId })">@i</a>
+                    </li>
+                }
+                
+                @if (endPage < ViewBag.TotalPages)
+                {
+                    @if (endPage < ViewBag.TotalPages - 1)
+                    {
+                        <li class="page-item disabled">
+                            <span class="page-link">...</span>
+                        </li>
+                    }
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("BookingHistory", "Booking", new { page = ViewBag.TotalPages, open = openId })">@ViewBag.TotalPages</a>
+                    </li>
+                }
+                
+                @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("BookingHistory", "Booking", new { page = ViewBag.CurrentPage + 1, open = openId })" aria-label="Trang sau">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
 </div>
 @Html.Partial("~/Views/client/share/footer-area.cshtml")
-@Html.Partial("~/Views/client/share/script.cshtml") 
+@Html.Partial("~/Views/client/share/script.cshtml")
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Tự động scroll đến booking được mở nếu có parameter open
+    var openId = '@openId';
+    if (openId) {
+        setTimeout(function() {
+            var openBooking = document.querySelector('.accordion-button[aria-expanded="true"]');
+            if (openBooking) {
+                openBooking.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }, 500);
+    }
+    
+    // Tạo modal confirmation
+    function showCancelConfirmation(bookingId, tourName) {
+        const modal = document.createElement('div');
+        modal.className = 'cancel-modal';
+        modal.innerHTML = `
+            <div class="cancel-modal-overlay"></div>
+            <div class="cancel-modal-content">
+                <div class="cancel-modal-header">
+                    <h5><i class="fas fa-exclamation-triangle text-warning"></i> Xác nhận hủy tour</h5>
+                    <button type="button" class="cancel-modal-close" onclick="closeCancelModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="cancel-modal-body">
+                    <p>Bạn có chắc chắn muốn hủy tour <strong>"${tourName}"</strong> để được hoàn tiền?</p>
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>Lưu ý:</strong> Việc hủy tour sẽ tuân theo chính sách hủy tour của từng tour cụ thể.
+                    </div>
+                </div>
+                <div class="cancel-modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeCancelModal()">
+                        <i class="fas fa-times"></i> Hủy bỏ
+                    </button>
+                    <button type="button" class="btn btn-danger" onclick="confirmCancelTour(${bookingId})">
+                        <i class="fas fa-check"></i> Xác nhận hủy
+                    </button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+
+    function closeCancelModal() {
+        const modal = document.querySelector('.cancel-modal');
+        if (modal) {
+            modal.remove();
+        }
+    }
+    window.closeCancelModal = closeCancelModal;
+
+    function confirmCancelTour(bookingId) {
+        const button = document.querySelector(`[data-booking-id="${bookingId}"]`);
+        if (!button) return;
+
+        // Disable button và hiển thị loading
+        button.disabled = true;
+        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang kiểm tra chính sách...';
+        
+        // Đóng modal
+        closeCancelModal();
+        
+        // Gửi request hủy tour
+        fetch('/booking/cancel', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ bookingId: parseInt(bookingId) })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showSuccessNotification(data.message);
+                setTimeout(() => {
+                    location.reload();
+                }, 2000);
+            } else {
+                showErrorNotification(data.message);
+                // Re-enable button
+                button.disabled = false;
+                button.innerHTML = '<i class="fas fa-times"></i> Hủy tour hoàn tiền';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showErrorNotification('Có lỗi xảy ra khi hủy tour. Vui lòng thử lại.');
+            // Re-enable button
+            button.disabled = false;
+            button.innerHTML = '<i class="fas fa-times"></i> Hủy tour hoàn tiền';
+        });
+    }
+    window.confirmCancelTour = confirmCancelTour;
+
+    // Hiển thị thông báo thành công
+    function showSuccessNotification(message) {
+        const notification = document.createElement('div');
+        notification.className = 'success-notification';
+        notification.innerHTML = `
+            <div class="notification-content">
+                <i class="fas fa-check-circle"></i>
+                <span>${message}</span>
+            </div>
+        `;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 5000);
+    }
+
+    // Hiển thị thông báo lỗi
+    function showErrorNotification(message) {
+        const notification = document.createElement('div');
+        notification.className = 'error-notification';
+        notification.innerHTML = `
+            <div class="notification-content">
+                <i class="fas fa-exclamation-circle"></i>
+                <span>${message}</span>
+            </div>
+        `;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 5000);
+    }
+
+    // Xử lý nút hủy tour
+    document.querySelectorAll('.cancel-booking-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var bookingId = this.getAttribute('data-booking-id');
+            var tourName = this.getAttribute('data-tour-name');
+            showCancelConfirmation(bookingId, tourName);
+        });
+    });
+});
+</script> 

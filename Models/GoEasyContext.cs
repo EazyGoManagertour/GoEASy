@@ -75,6 +75,8 @@ public partial class GoEasyContext : DbContext
 
     public virtual DbSet<TourViewLog> TourViewLogs { get; set; }
 
+    public virtual DbSet<TourPolicy> TourPolicies { get; set; }
+
     public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<VIPPointHistory> VIPPointHistories { get; set; }
@@ -577,6 +579,25 @@ public partial class GoEasyContext : DbContext
                 .HasForeignKey(d => d.UserID)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__VIPPointH__UserI__0C85DE4D");
+        });
+
+        modelBuilder.Entity<TourPolicy>(entity =>
+        {
+            entity.HasKey(e => e.PolicyID).HasName("PK__TourPoli__PolicyID");
+
+            entity.ToTable("TourPolicies");
+
+            entity.Property(e => e.PolicyType).HasMaxLength(50);
+            entity.Property(e => e.PolicyName).HasMaxLength(100);
+            entity.Property(e => e.PolicyDescription).HasMaxLength(500);
+            entity.Property(e => e.PolicyValue).HasColumnType("nvarchar(max)");
+            entity.Property(e => e.IsActive).HasDefaultValue(true);
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
+
+            entity.HasOne(d => d.Tour).WithMany()
+                .HasForeignKey(d => d.TourID)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK__TourPolicies__TourID");
         });
 
         OnModelCreatingPartial(modelBuilder);

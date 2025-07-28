@@ -105,7 +105,7 @@
                                 <td>
                                     <button class="status admit"
                                             style="border: none; outline: none; background-color:@(discount.Status == true ? "" : "#dc3545")"
-                                            onclick="toggleStatus(this, '@discount.DiscountId', @(discount.Status.ToString().ToLower()))">
+                                            onclick="toggleStatus(this, '@discount.DiscountID', @(discount.Status.ToString().ToLower()))">
                                         @(discount.Status == true ? "Active" : "Disable")
                                     </button>
                                 </td>
@@ -114,13 +114,13 @@
                                         <button class="action-btn edit"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#editModal"
-                                                onclick="fillEditModal('@discount.DiscountId', '@discount.Code', '@discount.Description', '@discount.Percentage', '@discount.MaxAmount', '@discount.MinTotalPrice', '@discount.StartDate', '@discount.EndDate', '@(discount.Status ? "true" : "false")')">
+                                                onclick="fillEditModal('@discount.DiscountID', '@discount.Code', '@discount.Description', '@discount.Percentage', '@discount.MaxAmount', '@discount.MinTotalPrice', '@discount.StartDate', '@discount.EndDate', '@(discount.Status ? "true" : "false")')">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                         <button class="action-btn delete"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal"
-                                                onclick="setDeleteDiscountId('@discount.DiscountId')">
+                                                onclick="setDeleteDiscountId('@discount.DiscountID')">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
@@ -198,7 +198,7 @@
                 </div>
                 <div class="modal-body">
                     <form action="/admin/coupons/update" method="POST">
-                        <input type="hidden" name="DiscountId" id="editDiscountId">
+                        <input type="hidden" name="DiscountID" id="editDiscountId">
 
                         <div class="mb-3">
                             <label for="editCode" class="form-label">Code</label>

@@ -95,7 +95,7 @@
                                 <td>
                                     <button class="status admit"
                                             style="border: none; outline: none; background-color:@(category.Status == true ? "" : "#dc3545")"
-                                            onclick="toggleStatus(this, '@category.CategoryId', @(category.Status.ToString().ToLower()))">
+                                            onclick="toggleStatus(this, '@category.CategoryID', @(category.Status.ToString().ToLower()))">
                                         @(category.Status == true ? "Active" : "Disable")
                                     </button>
                                 </td>
@@ -105,7 +105,7 @@
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#editModal"
                                                 onclick="fillEditModal(
-                                '@category.CategoryId',
+                                '@category.CategoryID',
                                 '@category.CategoryName',
                                 '@category.Description',
                                 '@(category.Status == true ? "true" : "false")')">
@@ -115,7 +115,7 @@
                                         <button class="action-btn delete"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal"
-                                                onclick="setDeleteCategoryId('@category.CategoryId')">
+                                                onclick="setDeleteCategoryId('@category.CategoryID')">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
@@ -173,7 +173,7 @@
                 </div>
                 <div class="modal-body">
                     <form action="/admin/category/update" method="POST">
-                        <input type="hidden" name="CategoryId" id="editCategoryId" />
+                        <input type="hidden" name="CategoryID" id="editCategoryId" />
 
                         <div class="mb-3">
                             <label for="editCategoryName" class="form-label">Category Name</label>

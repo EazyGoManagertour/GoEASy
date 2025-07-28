@@ -118,7 +118,7 @@
                                 <td>
                                     @if (gallery.Any())
                                     {
-                                        string carouselId = $"carousel_{detail.BlogDetailId}";
+                                        string carouselId = $"carousel_{detail.BlogDetailID}";
                                         <div id="@carouselId" class="carousel slide" data-bs-ride="carousel" style="width: 120px;">
                                             <div class="carousel-inner">
                                                 @for (int i = 0; i < gallery.Count; i++)
@@ -208,7 +208,7 @@
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#editModal"
                                                 onclick="fillEditDetail(this)"
-                                                data-id="@detail.BlogDetailId"
+                                                data-id="@detail.BlogDetailID"
                                                 data-intro="@detail.Introduction"
                                                 data-s1title="@detail.Section1Title"
                                                 data-s1content="@detail.Section1Content"
@@ -224,7 +224,7 @@
                                         <button class="action-btn delete"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal"
-                                                onclick="setDeleteDetailId('@detail.BlogDetailId')">
+                                                onclick="setDeleteDetailId('@detail.BlogDetailID')">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
@@ -337,7 +337,7 @@
                     </div>
 
                     <div class="modal-body row g-3">
-                        <input type="hidden" name="BlogDetailId" id="editDetailId" />
+                        <input type="hidden" name="BlogDetailID" id="editDetailId" />
 
                         <div class="col-md-12">
                             <label>Introduction</label>

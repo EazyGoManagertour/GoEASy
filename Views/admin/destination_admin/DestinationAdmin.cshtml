@@ -127,7 +127,7 @@
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#editModal"
                                                 onclick="fillEditModal(
-                                                '@destination.DestinationId',
+                                                '@destination.DestinationID',
                                                 '@destination.DestinationName',
                                                 '@(destination.Description ?? "")',
                                                 '@(destination.Location ?? "")',
@@ -138,7 +138,7 @@
                                         <button class="action-btn delete"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal"
-                                                onclick="setDeleteDestinationId('@destination.DestinationId')">
+                                                onclick="setDeleteDestinationId('@destination.DestinationID')">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
@@ -243,7 +243,7 @@
                 </div>
                 <div class="modal-body">
                     <form action="/admin/destination-admin/update" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" name="DestinationId" id="editDestinationId">
+                        <input type="hidden" name="DestinationID" id="editDestinationId">
 
                         <div class="row">
                             <div class="col-md-6">

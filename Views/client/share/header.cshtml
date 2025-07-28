@@ -3,7 +3,7 @@
 
         <div class="header-inner rel d-flex align-items-center">
             <div class="logo-outer">
-                <div class="logo"><a href="home"><img src="@Url.Content("~/assets/images/logos/logo.png")" alt="Logo" title="Logo"></a></div>
+                <div class="logo"><a href="/"><img src="@Url.Content("~/assets/images/logos/logo.png")" alt="Logo" title="Logo"></a></div>
             </div>
 
             <div class="nav-outer mx-lg-auto ps-xxl-5 clearfix">
@@ -11,7 +11,7 @@
                 <nav class="main-menu navbar-expand-lg">
                     <div class="navbar-header">
                         <div class="mobile-logo">
-                            <a href="home">
+                            <a href="/">
                                 <img src="@Url.Content("~/assets/images/logos/logo.png")" alt="Logo" title="Logo">
                             </a>
                         </div>
@@ -27,15 +27,15 @@
                     <div class="navbar-collapse collapse clearfix">
                         <ul class="navigation clearfix">
                             <li class="dropdown current">
-                                <a href="#">Home</a>
+                                <a href="/">Trang Chủ</a>
                                 <ul>
-                                    <li><a href="#">Travel Agency</a></li>
-                                    <li><a href="#">City Tour</a></li>
-                                    <li><a href="#">Tour Package</a></li>
+                                    <li><a href="#">Công Ty Du Lịch</a></li>
+                                    <li><a href="#">Tour Thành Phố</a></li>
+                                    <li><a href="#">Gói Tour</a></li>
                                 </ul>
                             </li>
-                            <li><a href="tour-list">Tour list</a></li>
-                            <li><a href="blog">Blog</a></li>
+                            <li><a href="/tour-list">Danh Sách Tour</a></li>
+                            <li><a href="/blog">Blog</a></li>
                         </ul>
                     </div>
 
@@ -150,6 +150,10 @@ document.addEventListener('DOMContentLoaded', function() {
             li.style.cursor = 'pointer';
             li.innerHTML = `<b>${n.Title}</b><br><span>${n.Message}</span><br><small class="text-muted">${new Date(n.CreatedAt).toLocaleString()}</small>`;
             li.addEventListener('click', function() {
+                // Đánh dấu notification đã đọc
+                li.style.opacity = '0.6';
+                li.style.fontWeight = 'normal';
+                
                 if (n.RelatedId) {
                     window.location.href = '/booking/history?open=' + n.RelatedId;
                 } else {
