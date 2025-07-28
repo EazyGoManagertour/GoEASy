@@ -1,182 +1,182 @@
-﻿$(window).on("load", function () {
-    var ctx = $('#mainChart');
+﻿//$(window).on("load", function () {
+//    var ctx = $('#mainChart');
 
-    // Chart Options
-    var chartOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                position: 'bottom',
-                labels: {
-                    boxWidth: 12,
-                    padding: 15
-                }
-            },
-            tooltip: {
-                mode: 'index',
-                intersect: false
-            },
-            title: {
-                display: true,
-                text: 'Visitors Overview'
-            }
-        },
-        interaction: {
-            mode: 'nearest',
-            intersect: false
-        },
-        scales: {
-            x: {
-                grid: {
-                    color: "#f3f3f3",
-                    drawTicks: false
-                },
-                title: {
-                    display: true,
-                    text: 'Year'
-                }
-            },
-            y: {
-                grid: {
-                    color: "#f3f3f3",
-                    drawTicks: false
-                },
-                title: {
-                    display: true,
-                    text: 'Visitors'
-                },
-                beginAtZero: true
-            }
-        }
-    };
+//    // Chart Options
+//    var chartOptions = {
+//        responsive: true,
+//        maintainAspectRatio: false,
+//        plugins: {
+//            legend: {
+//                position: 'bottom',
+//                labels: {
+//                    boxWidth: 12,
+//                    padding: 15
+//                }
+//            },
+//            tooltip: {
+//                mode: 'index',
+//                intersect: false
+//            },
+//            title: {
+//                display: true,
+//                text: 'Overview'
+//            }
+//        },
+//        interaction: {
+//            mode: 'nearest',
+//            intersect: false
+//        },
+//        scales: {
+//            x: {
+//                grid: {
+//                    color: "#f3f3f3",
+//                    drawTicks: false
+//                },
+//                title: {
+//                    display: true,
+//                    text: 'Year'
+//                }
+//            },
+//            y: {
+//                grid: {
+//                    color: "#f3f3f3",
+//                    drawTicks: false
+//                },
+//                title: {
+//                    display: true,
+//                    text: 'Total'
+//                },
+//                beginAtZero: true
+//            }
+//        }
+//    };
 
-    // Chart Data
-    var chartData = {
-        labels: ["2010", "2011", "2012", "2013", "2014", "2015", "2016"],
-        datasets: [
-            {
-                label: "Page Views",
-                data: [0, 18, 10, 45, 17, 35, 20],
-                backgroundColor: "rgba(38,198,218,0.5)",
-                borderColor: "transparent",
-                pointBorderColor: "#26C6DA",
-                pointBackgroundColor: "#fff",
-                pointBorderWidth: 2,
-                pointHoverBorderWidth: 2,
-                pointRadius: 3,
-                fill: true,
-                tension: 0.4
-            },
-            {
-                label: "Total Visits",
-                data: [0, 5, 28, 15, 18, 20, 10],
-                backgroundColor: "rgba(255,159,64,0.5)",
-                borderColor: "transparent",
-                pointBorderColor: "#FF9F40",
-                pointBackgroundColor: "#fff",
-                pointBorderWidth: 2,
-                pointHoverBorderWidth: 2,
-                pointRadius: 3,
-                fill: true,
-                tension: 0.4
-            },
-            {
-                label: "Unique Visitor",
-                data: [0, 3, 22, 17, 28, 25, 5],
-                backgroundColor: "rgba(255,99,132,0.5)",
-                borderColor: "transparent",
-                pointBorderColor: "#FF6384",
-                pointBackgroundColor: "#fff",
-                pointBorderWidth: 2,
-                pointHoverBorderWidth: 2,
-                pointRadius: 3,
-                fill: true,
-                tension: 0.4
-            }
-        ]
-    };
+//    // Chart Data
+//    var chartData = {
+//        labels: ["2020", "2021", "2022", "2023", "2024", "2025", "2026"],
+//        datasets: [
+//            {
+//                label: "Page Views",
+//                data: [0, 18, 10, 45, 17, 35, 20],
+//                backgroundColor: "rgba(38,198,218,0.5)",
+//                borderColor: "transparent",
+//                pointBorderColor: "#26C6DA",
+//                pointBackgroundColor: "#fff",
+//                pointBorderWidth: 2,
+//                pointHoverBorderWidth: 2,
+//                pointRadius: 3,
+//                fill: true,
+//                tension: 0.4
+//            },
+//            {
+//                label: "Total Revenue",
+//                data: [0, 5, 28, 15, 18, 20, 10],
+//                backgroundColor: "rgba(255,159,64,0.5)",
+//                borderColor: "transparent",
+//                pointBorderColor: "#FF9F40",
+//                pointBackgroundColor: "#fff",
+//                pointBorderWidth: 2,
+//                pointHoverBorderWidth: 2,
+//                pointRadius: 3,
+//                fill: true,
+//                tension: 0.4
+//            },
+//            {
+//                label: "Total Bookings",
+//                data: [0, 3, 22, 17, 28, 25, 5],
+//                backgroundColor: "rgba(255,99,132,0.5)",
+//                borderColor: "transparent",
+//                pointBorderColor: "#FF6384",
+//                pointBackgroundColor: "#fff",
+//                pointBorderWidth: 2,
+//                pointHoverBorderWidth: 2,
+//                pointRadius: 3,
+//                fill: true,
+//                tension: 0.4
+//            }
+//        ]
+//    };
 
-    var config = {
-        type: 'line',
-        options: chartOptions,
-        data: chartData
-    };
+//    var config = {
+//        type: 'line',
+//        options: chartOptions,
+//        data: chartData
+//    };
 
-    // Create the chart
-    new Chart(ctx, config);
-});
+//    // Create the chart
+//    new Chart(ctx, config);
+//});
 
 
-$(window).on("load", function () {
-    const ctx = $("#sessionChart");
+//$(window).on("load", function () {
+//    const ctx = $("#sessionChart");
 
-    const chartOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        elements: {
-            line: {
-                tension: 0.4 // 👈 Bo tròn đường cong
-            },
-            point: {
-                radius: 0 // 👈 Ẩn các chấm tròn
-            }
-        },
-        plugins: {
-            legend: {
-                display: false
-            },
-            tooltip: {
-                mode: 'index',
-                intersect: false
-            }
-        },
-        scales: {
-            x: {
-                grid: {
-                    color: "#f3f3f3",
-                    drawTicks: false
-                },
-                ticks: {
-                    color: "#999"
-                }
-            },
-            y: {
-                grid: {
-                    color: "#f3f3f3",
-                    drawTicks: false
-                },
-                ticks: {
-                    color: "#999"
-                }
-            }
-        }
-    };
+//    const chartOptions = {
+//        responsive: true,
+//        maintainAspectRatio: false,
+//        elements: {
+//            line: {
+//                tension: 0.4 // 👈 Bo tròn đường cong
+//            },
+//            point: {
+//                radius: 0 // 👈 Ẩn các chấm tròn
+//            }
+//        },
+//        plugins: {
+//            legend: {
+//                display: false
+//            },
+//            tooltip: {
+//                mode: 'index',
+//                intersect: false
+//            }
+//        },
+//        scales: {
+//            x: {
+//                grid: {
+//                    color: "#f3f3f3",
+//                    drawTicks: false
+//                },
+//                ticks: {
+//                    color: "#999"
+//                }
+//            },
+//            y: {
+//                grid: {
+//                    color: "#f3f3f3",
+//                    drawTicks: false
+//                },
+//                ticks: {
+//                    color: "#999"
+//                }
+//            }
+//        }
+//    };
 
-    const chartData = {
-        labels: ["2016-12-01", "2016-12-02", "2016-12-03", "2016-12-04", "2016-12-05", "2016-12-08"],
-        datasets: [
-            {
-                label: "Pages/Session",
-                data: [0, 150, 140, 105, 190, 230],
-                backgroundColor: "rgba(209,212,219,.4)",
-                fill: true
-            },
-            {
-                label: "Avg. Session Duration",
-                data: [0, 90, 120, 240, 140, 250],
-                backgroundColor: "rgba(81,117,224,.7)",
-                fill: true
-            }
-        ]
-    };
+//    const chartData = {
+//        labels: ["2016-12-01", "2016-12-02", "2016-12-03", "2016-12-04", "2016-12-05", "2016-12-08"],
+//        datasets: [
+//            {
+//                label: "Pages/Session",
+//                data: [0, 150, 140, 105, 190, 230],
+//                backgroundColor: "rgba(209,212,219,.4)",
+//                fill: true
+//            },
+//            {
+//                label: "Avg. Session Duration",
+//                data: [0, 90, 120, 240, 140, 250],
+//                backgroundColor: "rgba(81,117,224,.7)",
+//                fill: true
+//            }
+//        ]
+//    };
 
-    new Chart(ctx, {
-        type: "line",
-        data: chartData,
-        options: chartOptions
-    });
-});
+//    new Chart(ctx, {
+//        type: "line",
+//        data: chartData,
+//        options: chartOptions
+//    });
+//});
 
 
 // (function(window, document, $) {

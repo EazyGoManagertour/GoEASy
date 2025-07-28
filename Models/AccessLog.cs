@@ -9,10 +9,6 @@ public partial class AccessLog
 
     public int? UserID { get; set; }
 
-    public string? Action { get; set; }
-
-    public string? Description { get; set; }
-
     public string? IPAddress { get; set; }
 
     public string? UserAgent { get; set; }

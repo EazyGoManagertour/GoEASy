@@ -26,9 +26,9 @@
             <!-- Top Stats Cards -->
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-number">23,454</div>
+                    <div class="stat-number">@Model.TotalVisits.ToString("N0")</div>
                     <div class="stat-label">Page Views</div>
-                    <div class="stat-change positive">↑ 4.3%</div>
+
                     <div class="mini-chart">
                         <div class="chart-bars">
                             <div class="bar" style="height: 20%"></div>
@@ -44,9 +44,8 @@
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-number">6,630</div>
-                    <div class="stat-label">Unique Visitors</div>
-                    <div class="stat-change negative">↓ 2.5%</div>
+                    <div class="stat-number">@Model.TotalUsers?.ToString("N0")</div>
+                    <div class="stat-label">Total Users</div>
                     <div class="mini-chart">
                         <div class="chart-bars red">
                             <div class="bar" style="height: 30%"></div>
@@ -62,9 +61,8 @@
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-number">86,578</div>
-                    <div class="stat-label">Total Visits</div>
-                    <div class="stat-change positive">↑ 12.5%</div>
+                    <div class="stat-number">@Model.TotalBookings?.ToString("N0")</div>
+                    <div class="stat-label">Total Bookings</div>
                     <div class="mini-chart">
                         <div class="chart-bars orange">
                             <div class="bar" style="height: 50%"></div>
@@ -88,52 +86,46 @@
             <!-- Middle Stats Row -->
             <div class="middle-stats">
                 <div class="stat-item">
-                    <div class="stat-icon user-icon"><i class="fas fa-user"></i></div>
-                    <div class="stat-info">
-                        <div class="stat-percent">78%</div>
-                        <div class="stat-desc">New Sessions</div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 78%"></div>
+                    <div class="stat-icon user-icon">
+                        <i class="fa-light fa-eye"></i>
                         </div>
+                    <div class="stat-info">
+                        <div class="stat-percent"> @Model.MostViewedTourName</div>
+                        <div class="stat-desc">Most viewed tours</div>
+                        
                     </div>
                 </div>
 
                 <div class="stat-item">
                     <div class="stat-icon visits-icon">
-                        <i class="fas fa-chart-bar"></i>
+                        <i class="fa-light fa-cash-register"></i>
                     </div>
                     <div class="stat-info">
-                        <div class="stat-percent">423</div>
-                        <div class="stat-desc">Total Visits</div>
-                        <div class="progress-bar red">
-                            <div class="progress-fill" style="width: 60%"></div>
-                        </div>
+                        <div class="stat-percent">@Model.BestSellingTourName</div>
+                        <div class="stat-desc">Best selling tour</div>
+                       
                     </div>
                 </div>
 
                 <div class="stat-item">
                     <div class="stat-icon bounce-icon">
-                        <i class="fas fa-layer-group"></i>
+                        <i class="fa-light fa-fire"></i>
                     </div>
                     <div class="stat-info">
-                        <div class="stat-percent">64.89%</div>
-                        <div class="stat-desc">Bounce Rate</div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 65%"></div>
-                        </div>
+                        <div class="stat-percent">@Model.HighestRatedTourName</div>
+                        <div class="stat-desc">Top rated tour</div>
+                        
                     </div>
                 </div>
 
                 <div class="stat-item">
                     <div class="stat-icon duration-icon">
-                        <i class="fas fa-globe"></i>
+                        <i class="fa-light fa-plane-slash"></i>
                     </div>
                     <div class="stat-info">
-                        <div class="stat-percent">02:12</div>
-                        <div class="stat-desc">Session Duration</div>
-                        <div class="progress-bar orange">
-                            <div class="progress-fill" style="width: 45%"></div>
-                        </div>
+                        <div class="stat-percent">@Model.MostCancelledTourName</div>
+                        <div class="stat-desc">Most canceled tours</div>
+                        
                     </div>
                 </div>
             </div>
@@ -152,47 +144,19 @@
 
                 <!-- Goals Completion -->
                 <div class="goals-widget">
-                    <div class="widget-header">
-                        <h3>GOALS COMPLETION</h3>
-                    </div>
-                    <div class="goals-list">
-                        <div class="goal-item">
-                            <div class="goal-info">
-                                <span class="goal-name">Account</span>
-                                <span class="goal-value">$0.18</span>
+                    <div class="middle-stats">
+                        <div class="stat-item">
+                            <div class="stat-icon duration-icon">
+                                <i class="fa-light fa-dollar-sign"></i>
                             </div>
-                            <div class="goal-progress">
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width: 85%"></div>
-                                </div>
-                                <span class="goal-percent">85%</span>
+                            <div class="stat-info">
+                                <div class="stat-percent">@Model.TotalRevenue.ToString("N0") VND</div>
+                                <div class="stat-desc">Total Revenue</div>
+
                             </div>
                         </div>
-                        <div class="goal-item">
-                            <div class="goal-info">
-                                <span class="goal-name">Subscribe</span>
-                                <span class="goal-value">$9.12</span>
-                            </div>
-                            <div class="goal-progress">
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width: 75%"></div>
-                                </div>
-                                <span class="goal-percent">75%</span>
-                            </div>
-                        </div>
-                        <div class="goal-item">
-                            <div class="goal-info">
-                                <span class="goal-name">Mobile</span>
-                                <span class="goal-value">$2.20</span>
-                            </div>
-                            <div class="goal-progress">
-                                <div class="progress-bar orange">
-                                    <div class="progress-fill" style="width: 60%"></div>
-                                </div>
-                                <span class="goal-percent">60%</span>
-                            </div>
-                        </div>
-                    </div>
+                     <div/>
+                    
                 </div>
             </div>
 
@@ -240,7 +204,6 @@
                 <table class="analytics-table">
                     <thead>
                         <tr>
-                            <th>Country</th>
                             <th>Page views</th>
                             <th>Device</th>
                             <th>% Bounce rate</th>
@@ -248,56 +211,32 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>
-                                United State
-                            </td>
-                            <td>18</td>
+                            <td id="views-desktop">0</td>
                             <td>Desktop</td>
                             <td>
                                 <div class="bounce-bar">
-                                    <div class="bounce-fill" style="width: 80%"></div>
-                                    <span>80%</span>
+                                    <div id="fill-desktop" class="bounce-fill" style="width: 0%"></div>
+                                    <span id="rate-desktop">0%</span>
                                 </div>
                             </td>
                         </tr>
                         <tr>
-                            <td>
-                                Australia
-                            </td>
-                            <td>12</td>
+                            <td id="views-mobile">0</td>
                             <td>Mobile</td>
                             <td>
                                 <div class="bounce-bar">
-                                    <div class="bounce-fill" style="width: 75%"></div>
-                                    <span>75%</span>
+                                    <div id="fill-mobile" class="bounce-fill" style="width: 0%"></div>
+                                    <span id="rate-mobile">0%</span>
                                 </div>
                             </td>
                         </tr>
                         <tr>
-                            <td>
-
-                                Brazil
-                            </td>
-                            <td>25</td>
+                            <td id="views-tablet">0</td>
                             <td>Tablet</td>
                             <td>
                                 <div class="bounce-bar">
-                                    <div class="bounce-fill" style="width: 68%"></div>
-                                    <span>68%</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-
-                                Great Britain (UK)
-                            </td>
-                            <td>8</td>
-                            <td>Mobile</td>
-                            <td>
-                                <div class="bounce-bar orange">
-                                    <div class="bounce-fill" style="width: 55%"></div>
-                                    <span>55%</span>
+                                    <div id="fill-tablet" class="bounce-fill" style="width: 0%"></div>
+                                    <span id="rate-tablet">0%</span>
                                 </div>
                             </td>
                         </tr>
@@ -308,5 +247,241 @@
     </div>
 
     @Html.Partial("~/Views/admin/share/script.cshtml")
+
+    <script>
+        $(window).on("load", function () {
+            $.getJSON("/admin/statistics/chart-data", function (allStats) {
+                console.log("All stats:", allStats);
+                    const labels = allStats.map(x => x.year.toString());
+                const pageViews = allStats.map(x => x.totalVisits);
+                const totalUsers = allStats.map(x => x.totalUsers);
+                const totalBookings = allStats.map(x => x.totalBookings);
+
+                // Tìm giá trị lớn nhất để scale trục Y
+                const allValues = pageViews.concat(totalUsers).concat(totalBookings);
+                const maxValue = Math.max(...allValues);
+                const dynamicMax = Math.ceil(maxValue * 1.2);
+
+                var ctx = $('#mainChart');
+                var config = {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: "Page Views",
+                                data: pageViews,
+                                backgroundColor: "rgba(38,198,218,0.5)",
+                                pointBorderColor: "#26C6DA",
+                                pointBackgroundColor: "#fff",
+                                pointBorderWidth: 2,
+                                pointHoverBorderWidth: 2,
+                                pointRadius: 3,
+                                fill: true,
+                                tension: 0.4
+                            },
+                            {
+                                label: "Total Users",
+                                data: totalUsers,
+                                backgroundColor: "rgba(255,159,64,0.5)",
+                                pointBorderColor: "#FF9F40",
+                                pointBackgroundColor: "#fff",
+                                pointBorderWidth: 2,
+                                pointHoverBorderWidth: 2,
+                                pointRadius: 3,
+                                fill: true,
+                                tension: 0.4
+                            },
+                            {
+                                label: "Total Bookings",
+                                data: totalBookings,
+                                backgroundColor: "rgba(255,99,132,0.5)",
+                                pointBorderColor: "#FF6384",
+                                pointBackgroundColor: "#fff",
+                                pointBorderWidth: 2,
+                                pointHoverBorderWidth: 2,
+                                pointRadius: 3,
+                                fill: true,
+                                tension: 0.4
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    boxWidth: 12,
+                                    padding: 15
+                                }
+                            },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false
+                            },
+                            title: {
+                                display: true,
+                                text: 'Overview'
+                            }
+                        },
+                        interaction: {
+                            mode: 'nearest',
+                            intersect: false
+                        },
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Year'
+                                },
+                                grid: {
+                                    color: "#f3f3f3",
+                                    drawTicks: false
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Total'
+                                },
+                                beginAtZero: true,
+                                max: dynamicMax,
+                                grid: {
+                                    color: "#f3f3f3",
+                                    drawTicks: false
+                                }
+                            }
+                        }
+                    }
+                };
+
+                new Chart(ctx, config);
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $.getJSON("/admin/statistics/device-bounce", function (data) {
+                console.log("Data from API:", data);
+
+                const resultMap = {};
+                data.forEach(item => {
+                    if (item.device) {
+                        resultMap[item.device.toLowerCase()] = item;
+                    }
+                });
+
+                const devices = ["desktop", "mobile", "tablet", "other"];
+
+                devices.forEach(device => {
+                    const viewsId = `#views-${device}`;
+                    const fillId = `#fill-${device}`;
+                    const rateId = `#rate-${device}`;
+
+                    const item = resultMap[device];
+                    const views = item ? item.pageViews : 0;
+                    const rate = item ? item.bounceRate : 0;
+
+                    $(viewsId).text(views);
+                    $(fillId).css("width", rate + "%");
+                    $(rateId).text(rate + "%");
+                });
+            });
+        });
+    </script>
+
+    <script>
+                $(window).on("load", function () {
+            $.getJSON("/admin/statistics/chart-revenue", function (data) {
+                const labels = data.map(x =>
+                    new Date(x.snapshotAt).toLocaleDateString('vi-VN', { month: 'short', year: 'numeric' })
+                );
+
+                        const revenues = data.map(x => Number(x.totalRevenue) || 0);
+
+        // Lấy giá trị lớn nhất trong mảng đã ép kiểu
+        const maxValue = Math.max(...revenues);
+
+        // Nếu max nhỏ hơn 10 triệu → cộng dư 2 triệu thôi cho đẹp
+        let dynamicMax = 0;
+        if (maxValue <= 10_000_000) {
+            dynamicMax = maxValue + 2_000_000;
+        } else {
+            dynamicMax = Math.ceil(maxValue * 1.2); // scale đúng, không bị 1.6 tỷ như kia
+        }
+
+                console.log("✔ Tổng doanh thu:", revenues);
+                console.log("✔ Giá trị lớn nhất:", maxValue);
+                console.log("✔ Trục Y max:", dynamicMax);
+
+                const ctx = $("#sessionChart");
+
+                const chartData = {
+                    labels: labels,
+                    datasets: [{
+                        label: "Total Revenue (VNĐ)",
+                        data: revenues,
+                        backgroundColor: "rgba(81,117,224,0.6)",
+                        fill: true
+                    }]
+                };
+
+                const chartOptions = {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    elements: {
+                        line: { tension: 0.4 },
+                        point: { radius: 0 }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function (context) {
+                                    const v = context.parsed.y;
+                                    if (v >= 1_000_000_000) return (v / 1_000_000_000).toFixed(1) + " tỷ ₫";
+                                    if (v >= 1_000_000) return (v / 1_000_000).toFixed(1) + " triệu ₫";
+                                    return v.toLocaleString('vi-VN') + " ₫";
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: "#f3f3f3", drawTicks: false },
+                            ticks: { color: "#999" }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            suggestedMax: dynamicMax,
+                            grid: { color: "#f3f3f3", drawTicks: false },
+                            ticks: {
+                                color: "#999",
+                                callback: function (value) {
+                                    if (value >= 1_000_000_000) return (value / 1_000_000_000).toFixed(1) + " tỷ ₫";
+                                    if (value >= 1_000_000) return (value / 1_000_000).toFixed(1) + " triệu ₫";
+                                    return value.toLocaleString('vi-VN') + " ₫";
+                                }
+                            }
+                        }
+                    }
+                };
+
+                new Chart(ctx, {
+                    type: "line",
+                    data: chartData,
+                    options: chartOptions
+                });
+            });
+        });
+    </script>
+
+
+    @* <script src="~/js/script.js"></script>  *@
 </body>
 </html>

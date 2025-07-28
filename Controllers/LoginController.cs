@@ -7,12 +7,13 @@ namespace GoEASy.Controllers
     public class LoginController : Controller
     {
         private readonly LoginService _loginService;
-
-        public LoginController(LoginService loginService)
+        private readonly IAccessLogService _accessLogService;
+       
+        public LoginController(LoginService loginService, IAccessLogService accessLogService)
         {
             _loginService = loginService;
+            _accessLogService = accessLogService;
         }
-
         // GET: /login
         [HttpGet("")]
         public IActionResult Index()
@@ -44,7 +45,9 @@ namespace GoEASy.Controllers
                     HttpContext.Session.SetInt32("RoleID", user.RoleID ?? 1);
 
                     TempData["Success"] = "Đăng nhập thành công!";
-                    
+                    var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
+                    var userAgent = Request.Headers["User-Agent"].ToString();
+                    _accessLogService.LogAccess(user.UserID, ipAddress, userAgent);
                     // Redirect theo role
                     if (user.RoleID == 1)
                     {
