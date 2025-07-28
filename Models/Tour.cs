@@ -52,4 +52,6 @@ public partial class Tour
     public virtual ICollection<TourImage> TourImages { get; set; } = new List<TourImage>();
 
     public virtual ICollection<TourItinerary> TourItineraries { get; set; } = new List<TourItinerary>();
+
+    public virtual ICollection<TourPolicy> TourPolicies { get; set; } = new List<TourPolicy>();
 }
