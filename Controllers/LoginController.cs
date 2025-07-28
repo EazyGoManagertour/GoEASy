@@ -13,11 +13,13 @@ namespace GoEASy.Controllers
     {
         private readonly LoginService _loginService;
         private readonly IConfiguration _configuration;
+        private readonly IAccessLogService _accessLogService;
 
-        public LoginController(LoginService loginService, IConfiguration configuration)
+        public LoginController(LoginService loginService, IConfiguration configuration, IAccessLogService accessLogService)
         {
             _loginService = loginService;
             _configuration = configuration;
+            _accessLogService = accessLogService;
         }
 
         // GET: /login
@@ -88,6 +90,13 @@ namespace GoEASy.Controllers
                     HttpContext.Session.SetInt32("RoleId", user.RoleID ?? 1);
 
                     TempData["Success"] = "Đăng nhập thành công!";
+
+
+                    var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
+                    var userAgent = Request.Headers["User-Agent"].ToString();
+                    _accessLogService.LogAccess(user.UserID, ipAddress, userAgent);
+
+
                     // Redirect theo role
                     if (user.RoleID == 1)
                         return RedirectToAction("Index", "Home");
