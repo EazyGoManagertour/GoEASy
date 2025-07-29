@@ -1,0 +1,90 @@
+
+[7/29/2025 10:10:53 AM] DEBUG: API_KEY_LENGTH=164, ENDPOINT=https://api.openai.com/v1/chat/completions
+[7/29/2025 10:10:54 AM] RESPONSE_STATUS=Unauthorized, RESPONSE_CONTENT={
+    "error": {
+        "message": "Incorrect API key provided: sk-proj-********************************************************************************************************************************************************QZYA. You can find your API key at https://platform.openai.com/account/api-keys.",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "invalid_api_key"
+    }
+}
+
+[7/29/2025 10:10:54 AM] ERROR: HTTP_Unauthorized
+
+[7/29/2025 10:11:03 AM] DEBUG: API_KEY_LENGTH=164, ENDPOINT=https://api.openai.com/v1/chat/completions
+[7/29/2025 10:11:04 AM] RESPONSE_STATUS=Unauthorized, RESPONSE_CONTENT={
+    "error": {
+        "message": "Incorrect API key provided: sk-proj-********************************************************************************************************************************************************QZYA. You can find your API key at https://platform.openai.com/account/api-keys.",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "invalid_api_key"
+    }
+}
+
+[7/29/2025 10:11:04 AM] ERROR: HTTP_Unauthorized
+
+[7/29/2025 10:15:27 AM] DEBUG: API_KEY_LENGTH=164, ENDPOINT=https://api.openai.com/v1/chat/completions
+[7/29/2025 10:15:28 AM] RESPONSE_STATUS=Unauthorized, RESPONSE_CONTENT={
+    "error": {
+        "message": "Incorrect API key provided: sk-proj-********************************************************************************************************************************************************QZYA. You can find your API key at https://platform.openai.com/account/api-keys.",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "invalid_api_key"
+    }
+}
+
+[7/29/2025 10:15:28 AM] ERROR: HTTP_Unauthorized
+
+[7/29/2025 10:18:09 AM] DEBUG: API_KEY_LENGTH=164, ENDPOINT=https://api.openai.com/v1/chat/completions
+[7/29/2025 10:18:09 AM] RESPONSE_STATUS=Unauthorized, RESPONSE_CONTENT={
+    "error": {
+        "message": "Incorrect API key provided: sk-proj-********************************************************************************************************************************************************QZYA. You can find your API key at https://platform.openai.com/account/api-keys.",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "invalid_api_key"
+    }
+}
+
+[7/29/2025 10:18:09 AM] ERROR: HTTP_Unauthorized
+
+[7/29/2025 10:20:19 AM] DEBUG: API_KEY_LENGTH=164, ENDPOINT=https://api.openai.com/v1/chat/completions
+[7/29/2025 10:20:20 AM] RESPONSE_STATUS=OK, RESPONSE_CONTENT={
+  "id": "chatcmpl-ByVAwtYudb7E41FZz4PUJLEe5ibJ4",
+  "object": "chat.completion",
+  "created": 1753759218,
+  "model": "gpt-3.5-turbo-0125",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "NEG",
+        "refusal": null,
+        "annotations": []
+      },
+      "logprobs": null,
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 182,
+    "completion_tokens": 1,
+    "total_tokens": 183,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    }
+  },
+  "service_tier": "default",
+  "system_fingerprint": null
+}
+
+[7/29/2025 10:20:20 AM] COMMENT: quá nguu
+AI_RESULT: NEG
+FINAL_DECISION: BLOCK

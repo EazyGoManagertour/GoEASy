@@ -38,7 +38,7 @@ namespace GoEASy.Controllers
         public async Task<IActionResult> Create(int tourID, int adultGuests, int childGuests, decimal totalPrice, bool isCustom = false)
         {
 
-            int? userID = HttpContext.Session.GetInt32("UserID");
+            int? userID = HttpContext.Session.GetInt32("UserID"); 
             if (userID == null)
 
             {

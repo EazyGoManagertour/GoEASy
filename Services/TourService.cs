@@ -330,51 +330,51 @@ namespace GoEASy.Services
             var tour = await _context.Tours.FindAsync(tourID);
             if (tour == null) return false;
 
-            // Tạo tên folder từ tên tour
-            var folderName = tour.TourName?.ToLowerInvariant()
-                .Replace(" ", "-")
-                .Replace("đ", "d").Replace("ă", "a").Replace("â", "a")
-                .Replace("ê", "e").Replace("ô", "o").Replace("ơ", "o").Replace("ư", "u")
-                .Replace(":", "").Replace(";", "").Replace(",", "").Replace(".", "")
-                .Replace("!", "").Replace("?", "").Replace("(", "").Replace(")", "")
-                .Replace("[", "").Replace("]", "").Replace("{", "").Replace("}", "")
-                .Replace("'", "").Replace("\"", "").Replace("\\", "").Replace("/", "")
-                .Replace("|", "").Replace("<", "").Replace(">", "");
-            
-            if (string.IsNullOrEmpty(folderName))
-            {
-                folderName = "tour-" + tour.TourID;
-            }
-            
-            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "assets", "tours", folderName);
-            if (!Directory.Exists(uploadsFolder))
-                Directory.CreateDirectory(uploadsFolder);
+                // Tạo tên folder từ tên tour
+                var folderName = tour.TourName?.ToLowerInvariant()
+                    .Replace(" ", "-")
+                    .Replace("đ", "d").Replace("ă", "a").Replace("â", "a")
+                    .Replace("ê", "e").Replace("ô", "o").Replace("ơ", "o").Replace("ư", "u")
+                    .Replace(":", "").Replace(";", "").Replace(",", "").Replace(".", "")
+                    .Replace("!", "").Replace("?", "").Replace("(", "").Replace(")", "")
+                    .Replace("[", "").Replace("]", "").Replace("{", "").Replace("}", "")
+                    .Replace("'", "").Replace("\"", "").Replace("\\", "").Replace("/", "")
+                    .Replace("|", "").Replace("<", "").Replace(">", "");
                 
-            // Xóa tất cả ảnh cũ của tour này
-            var oldImages = _context.TourImages.Where(i => i.TourID == tourID).ToList();
-            _context.TourImages.RemoveRange(oldImages);
-            await _context.SaveChangesAsync();
-            
-            for (int i = 0; i < images.Count; i++)
-            {
-                var image = images[i];
-                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
-                var filePath = Path.Combine(uploadsFolder, fileName);
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                if (string.IsNullOrEmpty(folderName))
                 {
-                    await image.CopyToAsync(stream);
+                    folderName = "tour-" + tour.TourID;
                 }
-                var ImageURL = $"/assets/tours/{folderName}/{fileName}";
-                var tourImage = new TourImage
+                
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "assets", "tours", folderName);
+                if (!Directory.Exists(uploadsFolder))
+                    Directory.CreateDirectory(uploadsFolder);
+                    
+                // Xóa tất cả ảnh cũ của tour này
+            var oldImages = _context.TourImages.Where(i => i.TourID == tourID).ToList();
+                _context.TourImages.RemoveRange(oldImages);
+                await _context.SaveChangesAsync();
+                
+                for (int i = 0; i < images.Count; i++)
                 {
+                    var image = images[i];
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
+                    var filePath = Path.Combine(uploadsFolder, fileName);
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await image.CopyToAsync(stream);
+                    }
+                    var ImageURL = $"/assets/tours/{folderName}/{fileName}";
+                    var tourImage = new TourImage
+                    {
                     TourID = tourID,
-                    ImageURL = ImageURL,
-                    IsCover = (i == 0),
-                    UploadedAt = DateTime.Now
-                };
-                _context.TourImages.Add(tourImage);
-            }
-            await _context.SaveChangesAsync();
+                        ImageURL = ImageURL,
+                        IsCover = (i == 0),
+                        UploadedAt = DateTime.Now
+                    };
+                    _context.TourImages.Add(tourImage);
+                }
+                await _context.SaveChangesAsync();
             return true;
         }
 
