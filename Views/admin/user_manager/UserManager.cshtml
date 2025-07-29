@@ -106,9 +106,9 @@
                                 <td>@(user.IsVip == true ? "VIP" : "Regular")</td>
                                 <td>@user.Vippoints</td>
                                 <td>
-                                    <button class="status admit"
+                                    <button class="status-btn @(user.Status == true ? "active" : "inactive")"
                                             style="border: none; outline: none; background-color:@(user.Status == true ? "" : "#dc3545")"
-                                            onclick="toggleStatus(this, '@user.UserId', @(user.Status.ToString().ToLower()))">
+                                            onclick="toggleStatus(this, '@user.UserID', @(user.Status.ToString().ToLower()))">
                                         @(user.Status == true ? "Active" : "Disable")
                                     </button>
                                 </td>
@@ -119,7 +119,7 @@
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#editModal"
                                                 onclick="fillEditModal(
-                                                '@user.UserId',
+                                                '@user.UserID',
                                                 '@user.Username',
                                                 '',
                                                 '@user.FullName',
@@ -127,9 +127,9 @@
                                                 '@user.Phone',
                                                 '@user.Address',
                                                 '@user.Sex',
-                                                '@user.RoleId',
-                                                '@(user.IsVip == true ? "true" : "false")',
-                                                '@user.Vippoints',
+                                                '@user.RoleID',
+                                                '@(user.IsVIP == true ? "true" : "false")',
+                                                '@user.VIPPoints',
                                                 '@(user.Status == true ? "true" : "false")')">
                                             <i class="fas fa-edit"></i>
                                         </button>
@@ -137,7 +137,7 @@
                                         <button class="action-btn delete"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal"
-                                                onclick="setDeleteUserId('@user.UserId')">
+                                                onclick="setDeleteUserId('@user.UserID')">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>

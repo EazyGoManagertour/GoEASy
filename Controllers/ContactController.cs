@@ -30,7 +30,7 @@ namespace GoEASy.Controllers
         {
             _logger.LogInformation("[Contact] GET /contact called");
             // Nếu user đã đăng nhập, lấy thông tin user để autofill form
-            int? userId = HttpContext.Session.GetInt32("UserId");
+            int? userId = HttpContext.Session.GetInt32("UserID"); // Sửa từ "UserId" thành "UserID"
             if (userId != null)
             {
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.UserID == userId);

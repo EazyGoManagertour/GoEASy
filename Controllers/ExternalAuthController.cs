@@ -205,7 +205,7 @@ namespace GoEASy.Controllers
         [HttpPost("/complete-profile")]
         public async Task<IActionResult> CompleteProfile(string phone, string address, string sex)
         {
-            var userId = HttpContext.Session.GetInt32("UserId");
+            var userId = HttpContext.Session.GetInt32("UserID"); // Đổi từ "UserId" thành "UserID"
             if (userId == null)
             {
                 return RedirectToAction("Index", "Login");

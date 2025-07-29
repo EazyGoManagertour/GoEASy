@@ -55,7 +55,7 @@
 
             <!-- Menu Button -->
             @{
-                var isLoggedIn = Context.Session.GetInt32("UserId") != null;
+                var isLoggedIn = Context.Session.GetInt32("UserID") != null; // Sửa từ "UserId" thành "UserID"
                 var userName = Context.Session.GetString("UserName") ?? "User";
                 var userAvatar = "/assets/images/blog/comment-author1.jpg"; // Dùng avatar mẫu feedback
             }

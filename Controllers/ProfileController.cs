@@ -22,7 +22,7 @@ namespace GoEASy.Controllers
         [HttpGet("")]
         public async Task<IActionResult> Index()
         {
-            int? userId = HttpContext.Session.GetInt32("UserId");
+            int? userId = HttpContext.Session.GetInt32("UserID"); // Sửa từ "UserId" thành "UserID"
             if (userId == null)
             {
                 TempData["Error"] = "Bạn cần đăng nhập để xem thông tin cá nhân.";
@@ -44,7 +44,7 @@ namespace GoEASy.Controllers
         {
             try
             {
-                int? userId = HttpContext.Session.GetInt32("UserId");
+                int? userId = HttpContext.Session.GetInt32("UserID"); // Sửa từ "UserId" thành "UserID"
                 if (userId == null)
                 {
                     TempData["Error"] = "Bạn cần đăng nhập để chỉnh sửa thông tin cá nhân.";
@@ -105,7 +105,7 @@ namespace GoEASy.Controllers
         {
             try
             {
-                int? userId = HttpContext.Session.GetInt32("UserId");
+                int? userId = HttpContext.Session.GetInt32("UserID"); // Sửa từ "UserId" thành "UserID"
                 if (userId == null)
                 {
                     TempData["Error"] = "Bạn cần đăng nhập để đổi mật khẩu.";

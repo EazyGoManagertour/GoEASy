@@ -83,7 +83,7 @@ namespace GoEASy.Controllers
                 if (success && user != null)
                 {
                     // Tạo session cho user
-                    HttpContext.Session.SetInt32("UserId", user.UserID);
+                    HttpContext.Session.SetInt32("UserID", user.UserID); // Sửa từ "UserId" thành "UserID"
                     HttpContext.Session.SetString("UserEmail", user.Email ?? "");
                     HttpContext.Session.SetString("UserName", user.FullName);
                     HttpContext.Session.SetString("UserRole", user.Role?.RoleName ?? "User");
@@ -160,7 +160,7 @@ namespace GoEASy.Controllers
                 if (success)
                 {
                     var newUser = await _loginService.GetUserByEmailAsync(user.Email);
-                    HttpContext.Session.SetInt32("UserId", newUser.UserID);
+                    HttpContext.Session.SetInt32("UserID", newUser.UserID); // Sửa từ "UserId" thành "UserID"
                     HttpContext.Session.SetString("UserEmail", newUser.Email ?? "");
                     HttpContext.Session.SetString("UserName", newUser.FullName);
                     HttpContext.Session.SetString("UserRole", newUser.Role?.RoleName ?? "User");
@@ -316,7 +316,7 @@ namespace GoEASy.Controllers
         [HttpGet("/login/complete-profile")]
         public IActionResult CompleteProfile()
         {
-            var userId = HttpContext.Session.GetInt32("UserId");
+            var userId = HttpContext.Session.GetInt32("UserID"); // Sửa từ "UserId" thành "UserID"
             if (userId == null)
             {
                 return RedirectToAction("Index", "Login");
@@ -328,7 +328,7 @@ namespace GoEASy.Controllers
         [HttpPost("/login/complete-profile")]
         public async Task<IActionResult> CompleteProfilePost(string phone, string address, string sex)
         {
-            var userId = HttpContext.Session.GetInt32("UserId");
+            var userId = HttpContext.Session.GetInt32("UserID"); // Đã sửa từ "UserId"
             if (userId == null)
             {
                 return RedirectToAction("Index", "Login");
