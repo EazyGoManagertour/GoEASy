@@ -5,6 +5,7 @@ using GoEASy.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Text.Json;
+using Helper;
 
 namespace GoEASy.Controllers
 {
@@ -119,6 +120,22 @@ namespace GoEASy.Controllers
                     Message = "Phải có ít nhất 1 người lớn cho mỗi 3 trẻ em" 
                 });
             }
+        }
+
+        [HttpGet("{id}/comments-ajax")]
+        public async Task<IActionResult> GetCommentsAjax(int id, int page = 1)
+        {
+            var feedbacks = await _context.Reviews
+                .Include(r => r.User)
+                .Where(r => r.TourID == id && !string.IsNullOrEmpty(r.Comment))
+                .OrderByDescending(r => r.CreatedDate)
+                .ToListAsync();
+            int pageSize = 5; // User requested 5 comments per page
+            int totalFeedbacks = feedbacks.Count;
+            int totalPages = (int)Math.Ceiling((double)totalFeedbacks / pageSize);
+            var pagedFeedbacks = feedbacks.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var html = await this.RenderViewAsync("~/Views/client/Partials/_TourCommentsPartial.cshtml", pagedFeedbacks, true);
+            return Json(new { html, totalPages, currentPage = page });
         }
     }
 }

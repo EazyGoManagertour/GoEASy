@@ -29,6 +29,23 @@ namespace GoEASy.Services
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Destination>> GetPagedDestinationsAsync(int page, int pageSize)
+        {
+            return await _context.Destinations
+                .Include(d => d.DestinationImages)
+                .Include(d => d.Tours)
+                .OrderByDescending(d => d.CreatedAt)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
+
+        public async Task<int> GetTotalPagesAsync(int pageSize)
+        {
+            var totalDestinations = await _context.Destinations.CountAsync();
+            return (int)Math.Ceiling((double)totalDestinations / pageSize);
+        }
+
         public async Task<Destination?> GetDestinationByIdAsync(int id)
         {
             return await _context.Destinations

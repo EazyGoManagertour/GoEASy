@@ -87,7 +87,7 @@ namespace GoEASy.Controllers
                     HttpContext.Session.SetString("UserEmail", user.Email ?? "");
                     HttpContext.Session.SetString("UserName", user.FullName);
                     HttpContext.Session.SetString("UserRole", user.Role?.RoleName ?? "User");
-                    HttpContext.Session.SetInt32("RoleId", user.RoleID ?? 1);
+                    HttpContext.Session.SetInt32("RoleID", user.RoleID ?? 1);
 
                     TempData["Success"] = "Đăng nhập thành công!";
 
@@ -164,7 +164,7 @@ namespace GoEASy.Controllers
                     HttpContext.Session.SetString("UserEmail", newUser.Email ?? "");
                     HttpContext.Session.SetString("UserName", newUser.FullName);
                     HttpContext.Session.SetString("UserRole", newUser.Role?.RoleName ?? "User");
-                    HttpContext.Session.SetInt32("RoleId", newUser.RoleID ?? 1);
+                    HttpContext.Session.SetInt32("RoleID", newUser.RoleID ?? 1);
                     HttpContext.Session.SetString("NeedCompleteProfile", "true");
                     TempData["Success"] = "Đăng ký thành công! Vui lòng bổ sung thông tin cá nhân.";
                     return RedirectToAction("CompleteProfile", "ExternalAuth");

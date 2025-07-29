@@ -7,14 +7,14 @@
     <link rel="stylesheet" href="/assets/css/jquery-ui.min.css">
 
     <!-- Additional CSS for Tour List (not in shared) -->
-    <link rel="stylesheet" href="/assets/css/flaticon.min.css">
-    <link rel="stylesheet" href="/assets/css/fontawesome-5.14.0.min.css">
-    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/assets/css/magnific-popup.min.css">
-    <link rel="stylesheet" href="/assets/css/nice-select.min.css">
-    <link rel="stylesheet" href="/assets/css/aos.css">
-    <link rel="stylesheet" href="/assets/css/slick.min.css">
-    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="@Url.Content("~/assets/css/flaticon.min.css")" asp-append-version="true" />
+    <link rel="stylesheet" href="@Url.Content("~/assets/css/fontawesome-5.14.0.min.css")" asp-append-version="true" />
+    <link rel="stylesheet" href="@Url.Content("~/assets/css/bootstrap.min.css")" asp-append-version="true" />
+    <link rel="stylesheet" href="@Url.Content("~/assets/css/magnific-popup.min.css")" asp-append-version="true" />
+    <link rel="stylesheet" href="@Url.Content("~/assets/css/nice-select.min.css")" asp-append-version="true" />
+    <link rel="stylesheet" href="@Url.Content("~/assets/css/aos.css")" asp-append-version="true" />
+    <link rel="stylesheet" href="@Url.Content("~/assets/css/slick.min.css")" asp-append-version="true" />
+    <link rel="stylesheet" href="@Url.Content("~/assets/css/style.css")" asp-append-version="true" />
 
     <style>
         .heart {
@@ -161,11 +161,11 @@
         <section class="page-banner-area pt-50 pb-35 rel z-1 bgs-cover" style="background-image: url(/assets/images/banner/banner.jpg);">
             <div class="container">
                 <div class="banner-inner text-white mb-50">
-                    <h2 class="page-title mb-10" data-aos="fade-left" data-aos-duration="1500" data-aos-offset="50">Tour List View</h2>
+                    <h2 class="page-title mb-10" data-aos="fade-left" data-aos-duration="1500" data-aos-offset="50">Danh Sách Tour</h2>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-center mb-20" data-aos="fade-right" data-aos-delay="200" data-aos-duration="1500" data-aos-offset="50">
-                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                            <li class="breadcrumb-item active">Tour List</li>
+                            <li class="breadcrumb-item"><a href="index.html">Trang Chủ</a></li>
+                            <li class="breadcrumb-item active">Danh Sách Tour</li>
                         </ol>
                     </nav>
                 </div>
@@ -175,7 +175,7 @@
             <div class="search-filter-inner" data-aos="zoom-out-down" data-aos-duration="1500" data-aos-offset="50">
                 <div class="filter-item clearfix">
                     <div class="icon"><i class="fal fa-map-marker-alt"></i></div>
-                    <span class="title">Destinations</span>
+                    <span class="title">Điểm Đến</span>
                     <select name="DestinationID" id="DestinationID" class="nice-select">
                         <option value="">Tất cả điểm đến</option>
                         @if (ViewBag.Destinations != null)
@@ -190,7 +190,7 @@
                 </div>
                 <div class="filter-item clearfix">
                     <div class="icon"><i class="fal fa-flag"></i></div>
-                    <span class="title">Categories</span>
+                    <span class="title">Danh Mục</span>
                     <select name="CategoryID" id="CategoryID" class="nice-select">
                         <option value="">Tất cả danh mục</option>
                         @if (ViewBag.Categories != null)
@@ -278,10 +278,10 @@
                                 <option value="price" @(ViewBag.SortBy?.ToString() == "price" ? "selected" : "")>Giá</option>
                                 <option value="startdate" @(ViewBag.SortBy?.ToString() == "startdate" ? "selected" : "")>Ngày khởi hành</option>
                             </select>
-                                                            <button class="theme-btn style-two clear-filters ms-3">
-                                    <span data-hover="Xóa Bộ Lọc">Xóa Bộ Lọc</span>
-                                    <i class="fal fa-times"></i>
-                                </button>
+                            <button class="theme-btn style-two clear-filters ms-3">
+                                <span data-hover="Xóa Bộ Lọc">Xóa Bộ Lọc</span>
+                                <i class="fal fa-times"></i>
+                            </button>
                         </div>
 
                         @if (Model != null && Model.Count > 0)
@@ -328,7 +328,7 @@
                                     </div>
                                     <div class="content">
                                         <div class="destination-header">
-                                            <span class="location"><i class="fal fa-map-marker-alt"></i> @(tour.Destination != null ? tour.Destination.DestinationName : "Unknown Location")</span>
+                                            <span class="location"><i class="fal fa-map-marker-alt"></i> @(tour.Destination != null ? tour.Destination.DestinationName : "Địa điểm chưa xác định")</span>
                                             <div class="ratting">
                                                 <i class="fas fa-star"></i>
                                                 <i class="fas fa-star"></i>
@@ -349,7 +349,7 @@
                                             }
                                         </p>
                                         <ul class="blog-meta">
-                                            <li><i class="far fa-clock"></i> @(tour.StartDate?.ToString("dd/MM/yyyy") ?? "TBD") - @(tour.EndDate?.ToString("dd/MM/yyyy") ?? "TBD")</li>
+                                            <li><i class="far fa-clock"></i> @(tour.StartDate?.ToString("dd/MM/yyyy") ?? "Chưa xác định") - @(tour.EndDate?.ToString("dd/MM/yyyy") ?? "Chưa xác định")</li>
                                             @if (tour.Category != null)
                                             {
                                                 <li><i class="far fa-tag"></i> @tour.Category.CategoryName</li>
@@ -393,36 +393,11 @@
                                     <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
                                         <a class="page-link" href="/tour-list?page=@(ViewBag.CurrentPage - 1)@(ViewBag.PageSize != null ? "&pageSize=" + ViewBag.PageSize : "")@(ViewBag.SelectedDestinationID != null ? "&DestinationID=" + ViewBag.SelectedDestinationID : "")@(ViewBag.SelectedCategoryID != null ? "&CategoryID=" + ViewBag.SelectedCategoryID : "")@(ViewBag.StartDate != null ? "&startDate=" + ViewBag.StartDate : "")@(ViewBag.SortBy != null ? "&sortBy=" + ViewBag.SortBy : "")" tabindex="-1"><i class="far fa-chevron-left"></i></a>
                                     </li>
-                                    @{
-                                        int startPage = Math.Max(1, ViewBag.CurrentPage - 1);
-                                        int endPage = Math.Min((int)ViewBag.TotalPages, ViewBag.CurrentPage + 1);
-                                        if (startPage > 1)
-                                        {
-                                            <li class="page-item"><a class="page-link" href="/tour-list?page=1@(ViewBag.PageSize != null ? "&pageSize=" + ViewBag.PageSize : "")@(ViewBag.SelectedDestinationID != null ? "&DestinationID=" + ViewBag.SelectedDestinationID : "")@(ViewBag.SelectedCategoryID != null ? "&CategoryID=" + ViewBag.SelectedCategoryID : "")@(ViewBag.StartDate != null ? "&startDate=" + ViewBag.StartDate : "")@(ViewBag.SortBy != null ? "&sortBy=" + ViewBag.SortBy : "")">1</a></li>
-                                            if (startPage > 2)
-                                            {
-                                                <li class="page-item disabled"><span class="page-link">...</span></li>
-                                            }
-                                        }
-                                        for (int i = startPage; i <= endPage; i++)
-                                        {
-                                            if (i == ViewBag.CurrentPage)
-                                            {
-                                                <li class="page-item active"><span class="page-link">@i</span></li>
-                                            }
-                                            else
-                                            {
-                                                <li class="page-item"><a class="page-link" href="/tour-list?page=@i@(ViewBag.PageSize != null ? "&pageSize=" + ViewBag.PageSize : "")@(ViewBag.SelectedDestinationID != null ? "&DestinationID=" + ViewBag.SelectedDestinationID : "")@(ViewBag.SelectedCategoryID != null ? "&CategoryID=" + ViewBag.SelectedCategoryID : "")@(ViewBag.StartDate != null ? "&startDate=" + ViewBag.StartDate : "")@(ViewBag.SortBy != null ? "&sortBy=" + ViewBag.SortBy : "")">@i</a></li>
-                                            }
-                                        }
-                                        if (endPage < (int)ViewBag.TotalPages)
-                                        {
-                                            if (endPage < (int)ViewBag.TotalPages - 1)
-                                            {
-                                                <li class="page-item disabled"><span class="page-link">...</span></li>
-                                            }
-                                            <li class="page-item"><a class="page-link" href="/tour-list?page=@ViewBag.TotalPages@(ViewBag.PageSize != null ? "&pageSize=" + ViewBag.PageSize : "")@(ViewBag.SelectedDestinationID != null ? "&DestinationID=" + ViewBag.SelectedDestinationID : "")@(ViewBag.SelectedCategoryID != null ? "&CategoryID=" + ViewBag.SelectedCategoryID : "")@(ViewBag.StartDate != null ? "&startDate=" + ViewBag.StartDate : "")@(ViewBag.SortBy != null ? "&sortBy=" + ViewBag.SortBy : "")">@ViewBag.TotalPages</a></li>
-                                        }
+                                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                                    {
+                                        <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                                            <a class="page-link" href="/tour-list?page=@i@(ViewBag.PageSize != null ? "&pageSize=" + ViewBag.PageSize : "")@(ViewBag.SelectedDestinationID != null ? "&DestinationID=" + ViewBag.SelectedDestinationID : "")@(ViewBag.SelectedCategoryID != null ? "&CategoryID=" + ViewBag.SelectedCategoryID : "")@(ViewBag.StartDate != null ? "&startDate=" + ViewBag.StartDate : "")@(ViewBag.SortBy != null ? "&sortBy=" + ViewBag.SortBy : "")">@i</a>
+                                        </li>
                                     }
                                     <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
                                         <a class="page-link" href="/tour-list?page=@(ViewBag.CurrentPage + 1)@(ViewBag.PageSize != null ? "&pageSize=" + ViewBag.PageSize : "")@(ViewBag.SelectedDestinationID != null ? "&DestinationID=" + ViewBag.SelectedDestinationID : "")@(ViewBag.SelectedCategoryID != null ? "&CategoryID=" + ViewBag.SelectedCategoryID : "")@(ViewBag.StartDate != null ? "&startDate=" + ViewBag.StartDate : "")@(ViewBag.SortBy != null ? "&sortBy=" + ViewBag.SortBy : "")"><i class="far fa-chevron-right"></i></a>
@@ -513,7 +488,7 @@
                 var startDate = $('#startDate').val();
                 var sortBy = $('.sort-select').val();
 
-                console.log('Search params:', { DestinationID, CategoryID, startDate, sortBy });
+                console.log('Tham số tìm kiếm:', { DestinationID, CategoryID, startDate, sortBy });
 
                 // Build search parameters
                 var searchParams = new URLSearchParams();
@@ -524,7 +499,7 @@
 
                 // Reload page with search parameters
                 var newUrl = window.location.pathname + '?' + searchParams.toString();
-                console.log('Redirecting to:', newUrl);
+                console.log('Chuyển hướng đến:', newUrl);
                 window.location.href = newUrl;
             }
 

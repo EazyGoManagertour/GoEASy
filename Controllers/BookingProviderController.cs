@@ -46,6 +46,13 @@ namespace GoEASy.Controllers
 
             // Cập nhật trạng thái
             booking.Status = Status == "true";
+            
+            // Nếu hủy booking đã thanh toán, set PaymentStatus thành Cancelled
+            if (Status == "false" && booking.PaymentStatus == "Paid")
+            {
+                booking.PaymentStatus = "Cancelled";
+            }
+            
             await _bookingService.UpdateBookingAsync(booking);
 
             TempData["Success"] = "Cập nhật trạng thái booking thành công!";

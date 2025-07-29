@@ -22,13 +22,16 @@ namespace GoEASy.Controllers
 
         // GET: admin/destination-admin
         [HttpGet("")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            var destinations = await _destinationService.GetAllDestinationsAsync();
+            int pageSize = 6;
+            var destinations = await _destinationService.GetPagedDestinationsAsync(page, pageSize);
             
             // Lấy danh sách ảnh có sẵn trong thư mục destinations
             var availableImages = GetAvailableImages();
             ViewBag.AvailableImages = availableImages;
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = await _destinationService.GetTotalPagesAsync(pageSize);
             
             return View("~/Views/admin/destination_admin/DestinationAdmin.cshtml", destinations);
         }

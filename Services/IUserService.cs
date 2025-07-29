@@ -7,6 +7,8 @@ namespace GoEASy.Services
     public interface IUserService
     {
         Task<IEnumerable<User>> GetAllUsersAsync();
+        Task<IEnumerable<User>> GetPagedUsersAsync(int page, int pageSize);
+        Task<int> GetTotalPagesAsync(int pageSize);
         Task<User> GetUserByIdAsync(int id);
         Task<User> GetUserByUsernameAsync(string username);
         Task<User> GetUserByEmailAsync(string email);

@@ -187,7 +187,7 @@ namespace GoEASy.Controllers
             HttpContext.Session.SetString("UserEmail", user.Email ?? "");
             HttpContext.Session.SetString("UserName", user.FullName);
             HttpContext.Session.SetString("UserRole", user.Role?.RoleName ?? "User");
-            HttpContext.Session.SetInt32("RoleId", user.RoleID ?? 1);
+                            HttpContext.Session.SetInt32("RoleID", user.RoleID ?? 1);
         }
 
         [HttpGet("/complete-profile")]

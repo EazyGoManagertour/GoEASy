@@ -38,7 +38,7 @@ namespace GoEASy.Controllers
         public async Task<IActionResult> Create(int tourID, int adultGuests, int childGuests, decimal totalPrice, bool isCustom = false)
         {
 
-            int? userID = HttpContext.Session.GetInt32("UserID");
+            int? userID = HttpContext.Session.GetInt32("UserID"); 
             if (userID == null)
 
             {
@@ -50,6 +50,29 @@ namespace GoEASy.Controllers
             if (adultGuests <= 0)
             {
                 TempData["Error"] = "Phải có ít nhất 1 người lớn trong tour.";
+                return RedirectToAction("Index", "TourDetail", new { id = tourID });
+            }
+
+            // Lấy thông tin tour để kiểm tra available seats
+            var tour = await _context.Tours.FindAsync(tourID);
+            if (tour == null)
+            {
+                TempData["Error"] = "Tour không tồn tại.";
+                return RedirectToAction("Index", "TourDetail", new { id = tourID });
+            }
+
+            // Kiểm tra available seats
+            int totalGuests = adultGuests + childGuests;
+            if (tour.AvailableSeats.HasValue && tour.AvailableSeats.Value < totalGuests)
+            {
+                TempData["Error"] = $"Chỉ còn {tour.AvailableSeats.Value} chỗ trống. Bạn đang đặt {totalGuests} vé.";
+                return RedirectToAction("Index", "TourDetail", new { id = tourID });
+            }
+
+            // Kiểm tra max seats
+            if (tour.MaxSeats.HasValue && totalGuests > tour.MaxSeats.Value)
+            {
+                TempData["Error"] = $"Số vé tối đa cho phép là {tour.MaxSeats.Value}. Bạn đang đặt {totalGuests} vé.";
                 return RedirectToAction("Index", "TourDetail", new { id = tourID });
             }
 
@@ -68,6 +91,14 @@ namespace GoEASy.Controllers
                 UpdatedAt = DateTime.Now
             };
             _context.Bookings.Add(booking);
+
+            // Giảm available seats
+            if (tour.AvailableSeats.HasValue)
+            {
+                tour.AvailableSeats = tour.AvailableSeats.Value - totalGuests;
+                _context.Tours.Update(tour);
+            }
+
             await _context.SaveChangesAsync();
 
             // Tạo request MoMo
@@ -88,6 +119,14 @@ namespace GoEASy.Controllers
             }
             else
             {
+                // Nếu tạo MoMo thất bại, hoàn lại available seats
+                if (tour.AvailableSeats.HasValue)
+                {
+                    tour.AvailableSeats = tour.AvailableSeats.Value + totalGuests;
+                    _context.Tours.Update(tour);
+                    await _context.SaveChangesAsync();
+                }
+                
                 TempData["Error"] = "Không thể tạo thanh toán MoMo. Vui lòng thử lại.";
                 return RedirectToAction("Index", "Home");
             }
@@ -285,6 +324,16 @@ namespace GoEASy.Controllers
             booking.PaymentStatus = "Refunded"; // Đã hoàn tiền
             booking.Status = false; // Đánh dấu booking đã hủy
             booking.UpdatedAt = DateTime.Now;
+            
+            // Tăng lại available seats khi hoàn tiền thành công
+            var tour = await _context.Tours.FirstOrDefaultAsync(t => t.TourID == booking.TourID);
+            if (tour != null && tour.AvailableSeats.HasValue)
+            {
+                int totalGuests = booking.AdultGuests + booking.ChildGuests;
+                tour.AvailableSeats = tour.AvailableSeats.Value + totalGuests;
+                _context.Tours.Update(tour);
+            }
+            
             await _context.SaveChangesAsync();
 
             // Tạo thông báo cho user

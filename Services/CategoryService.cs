@@ -21,6 +21,21 @@ namespace GoEASy.Services
             return await _context.TourCategories.ToListAsync();
         }
 
+        public async Task<List<TourCategory>> GetPagedCategoriesAsync(int page, int pageSize)
+        {
+            return await _context.TourCategories
+                .OrderByDescending(c => c.CreatedAt)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
+
+        public async Task<int> GetTotalPagesAsync(int pageSize)
+        {
+            var totalCategories = await _context.TourCategories.CountAsync();
+            return (int)Math.Ceiling((double)totalCategories / pageSize);
+        }
+
         public async Task<TourCategory?> GetCategoryByIdAsync(int id)
         {
             return await _context.TourCategories.FindAsync(id);

@@ -168,6 +168,28 @@
                     </tbody>
                 </table>
             </div>
+            <!-- PHÂN TRANG -->
+            <div class="pagination-container" style="margin-top: 20px; display: flex; justify-content: center;">
+                @if (ViewBag.TotalPages > 1)
+                {
+                    <nav aria-label="Tour pagination">
+                        <ul class="pagination">
+                            <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                                <a class="page-link" href="?page=@(ViewBag.CurrentPage - 1)&pageSize=@ViewBag.PageSize">&laquo; Trước</a>
+                            </li>
+                            @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
+                            {
+                                <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                                    <a class="page-link" href="?page=@i&pageSize=@ViewBag.PageSize">@i</a>
+                                </li>
+                            }
+                            <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                                <a class="page-link" href="?page=@(ViewBag.CurrentPage + 1)&pageSize=@ViewBag.PageSize">Sau &raquo;</a>
+                            </li>
+                        </ul>
+                    </nav>
+                }
+            </div>
         </main>
     </div>
 
@@ -194,7 +216,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="addAdultPrice" class="form-label">Adult Price (VND)</label>
-                                    <input type="number" class="form-control" id="addAdultPrice" name="AdultPrice" min="0" step="1000" required>
+                                    <input type="text" class="form-control vnd-input" id="addAdultPrice" name="AdultPrice" min="0" required>
                                 </div>
                             </div>
                         </div>
@@ -202,7 +224,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="addChildPrice" class="form-label">Child Price (VND)</label>
-                                    <input type="number" class="form-control" id="addChildPrice" name="ChildPrice" min="0" step="1000" required>
+                                    <input type="text" class="form-control vnd-input" id="addChildPrice" name="ChildPrice" min="0" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -375,7 +397,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="editAdultPrice" class="form-label">Adult Price (VND)</label>
-                                    <input type="number" class="form-control" id="editAdultPrice" name="AdultPrice" min="0" step="1000" required>
+                                    <input type="text" class="form-control vnd-input" id="editAdultPrice" name="AdultPrice" min="0" required>
                                 </div>
                             </div>
                         </div>
@@ -383,7 +405,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="editChildPrice" class="form-label">Child Price (VND)</label>
-                                    <input type="number" class="form-control" id="editChildPrice" name="ChildPrice" min="0" step="1000" required>
+                                    <input type="text" class="form-control vnd-input" id="editChildPrice" name="ChildPrice" min="0" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -722,6 +744,95 @@
                 descTextarea.value = "Lỗi khi gọi AI: " + err.message;
             }
         }
+    </script>
+
+    <script>
+        // Format input tiền VND cho AdultPrice và ChildPrice
+        function formatVNDInput(input) {
+            let value = input.value.replace(/\D/g, "");
+            if (value) {
+                input.value = Number(value).toLocaleString('vi-VN');
+            } else {
+                input.value = '';
+            }
+        }
+        // Khi submit form, bỏ format để gửi số chuẩn
+        function unformatVNDInputs(form) {
+            const priceInputs = form.querySelectorAll('.vnd-input');
+            priceInputs.forEach(input => {
+                input.value = input.value.replace(/\./g, '').replace(/\D/g, '');
+            });
+        }
+        // Gắn sự kiện cho các input
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.vnd-input').forEach(function (input) {
+                input.addEventListener('input', function () {
+                    formatVNDInput(this);
+                });
+            });
+            // Xử lý submit form add/edit
+            document.querySelectorAll('form').forEach(function (form) {
+                form.addEventListener('submit', function () {
+                    unformatVNDInputs(form);
+                });
+            });
+        });
+    </script>
+
+    <script>
+        // Date validation cho StartDate và EndDate
+        document.addEventListener('DOMContentLoaded', function () {
+            // Lấy ngày hôm nay yyyy-MM-dd
+            function getTodayStr() {
+                const today = new Date();
+                const yyyy = today.getFullYear();
+                const mm = String(today.getMonth() + 1).padStart(2, '0');
+                const dd = String(today.getDate()).padStart(2, '0');
+                return `${yyyy}-${mm}-${dd}`;
+            }
+            // Form add
+            const addStart = document.getElementById('addStartDate');
+            const addEnd = document.getElementById('addEndDate');
+            if (addStart) {
+                addStart.setAttribute('min', getTodayStr());
+                addStart.addEventListener('change', function () {
+                    if (addEnd) {
+                        addEnd.value = '';
+                        addEnd.setAttribute('min', this.value);
+                    }
+                });
+            }
+            if (addEnd && addStart) {
+                addEnd.addEventListener('input', function () {
+                    if (this.value && this.value <= addStart.value) {
+                        this.setCustomValidity('End date phải sau Start date!');
+                    } else {
+                        this.setCustomValidity('');
+                    }
+                });
+            }
+            // Form edit
+            const editStart = document.getElementById('editStartDate');
+            const editEnd = document.getElementById('editEndDate');
+            if (editStart) {
+                editStart.setAttribute('min', getTodayStr());
+                editStart.addEventListener('change', function () {
+                    if (editEnd) {
+                        editEnd.value = '';
+                        editEnd.setAttribute('min', this.value);
+                    }
+                });
+            }
+            if (editEnd && editStart) {
+                editEnd.addEventListener('input', function () {
+                    if (this.value && this.value <= editStart.value) {
+                        this.setCustomValidity('End date phải sau Start date!');
+                    } else {
+                        this.setCustomValidity('');
+                    }
+                });
+            }
+        });
     </script>
 
 </body>

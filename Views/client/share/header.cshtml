@@ -74,22 +74,28 @@
                             <i class="fas fa-bell"></i>
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notifCount" style="display:none;">0</span>
                         </a>
-                        <ul class="dropdown-menu notification-dropdown-menu dropdown-menu-end w-100" aria-labelledby="notifBtn" id="notifList" style="max-height: 350px; overflow-y: auto;">
-                            <li class="dropdown-item text-muted">Không có thông báo mới</li>
+                        <ul class="dropdown-menu notification-dropdown-menu dropdown-menu-end w-100" aria-labelledby="notifBtn" id="notifList" style="max-height: 450px; overflow-y: auto;">
+                            <li class="dropdown-header" style="padding: 12px 20px; background: #f8f9fa; border-bottom: 1px solid #e5e5e5; font-weight: 600; color: #333; font-size: 16px;">
+                                <i class="fas fa-bell me-2"></i>Thông báo
+                            </li>
+                            <li class="dropdown-item text-muted" style="padding: 20px; text-align: center; font-size: 15px;">Không có thông báo mới</li>
                         </ul>
                     </div>
                     <div class="dropdown d-inline-block">
-                        <a href="#" class="d-inline-flex align-items-center dropdown-toggle btn btn-light" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="gap:8px; padding: 8px 20px; border-radius: 8px; background: #fff; color: #1a2a36; font-weight: 600; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: none;">
-                            <img src="@userAvatar" alt="Avatar" style="width:32px;height:32px;border-radius:50%;object-fit:cover;">
+                        <a href="#" class="d-inline-flex align-items-center dropdown-toggle btn btn-light" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="gap:12px; padding: 12px 24px; border-radius: 12px; background: #fff; color: #1a2a36; font-weight: 600; box-shadow: 0 4px 16px rgba(0,0,0,0.08); border: none; font-size: 16px;">
+                            <img src="@userAvatar" alt="Avatar" style="width:40px;height:40px;border-radius:50%;object-fit:cover;border: 2px solid #e5e5e5;">
                             <span>@userName</span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end w-100" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="/profile"><i class="fas fa-user"></i> Hồ sơ cá nhân</a></li>
-                            <li><a class="dropdown-item" href="/booking/history"><i class="fas fa-history"></i> Lịch sử giao dịch</a></li>
-                            <li><hr class="dropdown-divider"></li>
+                        <ul class="dropdown-menu dropdown-menu-end w-100" aria-labelledby="userDropdown" style="min-width: 280px; padding: 8px 0; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.12); border: 1px solid #e5e5e5;">
+                            <li class="dropdown-header" style="padding: 12px 20px; background: #f8f9fa; border-bottom: 1px solid #e5e5e5; font-weight: 600; color: #333; font-size: 16px;">
+                                <i class="fas fa-user me-2"></i>Tài khoản
+                            </li>
+                            <li><a class="dropdown-item" href="/profile" style="padding: 15px 20px; font-size: 15px; color: #333;"><i class="fas fa-user me-3"></i> Hồ sơ cá nhân</a></li>
+                            <li><a class="dropdown-item" href="/booking/history" style="padding: 15px 20px; font-size: 15px; color: #333;"><i class="fas fa-history me-3"></i> Lịch sử giao dịch</a></li>
+                            <li><hr class="dropdown-divider" style="margin: 8px 0;"></li>
                             <li>
                                 <form method="post" action="/login/logout" style="margin:0;">
-                                    <button class="dropdown-item" type="submit"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button>
+                                    <button class="dropdown-item" type="submit" style="padding: 15px 20px; font-size: 15px; color: #dc3545; border: none; background: none; width: 100%; text-align: left;"><i class="fas fa-sign-out-alt me-3"></i> Đăng xuất</button>
                                 </form>
                             </li>
                         </ul>
@@ -119,14 +125,55 @@
 }
 /* Phóng to dropdown thông báo, cho phép xuống dòng, ẩn cuộn ngang */
 .notification-dropdown-menu {
-    min-width: 340px !important;
-    max-width: 420px;
+    min-width: 400px !important;
+    max-width: 500px;
+    max-height: 450px !important;
     white-space: normal;
     overflow-x: hidden;
+    padding: 15px 0;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    border: 1px solid #e5e5e5;
 }
 .notification-item {
     white-space: normal;
     word-break: break-word;
+    padding: 15px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s ease;
+}
+.notification-item:hover {
+    background-color: #f8f9fa;
+}
+.notification-item:last-child {
+    border-bottom: none;
+}
+.notification-item b {
+    color: #333;
+    font-size: 16px;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 8px;
+}
+.notification-item span {
+    color: #666;
+    font-size: 15px;
+    line-height: 1.5;
+    display: block;
+    margin-bottom: 10px;
+}
+.notification-item small {
+    color: #999;
+    font-size: 13px;
+}
+
+/* CSS cho dropdown user */
+#userDropdown + .dropdown-menu .dropdown-item:hover {
+    background-color: #f8f9fa;
+    transition: background-color 0.2s ease;
+}
+#userDropdown + .dropdown-menu .dropdown-item {
+    transition: background-color 0.2s ease;
 }
 </style>
 <script>
@@ -173,17 +220,25 @@ document.addEventListener('DOMContentLoaded', function() {
             var li = document.createElement('li');
             li.className = 'dropdown-item notification-item';
             li.setAttribute('data-booking-id', n.RelatedId || '');
-            li.innerHTML = `
-                <div class="notification-item-icon">
-                    <i class="fas fa-info-circle"></i>
-                </div>
-                <div class="notification-item-content">
-                    <div class="notification-item-title">${n.Title}</div>
-                    <div class="notification-item-message">${n.Message}</div>
-                    <div class="notification-item-time">${new Date(n.CreatedAt).toLocaleString('vi-VN')}</div>
-                </div>
-            `;
+
+            li.style.cursor = 'pointer';
             
+            // Format thời gian đẹp hơn
+            var createdAt = new Date(n.CreatedAt);
+            var timeString = createdAt.toLocaleString('vi-VN', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            li.innerHTML = `
+                <b>${n.Title}</b>
+                <span>${n.Message}</span>
+                <small>${timeString}</small>
+            `;
+
             li.addEventListener('click', function() {
                 if (n.RelatedId) {
                     window.location.href = '/booking/history?open=' + n.RelatedId;

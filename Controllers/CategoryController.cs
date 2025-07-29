@@ -20,9 +20,12 @@ namespace GoEASy.Controllers
 
         // GET: admin/category
         [HttpGet("")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            var categories = await _categoryService.GetAllCategoriesAsync();
+            int pageSize = 6;
+            var categories = await _categoryService.GetPagedCategoriesAsync(page, pageSize);
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = await _categoryService.GetTotalPagesAsync(pageSize);
             return View("~/Views/admin/category/Category.cshtml", categories);
         }
 

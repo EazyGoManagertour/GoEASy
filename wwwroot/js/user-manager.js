@@ -14,7 +14,7 @@ function fillEditModal(id, username, password, fullname, email, phone, address, 
     document.getElementById("editAddress").value = address;
     document.getElementById("editSex").value = sex;
     document.getElementById("editRole").value = role;
-    document.getElementById("editIsVip").value = isvip;
-    document.getElementById("editVippoints").value = vippoints;
+    document.getElementById("editIsVIP").value = isvip;
+    document.getElementById("editVIPPoints").value = vippoints;
     document.getElementById("editStatus").value = status;
 } 
