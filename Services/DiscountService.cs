@@ -21,6 +21,22 @@ namespace GoEASy.Services
             return await _discountRepository.GetAllAsync();
         }
 
+        public async Task<IEnumerable<Discount>> GetPagedDiscountsAsync(int page, int pageSize)
+        {
+            var allDiscounts = await _discountRepository.GetAllAsync();
+            return allDiscounts
+                .OrderByDescending(d => d.CreatedAt)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize);
+        }
+
+        public async Task<int> GetTotalPagesAsync(int pageSize)
+        {
+            var allDiscounts = await _discountRepository.GetAllAsync();
+            var totalDiscounts = allDiscounts.Count();
+            return (int)Math.Ceiling((double)totalDiscounts / pageSize);
+        }
+
         public async Task<Discount> GetDiscountByIdAsync(int id)
         {
             return await _discountRepository.GetByIdAsync(id);

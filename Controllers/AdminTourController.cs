@@ -30,17 +30,19 @@ namespace GoEASy.Controllers
 
         // GET: admin/tour-admin
         [HttpGet("")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 6)
         {
-            var tours = await _tourService.GetAllToursForAdminAsync();
-            // Lấy danh sách category và destination
+            var (tours, totalTours) = await _tourService.GetPagedToursForAdminAsync(page, pageSize);
             var categories = await _tourService.GetAllCategoriesAsync();
             var destinations = await _tourService.GetAllDestinationsAsync();
-            // Lấy danh sách ảnh có sẵn trong thư mục Tourimg
             var availableImages = GetAvailableImages();
+            int totalPages = (int)Math.Ceiling((double)totalTours / pageSize);
             ViewBag.AvailableImages = availableImages;
             ViewBag.Categories = categories;
             ViewBag.Destinations = destinations;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.CurrentPage = page;
+            ViewBag.PageSize = pageSize;
             return View("~/Views/admin/tour_admin/TourAdmin.cshtml", tours);
         }
 
@@ -357,10 +359,14 @@ namespace GoEASy.Controllers
                 existingTour.AvailableSeats = tour.AvailableSeats;
                 existingTour.DestinationID = tour.DestinationID;
                 existingTour.CategoryID = tour.CategoryID;
-                await _tourService.UpdateTourAsync(existingTour, allImages);
-                // Update TourDetail
+                
+                // Sử dụng cùng 1 DbContext cho toàn bộ operation
                 using (var db = new GoEasyContext())
                 {
+                    // Update tour
+                    db.Tours.Update(existingTour);
+                    
+                    // Update TourDetail
                     var detail = db.TourDetails.FirstOrDefault(x => x.TourID == tour.TourID);
                     if (detail == null)
                     {
@@ -370,12 +376,13 @@ namespace GoEASy.Controllers
                     detail.Included = included;
                     detail.Excluded = excluded;
                     detail.Activities = activities;
+                    
                     // Xóa hết itinerary và FAQ cũ
                     var oldItineraries = db.TourItineraries.Where(x => x.TourID == tour.TourID);
                     db.TourItineraries.RemoveRange(oldItineraries);
                     var oldFaqs = db.TourFAQs.Where(x => x.TourID == tour.TourID);
                     db.TourFAQs.RemoveRange(oldFaqs);
-                    await db.SaveChangesAsync();
+                    
                     // Lưu Itinerary mới
                     for (int i = 0; i < days.Length; i++)
                     {
@@ -390,6 +397,7 @@ namespace GoEASy.Controllers
                             CreatedAt = DateTime.Now
                         });
                     }
+                    
                     // Lưu FAQ mới
                     for (int i = 0; i < faqQs.Length; i++)
                     {
@@ -401,8 +409,17 @@ namespace GoEASy.Controllers
                             CreatedAt = DateTime.Now
                         });
                     }
+                    
+                    // Save tất cả changes cùng lúc
                     await db.SaveChangesAsync();
                 }
+                
+                // Xử lý ảnh riêng biệt để tránh conflict
+                if (allImages.Count > 0)
+                {
+                    await _tourService.UpdateTourImagesAsync(tour.TourID, allImages);
+                }
+                
                 TempData["Success"] = "Tour updated successfully!";
             }
             catch (Exception ex)

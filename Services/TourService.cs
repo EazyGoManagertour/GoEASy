@@ -38,6 +38,21 @@ namespace GoEASy.Services
                 .ToListAsync(); // Lấy tất cả tours cho admin
         }
 
+        public async Task<(List<Tour> Tours, int TotalTours)> GetPagedToursForAdminAsync(int page, int pageSize)
+        {
+            var query = _context.Tours
+                .Include(t => t.TourImages)
+                .Include(t => t.Destination)
+                .Include(t => t.Category);
+            var totalTours = await query.CountAsync();
+            var tours = await query
+                .OrderByDescending(t => t.TourID)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+            return (tours, totalTours);
+        }
+
         public async Task<Tour?> GetTourByIdAsync(int id)
         {
             var tour = await _context.Tours
@@ -305,52 +320,61 @@ namespace GoEASy.Services
 
             if (images != null && images.Count > 0)
             {
-                // Tạo tên folder từ tên tour
-                var folderName = tour.TourName?.ToLowerInvariant()
-                    .Replace(" ", "-")
-                    .Replace("đ", "d").Replace("ă", "a").Replace("â", "a")
-                    .Replace("ê", "e").Replace("ô", "o").Replace("ơ", "o").Replace("ư", "u")
-                    .Replace(":", "").Replace(";", "").Replace(",", "").Replace(".", "")
-                    .Replace("!", "").Replace("?", "").Replace("(", "").Replace(")", "")
-                    .Replace("[", "").Replace("]", "").Replace("{", "").Replace("}", "")
-                    .Replace("'", "").Replace("\"", "").Replace("\\", "").Replace("/", "")
-                    .Replace("|", "").Replace("<", "").Replace(">", "");
-                
-                if (string.IsNullOrEmpty(folderName))
-                {
-                    folderName = "tour-" + tour.TourID;
-                }
-                
-                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "assets", "tours", folderName);
-                if (!Directory.Exists(uploadsFolder))
-                    Directory.CreateDirectory(uploadsFolder);
-                    
-                // Xóa tất cả ảnh cũ của tour này
-                var oldImages = _context.TourImages.Where(i => i.TourID == tour.TourID).ToList();
-                _context.TourImages.RemoveRange(oldImages);
-                await _context.SaveChangesAsync();
-                
-                for (int i = 0; i < images.Count; i++)
-                {
-                    var image = images[i];
-                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
-                    var filePath = Path.Combine(uploadsFolder, fileName);
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await image.CopyToAsync(stream);
-                    }
-                    var ImageURL = $"/assets/tours/{folderName}/{fileName}";
-                    var tourImage = new TourImage
-                    {
-                        TourID = tour.TourID,
-                        ImageURL = ImageURL,
-                        IsCover = (i == 0),
-                        UploadedAt = DateTime.Now
-                    };
-                    _context.TourImages.Add(tourImage);
-                }
-                await _context.SaveChangesAsync();
+                await UpdateTourImagesAsync(tour.TourID, images);
             }
+            return true;
+        }
+
+        public async Task<bool> UpdateTourImagesAsync(int tourID, List<IFormFile> images)
+        {
+            var tour = await _context.Tours.FindAsync(tourID);
+            if (tour == null) return false;
+
+            // Tạo tên folder từ tên tour
+            var folderName = tour.TourName?.ToLowerInvariant()
+                .Replace(" ", "-")
+                .Replace("đ", "d").Replace("ă", "a").Replace("â", "a")
+                .Replace("ê", "e").Replace("ô", "o").Replace("ơ", "o").Replace("ư", "u")
+                .Replace(":", "").Replace(";", "").Replace(",", "").Replace(".", "")
+                .Replace("!", "").Replace("?", "").Replace("(", "").Replace(")", "")
+                .Replace("[", "").Replace("]", "").Replace("{", "").Replace("}", "")
+                .Replace("'", "").Replace("\"", "").Replace("\\", "").Replace("/", "")
+                .Replace("|", "").Replace("<", "").Replace(">", "");
+            
+            if (string.IsNullOrEmpty(folderName))
+            {
+                folderName = "tour-" + tour.TourID;
+            }
+            
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "assets", "tours", folderName);
+            if (!Directory.Exists(uploadsFolder))
+                Directory.CreateDirectory(uploadsFolder);
+                
+            // Xóa tất cả ảnh cũ của tour này
+            var oldImages = _context.TourImages.Where(i => i.TourID == tourID).ToList();
+            _context.TourImages.RemoveRange(oldImages);
+            await _context.SaveChangesAsync();
+            
+            for (int i = 0; i < images.Count; i++)
+            {
+                var image = images[i];
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
+                var filePath = Path.Combine(uploadsFolder, fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await image.CopyToAsync(stream);
+                }
+                var ImageURL = $"/assets/tours/{folderName}/{fileName}";
+                var tourImage = new TourImage
+                {
+                    TourID = tourID,
+                    ImageURL = ImageURL,
+                    IsCover = (i == 0),
+                    UploadedAt = DateTime.Now
+                };
+                _context.TourImages.Add(tourImage);
+            }
+            await _context.SaveChangesAsync();
             return true;
         }
 

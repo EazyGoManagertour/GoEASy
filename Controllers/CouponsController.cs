@@ -22,9 +22,12 @@ namespace GoEASy.Controllers
 
         // GET: admin/coupons
         [HttpGet("")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            var discounts = await _discountService.GetAllDiscountsAsync();
+            int pageSize = 6;
+            var discounts = await _discountService.GetPagedDiscountsAsync(page, pageSize);
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = await _discountService.GetTotalPagesAsync(pageSize);
             return View("~/Views/admin/coupons/Coupons.cshtml", discounts);
         }
 

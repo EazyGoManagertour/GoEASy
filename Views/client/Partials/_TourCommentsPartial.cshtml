@@ -1,0 +1,34 @@
+@model List<GoEASy.Models.Review>
+@if (Model != null && Model.Count > 0)
+{
+    foreach (var feedback in Model)
+    {
+        <div class="comment-body" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+            <div class="author-thumb">
+                <img src="@Url.Content("~/assets/images/blog/comment-author1.jpg")" alt="Author">
+            </div>
+            <div class="content">
+                <h6>@feedback.User?.FullName</h6>
+                <div class="ratting">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        if (i <= feedback.Rating)
+                        {
+                            <i class="fas fa-star"></i>
+                        }
+                        else
+                        {
+                            <i class="far fa-star"></i>
+                        }
+                    }
+                </div>
+                <span class="time">@feedback.CreatedDate?.ToString("dd/MM/yyyy HH:mm")</span>
+                <p>@feedback.Comment</p>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div>Chưa có bình luận nào.</div>
+} 

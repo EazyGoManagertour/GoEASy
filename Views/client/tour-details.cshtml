@@ -220,7 +220,7 @@
                                 <button type="button" id="customCalcBtn" class="theme-btn style-two w-100 mb-2" style="border-radius:8px;">Tính tổng</button>
                                 <hr>
                                 <h6 style="font-weight:600;">Total: <span class="price" id="customTotal">0</span> đ</h6>
-                                <button type="submit" class="theme-btn style-two w-100 mt-2" style="border-radius:8px; background: #a50064; border-color: #a50064; color: #fff;">Đặt tour với MoMo <img src='/assets/images/momo-logo.png' alt='MoMo' style='height:20px;margin-left:8px;vertical-align:middle;' /></button>
+                                <button type="submit" class="theme-btn style-two w-100 mt-2" style="border-radius:8px; background: #007bff; border-color: #007bff; color: #fff;">Thanh toán</button>
                             </form>
                         </div>
 
@@ -348,45 +348,90 @@
 
                         <h3>Bình Luận Khách Hàng</h3>
                         <div class="comments mt-30 mb-60">
-                            @if (ViewBag.ClientFeedbacks != null && ((List<GoEASy.Models.Review>)ViewBag.ClientFeedbacks).Count > 0)
-                            {
-                                foreach (var feedback in (List<GoEASy.Models.Review>)ViewBag.ClientFeedbacks)
+                            <div id="comments-ajax-list">
+                                @if (ViewBag.ClientFeedbacks != null && ((List<GoEASy.Models.Review>)ViewBag.ClientFeedbacks).Count > 0)
                                 {
-                                    <div class="comment-body" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                                        <div class="author-thumb">
-                                            <img src="@Url.Content("~/assets/images/blog/comment-author1.jpg")" alt="Author">
-                                        </div>
-                                        <div class="content">
-                                            <h6>@feedback.User?.FullName</h6>
-                                            <div class="ratting">
-                                                @for (int i = 1; i <= 5; i++)
-                                                {
-                                                    if (i <= feedback.Rating)
+                                    int commentCount = 0;
+                                    foreach (var feedback in (List<GoEASy.Models.Review>)ViewBag.ClientFeedbacks)
+                                    {
+                                        if (commentCount >= 5) break;
+                                        <div class="comment-body" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                                            <div class="author-thumb">
+                                                <img src="@Url.Content("~/assets/images/blog/comment-author1.jpg")" alt="Author">
+                                            </div>
+                                            <div class="content">
+                                                <h6>@feedback.User?.FullName</h6>
+                                                <div class="ratting">
+                                                    @for (int i = 1; i <= 5; i++)
                                                     {
-                                                        <i class="fas fa-star"></i>
+                                                        if (i <= feedback.Rating)
+                                                        {
+                                                            <i class="fas fa-star"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="far fa-star"></i>
+                                                        }
                                                     }
-                                                    else
-                                                    {
-                                                        <i class="far fa-star"></i>
+                                                </div>
+                                                <span class="time">@feedback.CreatedDate?.ToString("dd/MM/yyyy HH:mm")</span>
+                                                <p>@feedback.Comment</p>
+                                            </div>
+                                        </div>
+                                        commentCount++;
+                                    }
+                                }
+                                else
+                                {
+                                    <div>Chưa có bình luận nào.</div>
+                                }
+                            </div>
+                            <div id="comments-pagination" style="margin-top: 16px;"></div>
+                        </div>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                function loadComments(page) {
+                                    var tourId = @Model.TourID;
+                                    fetch(`/tour-details/${tourId}/comments-ajax?page=${page}`)
+                                        .then(res => res.json())
+                                        .then(data => {
+                                            document.getElementById('comments-ajax-list').innerHTML = data.html;
+                                            
+                                            // Render pagination
+                                            let pagHtml = '';
+                                            if (data.totalPages > 1) {
+                                                pagHtml += '<ul class="pagination" style="justify-content:center">';
+                                                pagHtml += `<li class='page-item${data.currentPage==1?' disabled':''}'><a class='page-link' href='#' data-page='${data.currentPage-1}'>&laquo;</a></li>`;
+                                                for(let i=1;i<=data.totalPages;i++){
+                                                    pagHtml += `<li class='page-item${data.currentPage==i?' active':''}'><a class='page-link' href='#' data-page='${i}'>${i}</a></li>`;
+                                                }
+                                                pagHtml += `<li class='page-item${data.currentPage==data.totalPages?' disabled':''}'><a class='page-link' href='#' data-page='${data.currentPage+1}'>&raquo;</a></li>`;
+                                                pagHtml += '</ul>';
+                                            }
+                                            document.getElementById('comments-pagination').innerHTML = pagHtml;
+                                            
+                                            // Gắn sự kiện click
+                                            document.querySelectorAll('#comments-pagination .page-link').forEach(function(link){
+                                                link.onclick = function(e){
+                                                    e.preventDefault();
+                                                    let p = parseInt(this.getAttribute('data-page'));
+                                                    if(!isNaN(p) && p>=1 && p<=data.totalPages && p!=data.currentPage){
+                                                        loadComments(p);
                                                     }
                                                 }
-                                            </div>
-                                            <span class="time">@feedback.CreatedDate?.ToString("dd/MM/yyyy HH:mm")</span>
-                                            <p>@feedback.Comment</p>
-                                        </div>
-                                    </div>
+                                            });
+                                        });
                                 }
-                            }
-                            else
-                            {
-                                <div>Chưa có bình luận nào.</div>
-                            }
-                        </div>
+                                
+                                // Load comments ban đầu
+                                loadComments(1);
+                            });
+                        </script>
 
                         <h3>Thêm bình luận</h3>
                         @if (ViewBag.CanComment == true)
                         {
-                            <form id="comment-form" class="comment-form bgc-lighter z-1 rel mt-30" name="review-form" action="/review/post" method="post" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                            <form id="comment-form" class="comment-form bgc-lighter z-1 rel mt-30" name="review-form" autocomplete="off">
                                 <input type="hidden" name="TourID" value="@Model.TourID" />
                                 <div class="form-group">
                                     <label>Đánh giá (1-5 sao)</label>
@@ -410,26 +455,125 @@
                                 </div>
                             </form>
                             <script>
-    var policyData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.ChildPolicyData ?? new { MinAdultsPerChild = 1, MaxChildrenPerAdult = 3 }));
-    // Gắn event submit cho bookingForm ngay lập tức
-    var bookingForm = document.getElementById('booking-form');
-    if (bookingForm) {
-        bookingForm.addEventListener('submit', function(e) {
-            var adult = parseInt(document.getElementById('adultQty').value) || 0;
-            var child = parseInt(document.getElementById('childQty').value) || 0;
-            console.log('submit booking', { adult, child, policyData });
-            if (adult <= 0) {
-                showProfessionalNotification('Phải có ít nhất 1 người lớn trong tour.');
+                                document.addEventListener('DOMContentLoaded', function () {
+                                    // Star rating functionality
+                                    var stars = document.querySelectorAll('#star-rating i');
+                                    var ratingInput = document.getElementById('rating');
+                                    if (stars && ratingInput) {
+                                        stars.forEach(function(star, idx) {
+                                            star.addEventListener('click', function() {
+                                                var rating = idx + 1;
+                                                ratingInput.value = rating;
+                                                
+                                                // Update star display
+                                                stars.forEach(function(s, i) {
+                                                    if (i < rating) {
+                                                        s.className = 'fas fa-star';
+                                                    } else {
+                                                        s.className = 'far fa-star';
+                                                    }
+                                                });
+                                            });
+                                        });
+                                    }
+
+                                    // AJAX form submission - chỉ attach 1 lần
+                                    var commentForm = document.getElementById('comment-form');
+                                    if (commentForm) {
+                                        // Remove any existing event listeners
+                                        var newForm = commentForm.cloneNode(true);
+                                        commentForm.parentNode.replaceChild(newForm, commentForm);
+                                        commentForm = newForm;
+                                        
+                                        var msgDiv = document.createElement('div');
+                                        msgDiv.id = 'comment-msg';
+                                        msgDiv.style.marginTop = '10px';
+                                        commentForm.appendChild(msgDiv);
+                                        
+                                        commentForm.addEventListener('submit', function(e) {
                 e.preventDefault();
-                return false;
-            }
-            if (child > adult * policyData.MaxChildrenPerAdult) {
-                showProfessionalNotification('Tối đa ' + policyData.MaxChildrenPerAdult + ' trẻ em cho mỗi người lớn. Vui lòng điều chỉnh lại số lượng.');
-                e.preventDefault();
-                return false;
-            }
-        });
-    }
+                                            e.stopPropagation();
+                                            
+                                            // Clear previous messages
+                                            msgDiv.innerHTML = '';
+                                            
+                                            var formData = new FormData(commentForm);
+                                            fetch('/review/post', {
+                                                method: 'POST',
+                                                body: formData,
+                                                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                                            })
+                                            .then(res => res.json())
+                                            .then(data => {
+                                                console.log('Response:', data); // Debug log
+                                                
+                                                if (data.success) {
+                                                    // Reset form
+                                                    commentForm.reset();
+                                                    
+                                                    // Reset stars
+                                                    stars.forEach(function(star) {
+                                                        star.className = 'far fa-star';
+                                                    });
+                                                    
+                                                    // Add new comment to DOM
+                                                    var commentsContainer = document.getElementById('comments-ajax-list');
+                                                    var newComment = createCommentElement(data.comment);
+                                                    commentsContainer.insertBefore(newComment, commentsContainer.firstChild);
+                                                    
+                                                    // Remove "Chưa có bình luận nào" if exists
+                                                    var noCommentDiv = commentsContainer.querySelector('div');
+                                                    if (noCommentDiv && noCommentDiv.textContent === 'Chưa có bình luận nào.') {
+                                                        noCommentDiv.remove();
+                                                    }
+                                                    
+                                                    // Không hiện thông báo thành công
+                                                } else {
+                                                    // Show error message - không có timeout
+                                                    msgDiv.innerHTML = `<div style='color:red; font-weight: 500;'>${data.error}</div>`;
+                                                }
+                                            })
+                                            .catch((error) => {
+                                                console.error('Fetch error:', error);
+                                                // Không hiện thông báo lỗi gì cả
+                                            });
+                                        });
+                                    }
+                                    
+                                    // Function to create comment element
+                                    function createCommentElement(commentData) {
+                                        var commentDiv = document.createElement('div');
+                                        commentDiv.className = 'comment-body';
+                                        commentDiv.setAttribute('data-aos', 'fade-up');
+                                        commentDiv.setAttribute('data-aos-duration', '1500');
+                                        commentDiv.setAttribute('data-aos-offset', '50');
+                                        
+                                        var stars = '';
+                                        for (var i = 1; i <= 5; i++) {
+                                            if (i <= commentData.rating) {
+                                                stars += '<i class="fas fa-star"></i>';
+                                            } else {
+                                                stars += '<i class="far fa-star"></i>';
+                                            }
+                                        }
+                                        
+                                        commentDiv.innerHTML = `
+                                            <div class="author-thumb">
+                                                <img src="/assets/images/blog/comment-author1.jpg" alt="Author">
+                                            </div>
+                                            <div class="content">
+                                                <h6>${commentData.userName}</h6>
+                                                <div class="ratting">
+                                                    ${stars}
+                                                </div>
+                                                <span class="time">${commentData.createdDate}</span>
+                                                <p>${commentData.comment}</p>
+                                            </div>
+                                        `;
+                                        
+                                        return commentDiv;
+                                    }
+                                });
 </script>
                         }
                         else
@@ -450,6 +594,39 @@
                                     <input type="hidden" name="adultGuests" id="adultGuests" value="0" />
                                     <input type="hidden" name="childGuests" id="childGuests" value="0" />
                                     <input type="hidden" name="totalPrice" id="totalPriceInput" value="0" />
+                                    
+                                    <!-- Hiển thị thông tin seats -->
+                                    <div class="mb-3">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <small class="text-muted">
+                                                    <i class="fas fa-users"></i> 
+                                                    @if (Model.AvailableSeats.HasValue)
+                                                    {
+                                                        <span>Chỗ trống: @Model.AvailableSeats</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>Không giới hạn</span>
+                                                    }
+                                                </small>
+                                            </div>
+                                            <div class="col-6">
+                                                <small class="text-muted">
+                                                    <i class="fas fa-user-plus"></i> 
+                                                    @if (Model.MaxSeats.HasValue)
+                                                    {
+                                                        <span>Tối đa: @Model.MaxSeats</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>Không giới hạn</span>
+                                                    }
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
                                     <div class="date mb-25">
                                         <b>From Date</b>
                                         <input type="text" value="@(((DateTime)Model.StartDate).ToString("yyyy-MM-dd"))" readonly style="background:#f9f9f9;cursor:not-allowed;">
@@ -497,9 +674,9 @@
                                         <i class="fal fa-calculator"></i>
                                     </button>
                                     
-                                    <button type="submit" class="theme-btn style-two w-100 mt-15 mb-5" style="background: #a50064; border-color: #a50064; color: #fff;">
-                                        <span data-hover="Thanh toán MoMo">Thanh toán MoMo</span>
-                                        <img src='/assets/images/momo-logo.png' alt='MoMo' style='height:20px;margin-left:8px;vertical-align:middle;' />
+                                    <button type="submit" class="theme-btn style-two w-100 mt-15 mb-5" style="background: #007bff; border-color: #007bff; color: #fff;">
+                                        <span data-hover="Thanh toán">Thanh toán</span>
+                                        <i class="fal fa-arrow-right"></i>
                                     </button>
                                     <div class="text-center">
                                         <a href="contact.html">Cần trợ giúp?</a>
@@ -602,7 +779,7 @@
                                             })
                                             .catch(error => {
                                                 console.error('Fetch error:', error);
-                                                discountMessage.innerHTML = '<span style="color: #dc3545;">✗ Có lỗi xảy ra, vui lòng thử lại!</span>';
+                                                discountMessage.innerHTML = '<span style="color: #dc3545;">✗ Có lỗi xảy ra!</span>';
                                                 discountId.value = '';
                                                 discountAmount.value = 0;
                                             });
@@ -626,6 +803,23 @@
             }
             if (child > adult * policyData.MaxChildrenPerAdult) {
                 showProfessionalNotification('Tối đa ' + policyData.MaxChildrenPerAdult + ' trẻ em cho mỗi người lớn. Vui lòng điều chỉnh lại số lượng.');
+                e.preventDefault();
+                return false;
+            }
+
+            // Kiểm tra available seats
+            var totalGuests = adult + child;
+            var availableSeats = @(Model.AvailableSeats ?? 0);
+            var maxSeats = @(Model.MaxSeats ?? 0);
+            
+            if (availableSeats > 0 && totalGuests > availableSeats) {
+                showProfessionalNotification('Chỉ còn ' + availableSeats + ' chỗ trống. Bạn đang đặt ' + totalGuests + ' vé.');
+                e.preventDefault();
+                return false;
+            }
+            
+            if (maxSeats > 0 && totalGuests > maxSeats) {
+                showProfessionalNotification('Số vé tối đa cho phép là ' + maxSeats + '. Bạn đang đặt ' + totalGuests + ' vé.');
                 e.preventDefault();
                 return false;
             }
@@ -927,5 +1121,30 @@
             // XÓA: if (policyError) { ... }
         });
     </script>
+    <script>
+document.addEventListener('DOMContentLoaded', function () {
+    var stars = document.querySelectorAll('#star-rating i');
+    var ratingInput = document.getElementById('rating');
+    if (stars && ratingInput) {
+        stars.forEach(function(star, idx) {
+            star.addEventListener('click', function() {
+                var rating = idx + 1;
+                ratingInput.value = rating;
+                // Đổi màu các sao
+                stars.forEach(function(s, i) {
+                    if (i < rating) {
+                        s.classList.remove('far');
+                        s.classList.add('fas');
+                    } else {
+                        s.classList.remove('fas');
+                        s.classList.add('far');
+                    }
+                });
+            });
+        });
+    }
+});
+</script>
+
 </body>
 </html> 

@@ -111,6 +111,16 @@ namespace GoEASy.Controllers
                     else
                     {
                         booking.PaymentStatus = "Failed";
+                        
+                        // Hoàn lại available seats khi thanh toán thất bại
+                        var tour = await _context.Tours.FirstOrDefaultAsync(t => t.TourID == booking.TourID);
+                        if (tour != null && tour.AvailableSeats.HasValue)
+                        {
+                            int totalGuests = booking.AdultGuests + booking.ChildGuests;
+                            tour.AvailableSeats = tour.AvailableSeats.Value + totalGuests;
+                            _context.Tours.Update(tour);
+                        }
+                        
                         await _context.SaveChangesAsync();
                         TempData["Error"] = "Thanh toán thất bại hoặc bị hủy.";
                     }

@@ -41,6 +41,19 @@ namespace GoEASy.Services
             var oldBooking = await _context.Bookings.AsNoTracking().FirstOrDefaultAsync(b => b.BookingID == booking.BookingID);
             bool wasPending = oldBooking?.Status == false;
             bool isNowConfirmed = booking.Status == true;
+            
+            // Nếu booking bị hủy và đã thanh toán, tăng lại available seats
+            if (oldBooking?.Status == true && booking.Status == false && 
+                oldBooking.PaymentStatus == "Paid" && booking.PaymentStatus == "Cancelled")
+            {
+                var tour = await _context.Tours.FirstOrDefaultAsync(t => t.TourID == booking.TourID);
+                if (tour != null && tour.AvailableSeats.HasValue)
+                {
+                    int totalGuests = booking.AdultGuests + booking.ChildGuests;
+                    tour.AvailableSeats = tour.AvailableSeats.Value + totalGuests;
+                    _context.Tours.Update(tour);
+                }
+            }
 
             _context.Bookings.Update(booking);
             await _context.SaveChangesAsync();

@@ -20,12 +20,15 @@ namespace GoEASy.Controllers
 
         // GET: admin/user-manager
         [HttpGet("")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            var users = await _userService.GetAllUsersAsync();
+            int pageSize = 6;
+            var users = await _userService.GetPagedUsersAsync(page, pageSize);
             var roles = await _userService.GetAllRolesAsync();
 
             ViewBag.Roles = roles;
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = await _userService.GetTotalPagesAsync(pageSize);
             return View("~/Views/admin/user_manager/UserManager.cshtml", users);
         }
 

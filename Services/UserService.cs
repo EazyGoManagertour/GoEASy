@@ -25,6 +25,22 @@ namespace GoEASy.Services
             return await _context.Users.Include(u => u.Role).OrderByDescending(u => u.CreatedAt).ToListAsync();
         }
 
+        public async Task<IEnumerable<User>> GetPagedUsersAsync(int page, int pageSize)
+        {
+            return await _context.Users
+                .Include(u => u.Role)
+                .OrderByDescending(u => u.CreatedAt)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
+
+        public async Task<int> GetTotalPagesAsync(int pageSize)
+        {
+            var totalUsers = await _context.Users.CountAsync();
+            return (int)Math.Ceiling((double)totalUsers / pageSize);
+        }
+
         public Task<User> GetUserByIdAsync(int id)
         {
             return _context.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.UserID == id);
