@@ -88,3 +88,87 @@
 [7/29/2025 10:20:20 AM] COMMENT: quá nguu
 AI_RESULT: NEG
 FINAL_DECISION: BLOCK
+
+[7/29/2025 12:25:47 PM] DEBUG: API_KEY_LENGTH=164, ENDPOINT=https://api.openai.com/v1/chat/completions
+[7/29/2025 12:25:48 PM] RESPONSE_STATUS=OK, RESPONSE_CONTENT={
+  "id": "chatcmpl-ByX8MoQCHHWGfXlW1lkrfUsXYDXsh",
+  "object": "chat.completion",
+  "created": 1753766746,
+  "model": "gpt-3.5-turbo-0125",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "OK",
+        "refusal": null,
+        "annotations": []
+      },
+      "logprobs": null,
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 181,
+    "completion_tokens": 1,
+    "total_tokens": 182,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    }
+  },
+  "service_tier": "default",
+  "system_fingerprint": null
+}
+
+[7/29/2025 12:25:48 PM] COMMENT: ok đỏ
+AI_RESULT: OK
+FINAL_DECISION: ALLOW
+
+[7/29/2025 12:25:58 PM] DEBUG: API_KEY_LENGTH=164, ENDPOINT=https://api.openai.com/v1/chat/completions
+[7/29/2025 12:25:59 PM] RESPONSE_STATUS=OK, RESPONSE_CONTENT={
+  "id": "chatcmpl-ByX8XpgdcZnFHP8GdHukKgoloCBZl",
+  "object": "chat.completion",
+  "created": 1753766757,
+  "model": "gpt-3.5-turbo-0125",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "NEG",
+        "refusal": null,
+        "annotations": []
+      },
+      "logprobs": null,
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 186,
+    "completion_tokens": 1,
+    "total_tokens": 187,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    }
+  },
+  "service_tier": "default",
+  "system_fingerprint": null
+}
+
+[7/29/2025 12:25:59 PM] COMMENT: quá tệ quá suc vat
+AI_RESULT: NEG
+FINAL_DECISION: BLOCK

@@ -3,7 +3,7 @@
 
         <div class="header-inner rel d-flex align-items-center">
             <div class="logo-outer">
-                <div class="logo"><a href="/"><img src="@Url.Content("~/assets/images/logos/logo.png")" alt="Logo" title="Logo"></a></div>
+                <div class="logo"><a href="home"><img src="@Url.Content("~/assets/images/logos/logo.png")" alt="Logo" title="Logo"></a></div>
             </div>
 
             <div class="nav-outer mx-lg-auto ps-xxl-5 clearfix">
@@ -11,7 +11,7 @@
                 <nav class="main-menu navbar-expand-lg">
                     <div class="navbar-header">
                         <div class="mobile-logo">
-                            <a href="/">
+                            <a href="home">
                                 <img src="@Url.Content("~/assets/images/logos/logo.png")" alt="Logo" title="Logo">
                             </a>
                         </div>
@@ -27,15 +27,16 @@
                     <div class="navbar-collapse collapse clearfix">
                         <ul class="navigation clearfix">
                             <li class="dropdown current">
-                                <a href="/">Trang Chủ</a>
+                                <a href="#">Home</a>
                                 <ul>
-                                    <li><a href="#">Công Ty Du Lịch</a></li>
-                                    <li><a href="#">Tour Thành Phố</a></li>
-                                    <li><a href="#">Gói Tour</a></li>
+                                    <li><a href="#">Travel Agency</a></li>
+                                    <li><a href="#">City Tour</a></li>
+                                    <li><a href="#">Tour Package</a></li>
                                 </ul>
                             </li>
-                            <li><a href="/tour-list">Danh Sách Tour</a></li>
-                            <li><a href="/blog">Blog</a></li>
+                            <li><a href="tour-list">Tour list</a></li>
+                            <li><a href="blog">Blog</a></li>
+                            <li><a href="/contact">Liên hệ</a></li>
                         </ul>
                     </div>
 
@@ -54,7 +55,7 @@
 
             <!-- Menu Button -->
             @{
-                var isLoggedIn = Context.Session.GetInt32("UserID") != null;
+                var isLoggedIn = Context.Session.GetInt32("UserID") != null; // Sửa từ "UserId" thành "UserID"
                 var userName = Context.Session.GetString("UserName") ?? "User";
                 var userAvatar = "/assets/images/blog/comment-author1.jpg"; // Dùng avatar mẫu feedback
             }
@@ -182,6 +183,22 @@ document.addEventListener('DOMContentLoaded', function() {
     var notifBtn = document.getElementById('notifBtn');
     var notifUnread = 0;
     var notifHasBeenOpened = false;
+    
+    // Add header to dropdown
+    if (notifList) {
+        notifList.innerHTML = `
+            <div class="notification-dropdown-header">
+                <h6 class="notification-dropdown-title">
+                    <i class="fas fa-bell"></i> Thông báo
+                </h6>
+            </div>
+            <li class="notification-empty">
+                <i class="fas fa-bell-slash"></i><br>
+                Không có thông báo mới
+            </li>
+        `;
+    }
+    
     if (!!window.EventSource) {
         var source = new EventSource('/notification/stream');
         source.onmessage = function(event) {
@@ -189,11 +206,21 @@ document.addEventListener('DOMContentLoaded', function() {
             notifUnread++;
             notifCount.innerText = notifUnread;
             notifCount.style.display = '';
-            notifHasBeenOpened = false; // Có event mới, cho phép hiện badge lại
-            // Thêm thông báo mới lên đầu, hiển thị chi tiết
+            notifCount.className = 'notification-badge';
+            
+            // Add bell animation
+            notifBtn.querySelector('i').className = 'fas fa-bell notification-bell has-notifications';
+            setTimeout(() => {
+                notifBtn.querySelector('i').className = 'fas fa-bell notification-bell';
+            }, 500);
+            
+            notifHasBeenOpened = false;
+            
+            // Create beautiful notification item
             var li = document.createElement('li');
             li.className = 'dropdown-item notification-item';
             li.setAttribute('data-booking-id', n.RelatedId || '');
+
             li.style.cursor = 'pointer';
             
             // Format thời gian đẹp hơn
@@ -211,27 +238,78 @@ document.addEventListener('DOMContentLoaded', function() {
                 <span>${n.Message}</span>
                 <small>${timeString}</small>
             `;
+
             li.addEventListener('click', function() {
-                // Đánh dấu notification đã đọc
-                li.style.opacity = '0.6';
-                li.style.fontWeight = 'normal';
-                
                 if (n.RelatedId) {
                     window.location.href = '/booking/history?open=' + n.RelatedId;
                 } else {
                     window.location.href = '/booking/history';
                 }
             });
-            notifList.prepend(li);
-            // Xóa dòng 'Không có thông báo mới' nếu có
-            var empty = notifList.querySelector('.text-muted');
-            if (empty && notifList.children.length > 1) empty.remove();
+            
+            // Remove empty message and add new notification
+            var empty = notifList.querySelector('.notification-empty');
+            if (empty) empty.remove();
+            
+            // Insert after header
+            var header = notifList.querySelector('.notification-dropdown-header');
+            if (header) {
+                header.insertAdjacentElement('afterend', li);
+            } else {
+                notifList.prepend(li);
+            }
+            
+            // Show toast notification
+            showToastNotification(n.Title, n.Message, 'info');
         };
     }
+    
     notifBtn.addEventListener('click', function() {
         notifUnread = 0;
         notifCount.style.display = 'none';
         notifHasBeenOpened = true;
     });
+    
+    // Toast notification function
+    function showToastNotification(title, message, type = 'info') {
+        const toast = document.createElement('div');
+        toast.className = `professional-notification ${type}`;
+        
+        const iconMap = {
+            success: 'fas fa-check-circle',
+            error: 'fas fa-exclamation-circle',
+            warning: 'fas fa-exclamation-triangle',
+            info: 'fas fa-info-circle'
+        };
+        
+        toast.innerHTML = `
+            <div class="notification-header">
+                <div class="notification-icon">
+                    <i class="${iconMap[type]}"></i>
+                </div>
+                <div class="notification-content">
+                    <h6 class="notification-title">${title}</h6>
+                    <p class="notification-message">${message}</p>
+                </div>
+                <button class="notification-close" onclick="this.parentElement.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="notification-timestamp">
+                ${new Date().toLocaleString('vi-VN')}
+            </div>
+            <div class="notification-progress"></div>
+        `;
+        
+        document.body.appendChild(toast);
+        
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            if (toast.parentElement) {
+                toast.classList.add('notification-removing');
+                setTimeout(() => toast.remove(), 300);
+            }
+        }, 5000);
+    }
 });
 </script>

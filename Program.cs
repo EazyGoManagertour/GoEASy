@@ -56,6 +56,9 @@ builder.Services.AddScoped<IPolicyService, PolicyService>();
 builder.Services.Configure<MomoApiOptions>(builder.Configuration.GetSection("MomoAPI"));
 builder.Services.AddScoped<IMomoService, MomoService>();
 
+builder.Services.AddScoped<IAccessLogService, AccessLogService>();
+builder.Services.AddScoped<ISystemStatisticService, SystemStatisticService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -72,6 +75,8 @@ app.UseRouting();
 
 // Sử dụng Session
 app.UseSession();
+
+app.UseMiddleware<AccessLogMiddleware>();
 
 app.UseAuthorization();
 
