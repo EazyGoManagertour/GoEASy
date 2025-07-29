@@ -5,9 +5,9 @@ namespace GoEASy.Models;
 
 public partial class Contact
 {
-    public int ContactId { get; set; }
+    public int ContactID { get; set; }
 
-    public int? UserId { get; set; }
+    public int? UserID { get; set; }
 
     public string FullName { get; set; } = null!;
 
